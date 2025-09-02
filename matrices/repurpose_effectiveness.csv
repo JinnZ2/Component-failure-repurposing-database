@@ -1,0 +1,20 @@
+Component,Failure Mode,Repurpose Application,Effectiveness,Notes
+Diode,Short Circuit,Low-value Resistor,Medium,0.1–5Ω usable range
+Diode,Open Circuit,Parasitic Capacitor,Low,1–5pF between leads
+Diode,Partial Degradation,Random Noise Source,High,Good entropy for RNG
+
+Resistor,Open Circuit,Mechanical Spacer,High,Preserves PCB spacing and stability
+Resistor,Value Drift,Temperature Sensor,Medium,100–1000ppm/°C sensitivity
+Resistor,Short Circuit,Jumper Wire,Medium,Lead gauge ~1–5A capacity
+
+Capacitor (Ceramic),Open Circuit,PCB Spacer/Parasitic Cap,Low,0.1–2pF remains
+Capacitor (Ceramic),Value Drift,Humidity Sensor,Medium,Capacitance vs RH drift
+Capacitor (Ceramic),Short Circuit,Fused Link,Low,Sacrificial element only
+
+Transistor (BJT),Collector-Emitter Short,Low-value Resistor,Medium,0.05–1Ω usable
+Transistor (BJT),Open Junction,Antenna Stub,Low,Leads used for RF element
+Transistor (BJT),Gain Degradation,Noise Source,High,Leakage current exploitable
+
+Inductor (Ferrite Core),Open Winding,EMI Absorber,Medium,Ferrite core still effective
+Inductor (Ferrite Core),Core Crack,Spacer/Thermal Mass,Low,Limited but usable
+Inductor (Ferrite Core),Resistance Increase,Heating Element,Low,Low-power applications
