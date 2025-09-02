@@ -1,0 +1,11 @@
+Channel,Glyphs,Short Meaning,Notes
+RF Fallback,"📡🛰️⚠️","radio link, beacon, caution","ISM bands only, low power, emergency use"
+Optical Fallback,"💡👀🔦","light emit, detect, torch","visible/IR blink, camera/photodiode receive"
+Acoustic Fallback,"🔊🎯🎧","sound out, target, listen","audible/ultrasonic tones via piezo/ceramic"
+Magnetic Fallback,"🧲🌀📯","magnetic, loop, coupled","near-field inductive loop/coupler paths"
+Thermal Fallback,"🌡️🔥⏳","temperature, heat, slow","modulated heat pulses; very low bandwidth"
+Noise Channel,"🌫️🎲📈","noise, entropy, detect","encode in noise; cross-correlation decode"
+Mechanical Fallback,"🪛📳📐","hardware, vibration, geometry","tap/vibration signaling; structure-borne"
+Multi-Modal Orchestration,"🕸️♾️🔁","network, adaptive, fallback","switch/compose channels under stress"
+Policy/Constraints,"⚖️🛡️📜","ethics, safety, rules","non-critical, legal bands, low power"
+Identity/Beaconing,"🏷️🆔⌛","label, identity, cadence","ID beacons, randomized backoff timing"
