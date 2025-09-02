@@ -77,3 +77,14 @@
 ---
 
 ## Testing Protocols
+
+  1.	Measure drain-source resistance
+	2.	Check gate capacitance with LCR meter
+	3.	Thermal test under load for heat sinking ability
+
+    ---
+
+## AI Integration Notes
+- Record **threshold drift vs environment** for predictive models  
+- Capture **failure distributions** to train classifiers  
+- Tag **repurpose effectiveness** for shunt, sensor, RNG use cases
