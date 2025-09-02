@@ -1,0 +1,8 @@
+Channel,Repurposed Components,Range,Bandwidth,Effectiveness Rating,Notes
+RF Fallback,Wire-wound resistor + diode/MOSFET,1–50 m,10 bps–2 kbps,Medium,Unstable frequency but workable for beacons
+Optical Fallback,Failed LEDs + photodiodes,cm–10 m,1–10 kbps,High,Simple OOK/Morse or flicker coding
+Acoustic Fallback,Piezo disks + ceramic caps,1–20 m (audible),100 bps–2 kbps,Medium,Ultrasonic variant more covert but short range
+Magnetic Fallback,Wire-wound resistors + transformers,10–100 cm,10–500 bps,Medium,Good through walls/soil but limited range
+Thermal Fallback,Failed resistors + thermistors,cm–tens of cm,~1–10 bits/minute,Low,Very slow but robust as “I’m alive” signal
+Noise Channel,Degraded diodes + BJTs,Near-zero RF range (background),bps scale,Medium,Stealthy; requires correlation decoding
+Mechanical Fallback,Loose resistors/pots + accelerometers/piezos,cm–meters,1–10 bps,Low–Medium,Depends on structure for vibration coupling
