@@ -18,3 +18,6 @@ Transistor (BJT),Gain Degradation,Noise Source,High,Leakage current exploitable
 Inductor (Ferrite Core),Open Winding,EMI Absorber,Medium,Ferrite core still effective
 Inductor (Ferrite Core),Core Crack,Spacer/Thermal Mass,Low,Limited but usable
 Inductor (Ferrite Core),Resistance Increase,Heating Element,Low,Low-power applications
+Resistor (Open),Emergency RF,Antenna Element,Medium,Lead length sets band; near-field workable
+MOSFET (Shorted),Emergency RF,OOK Shunt Switch,Medium,Low-ohm reliable; keep duty low
+Wire-wound Resistor (Open),Emergency RF,Inductor for LC Tank,Medium,Use partial turns; trim C by lead length
