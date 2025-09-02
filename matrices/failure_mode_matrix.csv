@@ -1,0 +1,6 @@
+Component,Failure Mode,Repurpose Option,Effectiveness,Notes
+Diode,Short Circuit,Low-value Resistor,Medium,0.1-5Ω range usable
+Diode,Open Circuit,Capacitive Element,Low,1-5pF parasitic only
+Resistor,Open Circuit,Mechanical Spacer,High,Preserves PCB spacing
+Resistor,Value Drift,Temperature Sensor,Medium,100-1000ppm/°C sensitivity
+Resistor,Short Circuit,Jumper Wire,Medium,Lead gauge limits current
