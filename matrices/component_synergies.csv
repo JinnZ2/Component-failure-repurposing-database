@@ -7,3 +7,6 @@ Transistor (Degraded Gain),Diode (Partial Degradation),Noise leakage + junction 
 Inductor (Cracked Core),Capacitor (Value Drift),Modified inductance + capacitance shift,Adaptive LC filter,Useful in RF tuning under degraded conditions
 Multiple Failed Resistors,Multiple Failed Diodes,Distributed resistance + capacitance,Impedance network,Can create crude signal shaping circuits
 Resistor (Open),Capacitor (Open),Physical spacing + parasitic capacitance,Mechanical alignment + HF bypass,Maintains PCB integrity
+Resistor (Open),Inductor (Open/Loop),Antenna geometry from leads/coil,Emergency RF radiator,Use λ/4 or small loop
+MOSFET (Shorted),LC Tank (Degraded),Low-ohm shunt for OOK keying,Low-power beacon,Gate/base driven by MCU or RC
+Diode (Partial Degradation),MCU Timer,Noise-derived ID/backoff,Collision avoidance,Entropy from leakage/junction noise
