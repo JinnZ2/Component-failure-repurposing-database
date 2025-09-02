@@ -1,4 +1,4 @@
-# Component Failure Repurposing Database — File Index
+# Component Failure Repurposing Database — File Index (Current State)
 
 This index provides **direct raw links** to every major file in the repository, for fast access and AI parsing.
 
@@ -29,11 +29,7 @@ This index provides **direct raw links** to every major file in the repository, 
 - [photodiodes.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/diodes/photodiodes.md)
 
 ### Resistors
-- [carbon_film.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/resistors/carbon_film.md)
-- [metal_film.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/resistors/metal_film.md)
-- [wire_wound.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/resistors/wire_wound.md)
-- [thermistors.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/resistors/thermistors.md)
-- [potentiometers.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/resistors/potentiometers.md)
+- [resistor.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/resistors/resistor.md)
 
 ### Capacitors
 - [electrolytic.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/capacitors/electrolytic.md)
@@ -43,7 +39,7 @@ This index provides **direct raw links** to every major file in the repository, 
 - [supercapacitors.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/capacitors/supercapacitors.md)
 
 ### Transistors
-- [bjt_transistors.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/transistors/bjt_transistors.md)
+- [bjt.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/transistors/bjt.md)
 - [mosfets.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/transistors/mosfets.md)
 - [power_transistors.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/transistors/power_transistors.md)
 - [rf_transistors.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/transistors/rf_transistors.md)
