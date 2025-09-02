@@ -68,3 +68,5 @@
 4. **Annotate**: When proposing circuits, add the glyph tuple at the top for quick parsing.
 
 **Example header for a new fallback design:**
+
+Glyphtags: 📡🛰️⚠️ | 🕸️♾️🔁 | ⚖️🛡️📜 | 🏷️🆔⌛
