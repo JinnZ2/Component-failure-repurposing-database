@@ -1,0 +1,13 @@
+Component,Failure Mode,Repurposed Channel,Method,Notes
+Wire-wound Resistor,Open Winding,RF Fallback,LC tank inductor,Forms degraded oscillator with stray C
+Diode,Partial Degradation,RF Fallback,Noise entropy TX,Leakage/noise modulated as beacon ID
+LED,Partial/Degraded,Optical Fallback,Visible/IR blink code,MCU or RC oscillator drives blink
+Open LED / Photodiode,Intact Leads,Optical Fallback,Photodiode receiver,Detects flicker/light pulses
+Piezo / Ceramic Cap,Fractured,Acoustic Fallback,Buzzer / ultrasonic,Driven at 20–40 kHz
+Wire-wound Resistor,Open,Magnetic Fallback,Inductive loop,LF near-field comms through soil/walls
+Transformer,Degraded,Magnetic Fallback,Coupled coils,Short-range board-to-board coupling
+Resistor / Transistor,Overheated,Thermal Fallback,Heat pulse beacon,Thermistor detects modulated heat
+Thermistor,Intact,Thermal Fallback,Heat receiver,Senses pulses from nearby hot part
+Diode / BJT,Noisy,Noise Channel,Entropy-based comms,Cross-correlation decoding on receiver
+Resistor / Potentiometer,Loose/Cracked,Mechanical Fallback,Vibration signalling,Tap/microphonic path
+Accelerometer / Piezo,Intact,Mechanical Fallback,Vibration receiver,Senses vibration/tap codes
