@@ -1,0 +1,9 @@
+Component A,Component B,Synergy Effect,Repurpose Application,Notes
+Diode (Shorted),Resistor (Value Drift),Temperature coefficient + resistance drift,Distributed thermal sensing,Combine for more accurate heat maps
+Diode (Open),Capacitor (Ceramic Drift),Parasitic capacitance + dielectric variation,Timing circuit element,Useful for crude RC oscillators
+Resistor (Open),Inductor (Ferrite Core),Mechanical stability + magnetic field core,Hybrid spacer/EMI choke,Maintains board spacing while filtering
+Capacitor (Shorted),Resistor (Shorted),Thermal + resistive load,Emergency heating element,Low efficiency but usable in survival scenarios
+Transistor (Degraded Gain),Diode (Partial Degradation),Noise leakage + junction instability,Random number generator,Entropy source improved by mixing
+Inductor (Cracked Core),Capacitor (Value Drift),Modified inductance + capacitance shift,Adaptive LC filter,Useful in RF tuning under degraded conditions
+Multiple Failed Resistors,Multiple Failed Diodes,Distributed resistance + capacitance,Impedance network,Can create crude signal shaping circuits
+Resistor (Open),Capacitor (Open),Physical spacing + parasitic capacitance,Mechanical alignment + HF bypass,Maintains PCB integrity
