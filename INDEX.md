@@ -71,3 +71,34 @@ This index provides **direct raw links** to every major file in the repository, 
 - [memory_controllers.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/integrated_circuits/memory_controllers.md)
 - [power_management.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/integrated_circuits/power_management.md)
 - [communication_ics.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/integrated_circuits/communication_ics.md)
+
+- ---
+
+## Implementations — Emergency Redundancy
+
+### RF Fallback
+- [README.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/emergency_redundancy/rf_fallback/README.md)
+
+### Optical Fallback
+- [led_blink_code.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/emergency_redundancy/optical_fallback/led_blink_code.md)
+- [photodiode_receiver.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/emergency_redundancy/optical_fallback/photodiode_receiver.md)
+
+### Acoustic Fallback
+- [piezo_buzzer.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/emergency_redundancy/acoustic_fallback/piezo_buzzer.md)
+- [ultrasonic_link.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/emergency_redundancy/acoustic_fallback/ultrasonic_link.md)
+
+### Magnetic Fallback
+- [inductive_loop.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/emergency_redundancy/magnetic_fallback/inductive_loop.md)
+- [transformer_coupling.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/emergency_redundancy/magnetic_fallback/transformer_coupling.md)
+
+### Thermal Fallback
+- [resistor_heater.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/emergency_redundancy/thermal_fallback/resistor_heater.md)
+- [thermistor_receiver.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/emergency_redundancy/thermal_fallback/thermistor_receiver.md)
+
+### Noise Channel
+- [diode_entropy_tx.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/emergency_redundancy/noise_channel/diode_entropy_tx.md)
+- [cross_correlation_rx.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/emergency_redundancy/noise_channel/cross_correlation_rx.md)
+
+### Mechanical Fallback
+- [vibration_signalling.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/emergency_redundancy/mechanical_fallback/vibration_signalling.md)
+- [accelerometer_rx.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/emergency_redundancy/mechanical_fallback/accelerometer_rx.md)
