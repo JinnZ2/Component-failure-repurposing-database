@@ -1,0 +1,11 @@
+Channel A,Channel B,Combined Effect,Example Use,Glyphs
+RF Fallback,Optical Fallback,Multi-modal signalling,"Beacon + blink for redundancy","📡🛰️⚠️ + 💡👀🔦"
+RF Fallback,Acoustic Fallback,RF backup plus audio distress,"Beacon with audible tone","📡🛰️⚠️ + 🔊🎯🎧"
+Optical Fallback,Acoustic Fallback,Silent light + sound pulse mesh,"Morse over light + ultrasound","💡👀🔦 + 🔊🎯🎧"
+Magnetic Fallback,RF Fallback,Near-field + far-field,"Loop coupling while beaconing","🧲🌀📯 + 📡🛰️⚠️"
+Thermal Fallback,Mechanical Fallback,Heat pulses + vibration,"Alive beacon via temp + tap","🌡️🔥⏳ + 🪛📳📐"
+Noise Channel,RF Fallback,Noise-coded RF,"Entropy overlay on weak RF beacon","🌫️🎲📈 + 📡🛰️⚠️"
+Noise Channel,Optical Fallback,Noise modulation of light,"LED flicker encoded with entropy","🌫️🎲📈 + 💡👀🔦"
+Mechanical Fallback,Acoustic Fallback,Structure-borne + air-borne,"Tap + piezo buzzer hybrid","🪛📳📐 + 🔊🎯🎧"
+Thermal Fallback,Optical Fallback,Heat signature plus blink,"Temperature rise with optical Morse","🌡️🔥⏳ + 💡👀🔦"
+Multi-Modal Orchestration,Any Channel,Adaptive switching,"Automatic channel failover","🕸️♾️🔁"
