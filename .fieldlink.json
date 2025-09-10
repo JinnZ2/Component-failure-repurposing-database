@@ -1,16 +1,16 @@
 {
   "fieldlink": {
-    "atlas_repo": "https://github.com/JinnZ2/BioGrid2.0",
-    "atlas_paths": [
-      "planned/glyphs/atlas.json",
-      "registry/atlas.glyphs.json"
+    "version": "1.0",
+    "role": ["reclaimer", "hardware intelligence"],
+    "sources": [
+      {
+        "name": "bioatlas",
+        "repo": "https://github.com/JinnZ2/BioGrid2.0",
+        "ref": "main",
+        "paths": ["planned/glyphs/atlas.json", "registry/atlas.glyphs.json"]
+      }
     ],
-    "local_manifests": [
-      "glyphs/**",
-      "protocols/**",
-      "sensors/**",
-      "atlas/shapes.json"
-    ],
-    "role": "sensors|protocols|shapes|hub"
+    "local_manifests": ["components/**", "matrices/**", "implementations/**"],
+    "offline": true
   }
 }
