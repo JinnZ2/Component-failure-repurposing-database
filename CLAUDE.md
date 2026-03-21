@@ -59,10 +59,12 @@ This is a **documentation/database project**, not a software library.
 - **Markdown (.md):** All documentation and component specs
 - **YAML:** Embedded in markdown for structured component data
 - **CSV (.csv):** Cross-reference matrices and data tables
-- **Arduino (.ino):** One microcontroller sketch example
+- **Python:** ~600 lines of pseudocode/reference implementations embedded in markdown (PEP-8 style)
+- **Arduino C++ (.ino):** OOK beacon sketch (`arduino_ook_beacon.ino`)
+- **C++:** Example class (`FailedDiodeTemperatureSensor` in `components/diodes/silicon_diodes.md`)
 - **JSON (.json):** Configuration (`.fieldlink.json`)
 
-No package managers, build systems, or compiled code.
+No package managers, build systems, or compiled code. Python and C++ code is embedded in markdown as reference — not standalone runnable files.
 
 ## Development Workflow
 
@@ -135,12 +137,178 @@ Use descriptive prefixes:
 - Aim for minimal viable documentation
 - Include evidence tier for new data
 
+## Embedded Code Architecture
+
+### Core Engine (`Core_engine.md`)
+
+Python reference implementation for a real-time component monitoring system. Key classes:
+
+| Class | Purpose |
+|-------|---------|
+| `DataAcquisitionEngine` | Multi-channel hardware sampling with timestamps |
+| `InputBufferQueue` | Thread-safe lock-free ring buffer with overflow strategies |
+| `CoreProcessingLoop` | Routes measurements to plugins via ThreadPoolExecutor |
+| `ComponentRegistry` | Thread-safe registry of monitored components |
+| `PluginManager` | Plugin lifecycle and capabilities management |
+| `TimingController` | Tick-based precise timing for synchronized measurements |
+| `MonitoringSystem` | Top-level integration of all subsystems |
+
+Includes a complete working example with `ResistorMonitorPlugin`.
+
+### Binary Sensor (`binary_sensor.md`)
+
+Python reference implementation for failure detection plugins. Key types:
+
+| Type | Purpose |
+|------|---------|
+| `ComponentType` (Enum) | RESISTOR, CAPACITOR, INDUCTOR, DIODE, TRANSISTOR, etc. |
+| `FailureMode` (Enum) | NONE, DRIFT, DEGRADATION, OPEN_CIRCUIT, SHORT_CIRCUIT, etc. |
+| `MeasurementData` (dataclass) | Raw measurement: voltage, current, frequency, phase, temperature, noise spectrum |
+| `ComponentHealth` (dataclass) | Health score (0.0–1.0), confidence, failure mode, lifetime estimate |
+| `DetectionPlugin` (ABC) | Abstract base for all detection plugins |
+| `ResistorMonitorPlugin` | Drift detection, noise analysis, lifetime estimation via linear regression |
+| `ComponentMonitor` | Thread-based measurement processing and health history |
+
+Dependencies (for reference implementations): `numpy`, `scipy.stats`
+
+### Arduino OOK Beacon (`arduino_ook_beacon.ino`)
+
+Minimal On-Off Keying beacon for emergency RF communication. Encodes characters as 8-bit OOK with 6 ms/2 ms timing on GPIO pin 5. Includes pseudo-random backoff using analog noise.
+
+### C++ Example (`components/diodes/silicon_diodes.md`)
+
+`FailedDiodeTemperatureSensor` class — demonstrates reading a degraded diode as a temperature sensor via ADC, with calibration offset and voltage-to-temperature conversion.
+
+## Key Equations
+
+### RF / Antenna
+
+| Formula | Location |
+|---------|----------|
+| Resonant frequency: `f0 = 1/(2π√(LC))` | `simple_ook_tx.md` |
+| Quarter-wave antenna: `Length = λ/4` | `silicon_diodes.md`, `antenna_repurpose.md` |
+| 433 MHz cut length: 17.3 cm; 915 MHz: 8.2 cm; 2.4 GHz: 3.1 cm | `antenna_repurpose.md` |
+
+### Component Health
+
+| Formula | Location |
+|---------|----------|
+| Drift %: `abs((current - baseline_mean) / baseline_mean * 100)` | `binary_sensor.md` |
+| Lifetime: `abs((failure_threshold - current) / slope) / 3600` hours | `binary_sensor.md` |
+| Sample period: `1.0 / sampling_rate_hz` | `Core_engine.md` |
+
+Health score is a piecewise function based on drift thresholds (warning vs failure percentage).
+
+## YAML Schema Patterns
+
+Component YAML blocks embedded in markdown follow this structure:
+
+```yaml
+component_type: <type>
+original_function: <description>
+failure_modes:
+  - mode: short_circuit | open_circuit | partial_degradation
+    cause: <description>
+    characteristics:
+      resistance: <range>
+      thermal_coefficient: <value>
+    repurposing_applications:
+      - application: <name>
+        effectiveness: High | Medium | Low
+        implementation: <description>
+environmental_factors:
+  temperature: <range and effects>
+  humidity: <range and effects>
+testing_procedures:
+  - test: <name>
+    range: <measurement range>
+```
+
+### Extended Templates (`Future.md`)
+
+`Future.md` contains 4 expanded YAML templates for new component categories:
+- **Standard component** — failure progression (stage 1–4), ML feature vectors, safety considerations, economic analysis
+- **Connector/interconnect** — contact resistance, insertion cycles, mating force
+- **Electromechanical** — motor windings, relay contacts, solenoid coils
+- **Power component** — thermal derating, efficiency curves, protection circuits
+
+### System Configuration (`binary_sensor.md`)
+
+```yaml
+system:
+  name: <system_name>
+  sampling_rate_hz: <rate>
+  history_length: <count>
+  enable_auto_repurpose: true|false
+plugins:
+  - module: <module_path>
+    class: <class_name>
+    enabled: true|false
+components:
+  - id: <component_id>
+    type: <ComponentType>
+    plugin: <plugin_name>
+    hardware: {channel: <n>, ...}
+```
+
+## Validation and Data Quality
+
+### Confidence Labels
+
+Use inline labels to mark data certainty:
+- `⚠️ Theoretical` — physics-based, untested
+- `📚 Literature Supported` — backed by published research
+- `🔬 Lab Tested` — 100+ experimental cycles
+- `✅ Production Validated` — 6+ months field deployment
+
+### Validation Levels for YAML Entries
+
+Set `validation_level` in component YAML to one of:
+`theoretical` | `literature_backed` | `lab_validated` | `production_ready`
+
+### Pre-Submission Checklist
+
+- All required sections filled
+- Units specified for all numerical values
+- 3+ repurposing applications documented
+- Safety considerations assessed
+- Testing procedures provided
+- References cited
+- Validation level set appropriately
+
+## Emergency Communication Implementations
+
+The `implementations/circuit_examples/emergency_communication/` directory contains 8 modular fallback communication systems, each with transmitter and receiver designs:
+
+| Channel | TX Method | RX Method |
+|---------|-----------|-----------|
+| Acoustic | Piezo buzzer | Ultrasonic link |
+| Magnetic | Inductive loop | Transformer coupling |
+| Mechanical | Vibration signaling | Accelerometer |
+| Noise | Diode entropy | Cross-correlation |
+| Optical | LED blink codes | Photodiode |
+| RF | OOK beacon (ISM bands) | SDR receiver |
+| Thermal | Resistor heater | Thermistor |
+
+Supporting docs: `simple_ook_tx.md` (LC tank design), `antenna_repurpose.md` (monopole/dipole/loop construction), `sdr_receive_notes.md`.
+
+## Cross-Component Synergies
+
+The database documents how multiple failed components can be combined:
+- Failed diode + failed resistor = thermal sensing array
+- Failed LED + failed resistor = optical-thermal sensing system
+- Multiple failed components = distributed sensing networks
+
+See `matrices/component_synergies.csv` for the full cross-reference.
+
 ## Key Files for AI Assistants
 
 - **INDEX.md** — Machine-parseable file index with raw GitHub links
 - **Component.md** — YAML specification guide for structured component data
 - **components/_template.md** — Starting point for new component entries
-- **Core_engine.md** — Architecture for real-time monitoring/decision engine (includes Python pseudocode)
+- **Core_engine.md** — Monitoring/decision engine architecture (~900 lines, 6 Python classes)
+- **binary_sensor.md** — Detection plugin framework (~880 lines, 6 Python classes)
+- **Future.md** — Expansion roadmap with 4 extended YAML templates
 - **PROJECTS.md** — Links to 13 related repositories in the larger ecosystem
 - **.fieldlink.json** — Integration config linking to external resources (BioGrid2.0)
 
