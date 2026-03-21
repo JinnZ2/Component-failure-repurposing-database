@@ -118,10 +118,24 @@ Each component file follows this hierarchy:
 
 ### CSV Matrix Formats
 
+#### Core Matrices
+
 - `failure_mode_matrix.csv`: `Component,Failure Mode,Repurpose Option,Effectiveness,Notes`
+- `repurpose_effectiveness.csv`: `Component,Failure Mode,Repurpose Application,Effectiveness,Notes`
 - `environmental_interactions.csv`: `Component,Condition,Observed Effect,Repurpose Impact,Notes`
 - `component_synergies.csv`: `Component A,Component B,Synergy Effect,Repurpose Application,Notes`
 - Effectiveness scale: `High | Medium | Low`
+
+#### Redundancy Framework CSVs
+
+Five CSVs document the emergency fallback channel system:
+
+- `redundancy_channels.csv`: `Component,Failure Mode,Repurposed Channel,Method,Notes,Glyphs`
+- `redundancy_effectiveness.csv`: `Channel,Repurposed Components,Range,Bandwidth,Effectiveness Rating,Notes,Glyphs`
+- `redundancy_decay.csv`: `Channel,Condition,Degradation Pattern,Residual Functionality,Notes,Glyphs`
+- `redundancy_recovery.csv`: `Channel,Failure Condition,Recovery Strategy,AI/Software Role,Residual Benefit,Glyphs`
+- `redundancy_synergies.csv`: `Channel A,Channel B,Combined Effect,Example Use,Glyphs`
+- `redundancy_glyphs.csv`: `Channel,Glyphs,Short Meaning,Notes`
 
 ### Commit Messages
 
@@ -275,6 +289,56 @@ Set `validation_level` in component YAML to one of:
 - Testing procedures provided
 - References cited
 - Validation level set appropriately
+
+## Glyph Tagging System
+
+The repository uses a symbolic glyph system (defined in `matrices/documentation/redundancy_glyphs.md`) so AI models can quickly tag, route, and compose fallback communication designs.
+
+### Channel Glyphs
+
+| Channel | Glyphs | Meaning |
+|---------|--------|---------|
+| RF Fallback | `📡🛰️⚠️` | Radio link, beaconing, caution |
+| Optical Fallback | `💡👀🔦` | Emit, detect, torch |
+| Acoustic Fallback | `🔊🎯🎧` | Sound out, target, listen |
+| Magnetic Fallback | `🧲🌀📯` | Magnetic, loop, coupled |
+| Thermal Fallback | `🌡️🔥⏳` | Temperature, heat, slow |
+| Noise Channel | `🌫️🎲📈` | Noise, entropy, detection |
+| Mechanical Fallback | `🪛📳📐` | Hardware, vibration, geometry |
+
+### Cross-Cutting Glyphs
+
+- `🕸️♾️🔁` — Orchestration: multi-modal switching and composition
+- `⚖️🛡️📜` — Policy/Constraints: non-critical, low-power, legal bands
+- `🏷️🆔⌛` — Identity/Beaconing: device ID, randomized cadence/backoff
+
+### AI Usage
+
+1. **Tag** — assign channel glyphs to implementation docs or CSV rows
+2. **Route** — if one channel is blocked, choose the next viable glyph path (`🕸️♾️🔁`)
+3. **Constrain** — always include `⚖️🛡️📜` considerations in generated designs
+4. **Annotate** — add the glyph tuple at the top of new fallback designs
+
+## Fieldlink Configuration
+
+`.fieldlink.json` connects this repository to the broader ecosystem:
+
+```json
+{
+  "fieldlink": {
+    "version": "1.0",
+    "role": ["reclaimer", "hardware intelligence"],
+    "sources": [{"name": "bioatlas", "repo": "BioGrid2.0", "paths": ["planned/glyphs/atlas.json", "registry/atlas.glyphs.json"]}],
+    "local_manifests": ["components/**", "matrices/**", "implementations/**"],
+    "offline": true
+  }
+}
+```
+
+- **role** — declares this repo's function in the ecosystem
+- **sources** — external glyph atlas references (BioGrid2.0)
+- **local_manifests** — glob patterns defining which local paths are part of the fieldlink manifest
+- **offline** — operates without live network access to sources
 
 ## Emergency Communication Implementations
 
