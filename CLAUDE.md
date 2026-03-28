@@ -1,0 +1,381 @@
+# CLAUDE.md
+
+## Project Overview
+
+Component Failure Repurposing Database — a machine-readable knowledge base documenting how failed electronic components can be repurposed rather than discarded. The project treats degradation as a design feature, enabling adaptive and resilient systems.
+
+**Primary audience:** AI systems and human engineers.
+**License:** MIT
+
+## Repository Structure
+
+```
+├── components/              # Component specs and failure analysis (8 categories)
+│   ├── _template.md         # Reusable specification template
+│   ├── diodes/              # 6 types (silicon, zener, schottky, LED, photodiode)
+│   ├── resistors/           # 5 types (carbon film, metal film, wire wound, etc.)
+│   ├── capacitors/          # 5 types (ceramic, electrolytic, film, tantalum, super)
+│   ├── transistors/         # 5 types (BJT, MOSFET, power, RF, switching)
+│   ├── inductors/           # 4 types (air core, ferrite core, chokes, transformers)
+│   ├── integrated_circuits/ # 5 types (MCU, processors, memory, power, comms)
+│   ├── sensors/             # 5 types (temp, pressure, optical, magnetic, chemical)
+│   └── storage/             # 5 types (flash, EEPROM, HDD, optical, SD)
+├── matrices/                # Cross-reference CSV data (10 files)
+│   ├── failure_mode_matrix.csv
+│   ├── repurpose_effectiveness.csv
+│   ├── environmental_interactions.csv
+│   ├── component_synergies.csv
+│   ├── redundancy_*.csv     # 5 redundancy framework files
+│   ├── redundancy_glyphs.csv
+│   └── documentation/       # Glyph definitions
+├── implementations/         # Practical circuit examples
+│   └── circuit_examples/
+│       └── emergency_communication/  # 8 modular fallback systems
+│           ├── acoustic_fallback/
+│           ├── magnetic_fallback/
+│           ├── mechanical_fallback/
+│           ├── noise_channel/
+│           ├── optical_fallback/
+│           ├── rf_fallback/
+│           ├── thermal_fallback/
+│           └── arduino_ook_beacon.ino
+├── Core_engine.md           # Monitoring/analysis engine architecture
+├── Future.md                # Expansion roadmap
+├── Component.md             # YAML component specification guide
+├── INDEX.md                 # File index with links (for AI parsing)
+├── PROJECTS.md              # Related ecosystem repositories
+├── binary_sensor.md         # Binary sensor architecture spec
+├── diode.md                 # Diode reference
+├── resistor.md              # Resistor reference
+├── CONTRIBUTING.md          # Contribution guidelines
+├── .fieldlink.json          # Integration config for external resources
+└── LICENSE                  # MIT
+```
+
+## Tech Stack
+
+This is a **documentation/database project**, not a software library.
+
+- **Markdown (.md):** All documentation and component specs
+- **YAML:** Embedded in markdown for structured component data
+- **CSV (.csv):** Cross-reference matrices and data tables
+- **Python:** ~600 lines of pseudocode/reference implementations embedded in markdown (PEP-8 style)
+- **Arduino C++ (.ino):** OOK beacon sketch (`arduino_ook_beacon.ino`)
+- **C++:** Example class (`FailedDiodeTemperatureSensor` in `components/diodes/silicon_diodes.md`)
+- **JSON (.json):** Configuration (`.fieldlink.json`)
+
+No package managers, build systems, or compiled code. Python and C++ code is embedded in markdown as reference — not standalone runnable files.
+
+## Development Workflow
+
+There are no build, test, or lint commands. Changes are documentation-only.
+
+### Contributing a Component
+
+1. Copy `components/_template.md` into the appropriate category directory
+2. Fill in with measured/verified data following the template structure
+3. Append tabular data to relevant `matrices/*.csv` files
+4. Commit with a descriptive message
+5. Open a pull request
+
+### Component Spec Template Structure
+
+Each component file follows this hierarchy:
+- Component Overview (type, function, package, specs)
+- Failure Mode Analysis (2–3 modes per component)
+- Environmental Interaction Matrix
+- Implementation Examples
+- Testing Protocols
+- Cross-Component Interactions
+- AI Integration Notes
+
+## Conventions
+
+### File Naming
+
+- Use `lower_snake_case.md` for all files (e.g., `silicon_diodes.md`, `wire_wound.md`)
+
+### Units and Formatting
+
+- SI spacing: `10 kΩ`, `150 °C`, `5 mA`
+- Ranges use en-dash: `0.1–5 Ω` (not `0.1-5`)
+- Markdown heading hierarchy: `#` > `##` > `###`
+
+### Evidence Standards
+
+- Prefer **numbers over adjectives** — measured data over theory
+- Mark uncertainty with labels: `unverified`, `field report`, `hypothesis`, `(est.)`
+- Include environmental conditions when relevant
+
+### Evidence Tiers
+
+| Tier | Level | Description |
+|------|-------|-------------|
+| 1 | Theoretical | Physics compliance |
+| 2 | Literature | Published research |
+| 3 | Experimental | 100+ test cycles |
+| 4 | Field | Production deployment |
+
+### CSV Matrix Formats
+
+#### Core Matrices
+
+- `failure_mode_matrix.csv`: `Component,Failure Mode,Repurpose Option,Effectiveness,Notes`
+- `repurpose_effectiveness.csv`: `Component,Failure Mode,Repurpose Application,Effectiveness,Notes`
+- `environmental_interactions.csv`: `Component,Condition,Observed Effect,Repurpose Impact,Notes`
+- `component_synergies.csv`: `Component A,Component B,Synergy Effect,Repurpose Application,Notes`
+- Effectiveness scale: `High | Medium | Low`
+
+#### Redundancy Framework CSVs
+
+Five CSVs document the emergency fallback channel system:
+
+- `redundancy_channels.csv`: `Component,Failure Mode,Repurposed Channel,Method,Notes,Glyphs`
+- `redundancy_effectiveness.csv`: `Channel,Repurposed Components,Range,Bandwidth,Effectiveness Rating,Notes,Glyphs`
+- `redundancy_decay.csv`: `Channel,Condition,Degradation Pattern,Residual Functionality,Notes,Glyphs`
+- `redundancy_recovery.csv`: `Channel,Failure Condition,Recovery Strategy,AI/Software Role,Residual Benefit,Glyphs`
+- `redundancy_synergies.csv`: `Channel A,Channel B,Combined Effect,Example Use,Glyphs`
+- `redundancy_glyphs.csv`: `Channel,Glyphs,Short Meaning,Notes`
+
+### Commit Messages
+
+Use descriptive prefixes:
+- `add:` — New features/files
+- `data:` — CSV/matrix updates
+- `docs:` — Documentation changes
+- `test:` — Implementation/validation
+
+### Pull Requests
+
+- One focused change per PR
+- Aim for minimal viable documentation
+- Include evidence tier for new data
+
+## Embedded Code Architecture
+
+### Core Engine (`Core_engine.md`)
+
+Python reference implementation for a real-time component monitoring system. Key classes:
+
+| Class | Purpose |
+|-------|---------|
+| `DataAcquisitionEngine` | Multi-channel hardware sampling with timestamps |
+| `InputBufferQueue` | Thread-safe lock-free ring buffer with overflow strategies |
+| `CoreProcessingLoop` | Routes measurements to plugins via ThreadPoolExecutor |
+| `ComponentRegistry` | Thread-safe registry of monitored components |
+| `PluginManager` | Plugin lifecycle and capabilities management |
+| `TimingController` | Tick-based precise timing for synchronized measurements |
+| `MonitoringSystem` | Top-level integration of all subsystems |
+
+Includes a complete working example with `ResistorMonitorPlugin`.
+
+### Binary Sensor (`binary_sensor.md`)
+
+Python reference implementation for failure detection plugins. Key types:
+
+| Type | Purpose |
+|------|---------|
+| `ComponentType` (Enum) | RESISTOR, CAPACITOR, INDUCTOR, DIODE, TRANSISTOR, etc. |
+| `FailureMode` (Enum) | NONE, DRIFT, DEGRADATION, OPEN_CIRCUIT, SHORT_CIRCUIT, etc. |
+| `MeasurementData` (dataclass) | Raw measurement: voltage, current, frequency, phase, temperature, noise spectrum |
+| `ComponentHealth` (dataclass) | Health score (0.0–1.0), confidence, failure mode, lifetime estimate |
+| `DetectionPlugin` (ABC) | Abstract base for all detection plugins |
+| `ResistorMonitorPlugin` | Drift detection, noise analysis, lifetime estimation via linear regression |
+| `ComponentMonitor` | Thread-based measurement processing and health history |
+
+Dependencies (for reference implementations): `numpy`, `scipy.stats`
+
+### Arduino OOK Beacon (`arduino_ook_beacon.ino`)
+
+Minimal On-Off Keying beacon for emergency RF communication. Encodes characters as 8-bit OOK with 6 ms/2 ms timing on GPIO pin 5. Includes pseudo-random backoff using analog noise.
+
+### C++ Example (`components/diodes/silicon_diodes.md`)
+
+`FailedDiodeTemperatureSensor` class — demonstrates reading a degraded diode as a temperature sensor via ADC, with calibration offset and voltage-to-temperature conversion.
+
+## Key Equations
+
+### RF / Antenna
+
+| Formula | Location |
+|---------|----------|
+| Resonant frequency: `f0 = 1/(2π√(LC))` | `simple_ook_tx.md` |
+| Quarter-wave antenna: `Length = λ/4` | `silicon_diodes.md`, `antenna_repurpose.md` |
+| 433 MHz cut length: 17.3 cm; 915 MHz: 8.2 cm; 2.4 GHz: 3.1 cm | `antenna_repurpose.md` |
+
+### Component Health
+
+| Formula | Location |
+|---------|----------|
+| Drift %: `abs((current - baseline_mean) / baseline_mean * 100)` | `binary_sensor.md` |
+| Lifetime: `abs((failure_threshold - current) / slope) / 3600` hours | `binary_sensor.md` |
+| Sample period: `1.0 / sampling_rate_hz` | `Core_engine.md` |
+
+Health score is a piecewise function based on drift thresholds (warning vs failure percentage).
+
+## YAML Schema Patterns
+
+Component YAML blocks embedded in markdown follow this structure:
+
+```yaml
+component_type: <type>
+original_function: <description>
+failure_modes:
+  - mode: short_circuit | open_circuit | partial_degradation
+    cause: <description>
+    characteristics:
+      resistance: <range>
+      thermal_coefficient: <value>
+    repurposing_applications:
+      - application: <name>
+        effectiveness: High | Medium | Low
+        implementation: <description>
+environmental_factors:
+  temperature: <range and effects>
+  humidity: <range and effects>
+testing_procedures:
+  - test: <name>
+    range: <measurement range>
+```
+
+### Extended Templates (`Future.md`)
+
+`Future.md` contains 4 expanded YAML templates for new component categories:
+- **Standard component** — failure progression (stage 1–4), ML feature vectors, safety considerations, economic analysis
+- **Connector/interconnect** — contact resistance, insertion cycles, mating force
+- **Electromechanical** — motor windings, relay contacts, solenoid coils
+- **Power component** — thermal derating, efficiency curves, protection circuits
+
+### System Configuration (`binary_sensor.md`)
+
+```yaml
+system:
+  name: <system_name>
+  sampling_rate_hz: <rate>
+  history_length: <count>
+  enable_auto_repurpose: true|false
+plugins:
+  - module: <module_path>
+    class: <class_name>
+    enabled: true|false
+components:
+  - id: <component_id>
+    type: <ComponentType>
+    plugin: <plugin_name>
+    hardware: {channel: <n>, ...}
+```
+
+## Validation and Data Quality
+
+### Confidence Labels
+
+Use inline labels to mark data certainty:
+- `⚠️ Theoretical` — physics-based, untested
+- `📚 Literature Supported` — backed by published research
+- `🔬 Lab Tested` — 100+ experimental cycles
+- `✅ Production Validated` — 6+ months field deployment
+
+### Validation Levels for YAML Entries
+
+Set `validation_level` in component YAML to one of:
+`theoretical` | `literature_backed` | `lab_validated` | `production_ready`
+
+### Pre-Submission Checklist
+
+- All required sections filled
+- Units specified for all numerical values
+- 3+ repurposing applications documented
+- Safety considerations assessed
+- Testing procedures provided
+- References cited
+- Validation level set appropriately
+
+## Glyph Tagging System
+
+The repository uses a symbolic glyph system (defined in `matrices/documentation/redundancy_glyphs.md`) so AI models can quickly tag, route, and compose fallback communication designs.
+
+### Channel Glyphs
+
+| Channel | Glyphs | Meaning |
+|---------|--------|---------|
+| RF Fallback | `📡🛰️⚠️` | Radio link, beaconing, caution |
+| Optical Fallback | `💡👀🔦` | Emit, detect, torch |
+| Acoustic Fallback | `🔊🎯🎧` | Sound out, target, listen |
+| Magnetic Fallback | `🧲🌀📯` | Magnetic, loop, coupled |
+| Thermal Fallback | `🌡️🔥⏳` | Temperature, heat, slow |
+| Noise Channel | `🌫️🎲📈` | Noise, entropy, detection |
+| Mechanical Fallback | `🪛📳📐` | Hardware, vibration, geometry |
+
+### Cross-Cutting Glyphs
+
+- `🕸️♾️🔁` — Orchestration: multi-modal switching and composition
+- `⚖️🛡️📜` — Policy/Constraints: non-critical, low-power, legal bands
+- `🏷️🆔⌛` — Identity/Beaconing: device ID, randomized cadence/backoff
+
+### AI Usage
+
+1. **Tag** — assign channel glyphs to implementation docs or CSV rows
+2. **Route** — if one channel is blocked, choose the next viable glyph path (`🕸️♾️🔁`)
+3. **Constrain** — always include `⚖️🛡️📜` considerations in generated designs
+4. **Annotate** — add the glyph tuple at the top of new fallback designs
+
+## Fieldlink Configuration
+
+`.fieldlink.json` connects this repository to the broader ecosystem:
+
+```json
+{
+  "fieldlink": {
+    "version": "1.0",
+    "role": ["reclaimer", "hardware intelligence"],
+    "sources": [{"name": "bioatlas", "repo": "BioGrid2.0", "paths": ["planned/glyphs/atlas.json", "registry/atlas.glyphs.json"]}],
+    "local_manifests": ["components/**", "matrices/**", "implementations/**"],
+    "offline": true
+  }
+}
+```
+
+- **role** — declares this repo's function in the ecosystem
+- **sources** — external glyph atlas references (BioGrid2.0)
+- **local_manifests** — glob patterns defining which local paths are part of the fieldlink manifest
+- **offline** — operates without live network access to sources
+
+## Emergency Communication Implementations
+
+The `implementations/circuit_examples/emergency_communication/` directory contains 8 modular fallback communication systems, each with transmitter and receiver designs:
+
+| Channel | TX Method | RX Method |
+|---------|-----------|-----------|
+| Acoustic | Piezo buzzer | Ultrasonic link |
+| Magnetic | Inductive loop | Transformer coupling |
+| Mechanical | Vibration signaling | Accelerometer |
+| Noise | Diode entropy | Cross-correlation |
+| Optical | LED blink codes | Photodiode |
+| RF | OOK beacon (ISM bands) | SDR receiver |
+| Thermal | Resistor heater | Thermistor |
+
+Supporting docs: `simple_ook_tx.md` (LC tank design), `antenna_repurpose.md` (monopole/dipole/loop construction), `sdr_receive_notes.md`.
+
+## Cross-Component Synergies
+
+The database documents how multiple failed components can be combined:
+- Failed diode + failed resistor = thermal sensing array
+- Failed LED + failed resistor = optical-thermal sensing system
+- Multiple failed components = distributed sensing networks
+
+See `matrices/component_synergies.csv` for the full cross-reference.
+
+## Key Files for AI Assistants
+
+- **INDEX.md** — Machine-parseable file index with raw GitHub links
+- **Component.md** — YAML specification guide for structured component data
+- **components/_template.md** — Starting point for new component entries
+- **Core_engine.md** — Monitoring/decision engine architecture (~900 lines, 6 Python classes)
+- **binary_sensor.md** — Detection plugin framework (~880 lines, 6 Python classes)
+- **Future.md** — Expansion roadmap with 4 extended YAML templates
+- **PROJECTS.md** — Links to 13 related repositories in the larger ecosystem
+- **.fieldlink.json** — Integration config linking to external resources (BioGrid2.0)
+
+## Related Ecosystem
+
+This repository is part of a larger "regenerative AI" ecosystem by JinnZ2. See `PROJECTS.md` for links to related repositories including BioGrid2.0, glyphs systems, and other adaptive hardware projects.
