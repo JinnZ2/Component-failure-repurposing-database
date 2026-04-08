@@ -10,3 +10,32 @@ Resistor (Open),Capacitor (Open),Physical spacing + parasitic capacitance,Mechan
 Resistor (Open),Inductor (Open/Loop),Antenna geometry from leads/coil,Emergency RF radiator,Use λ/4 or small loop
 MOSFET (Shorted),LC Tank (Degraded),Low-ohm shunt for OOK keying,Low-power beacon,Gate/base driven by MCU or RC
 Diode (Partial Degradation),MCU Timer,Noise-derived ID/backoff,Collision avoidance,Entropy from leakage/junction noise
+Diode (Silicon Shorted),Diode (Silicon Shorted),Thermal network + distributed sensing,Distributed heat management,Load balancing; redundant thermal sensing; 9/10
+LED (Reduced Output),Resistor (Value Drift),Optical detection + temperature reference,Optical-thermal sensing system,Greenhouse automation; building energy management
+LED (Failed),LED (Failed),Wavelength diversity + spatial distribution,Distributed multi-spectral sensing array,Different spectral ranges for multi-point monitoring
+LED (Reduced Output),LED (Complete Failure),Partial emitter + photodetector pair,Low-speed optical communication,Simple on-off keying optical link
+Zener (Voltage Shift),Capacitor (Value Drift),Degraded regulation + shifted capacitance,Degraded power supply with sensing,Voltage regulation + environmental monitoring
+Zener (Voltage Shift),Resistor (Value Drift),Adaptive voltage + temperature compensation,Temperature-compensated voltage reference,Integrated current sensing
+Zener (Voltage Shift),Transistor (Degraded),Thermal monitoring + adaptive biasing,Thermal protection system,Comprehensive monitoring and control
+Multiple Zeners (Shifted),Multiple Zeners (Shifted),Stacked voltage offsets,Voltage ladder / Sensor array,Multi-level references; thermal distribution
+Diode (Silicon Shorted),Capacitor (Value Drift),Current path + shifted filtering,Adaptive power conditioning,Diode provides path; capacitor filters
+MOSFET (Drain-Source Short),Resistor (Open Leads),Low-ohm switch + antenna geometry,Emergency OOK RF beacon,MCU-driven beacon with improvised antenna
+Capacitor (Electrolytic ESR),Resistor (Wire-Wound Hot Spot),Dual resistive heating elements,Distributed emergency heater,Combined thermal output for survival scenarios
+Transistor (BJT Noise),MOSFET (Parameter Drift),Dual-source noise mixing,High-quality entropy source,XOR mixing improves randomness distribution
+Sensor (Temperature Drift),Diode (LED Reduced),Temperature trend + optical threshold,Environmental alarm system,Combined temp trend + visible/IR alert
+Sensor (Pressure Damaged),Sensor (Optical Reduced),Vibration + light threshold,Dual-mode intrusion detector,Mechanical + optical breach detection
+IC (MCU Peripheral Failure),Transistor (BJT Noise),Remaining GPIO + noise input,Hardware random number generator,MCU samples transistor noise via working ADC
+IC (Comm TX Burnout),IC (Comm Frequency Drift),Receiver-only + shifted oscillator,Frequency-scanning receiver,Drift provides crude frequency sweep
+Storage (Flash Stuck Bits),IC (MCU Flash Worn),Complementary fixed data,Distributed firmware fragments,Combine partial ROMs for complete firmware image
+Inductor (Transformer Open),Capacitor (Film Drift),Single winding + shifted capacitance,Adaptive bandpass filter,Tunable LC with degraded but functional components
+Sensor (Magnetic Drift),Inductor (Air Core Deformed),Relative field detection + altered coil,Proximity sensing system,Coil generates field; sensor detects perturbation
+Sensor (Chemical Drift),Sensor (Temperature Drift),Relative chemical + thermal trends,Environmental trend correlator,Cross-correlate drift patterns for environmental mapping
+Relay (Welded Contacts),Motor (Brush Wear),Fixed switch + degraded generator,Emergency power switching,Relay as permanent connection; motor generates voltage
+Motor (Winding Open),Capacitor (Film Drift),Remaining inductance + shifted capacitance,Adaptive LC filter,Usable at low frequencies for signal filtering
+Solenoid (Stuck Plunger),Relay (Open Coil),Static electromagnet + manual switch,Manual-triggered magnetic latch,Solenoid holds; relay provides manual switching
+Connector (Corroded),Resistor (Thermistor Drift),Humidity proxy + temperature trend,Dual environmental sensor,Cross-correlate humidity and temperature drift
+Voltage Regulator (Dropout ↑),Diode (Zener Shifted),Temperature-dependent dropout + shifted reference,Adaptive thermal alarm,Dropout triggers alarm via shifted Zener threshold
+Power Diode (Shorted),Motor (Bearing Failure),High-current path + low-speed generation,Emergency charging circuit,Diode carries motor-generated current to load
+Power Transformer (Open Winding),Capacitor (Electrolytic ESR),Single inductor + resistive heating,Heated LC element,Thermal stabilization of resonant circuit
+Switch (Stuck Closed),Relay (Welded),Dual permanent connections,Redundant fixed path,Two independent permanent connections for reliability
+Motor (Demagnetized),Sensor (Magnetic Drift),Weak field source + relative detector,Short-range proximity sensor,Motor magnet actuates drifted sensor at close range

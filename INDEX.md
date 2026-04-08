@@ -72,6 +72,22 @@ This index provides **direct raw links** to every major file in the repository, 
 - [power_management.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/integrated_circuits/power_management.md)
 - [communication_ics.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/integrated_circuits/communication_ics.md)
 
+### Connectors
+- [pin_headers.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/connectors/pin_headers.md)
+- [edge_connectors.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/connectors/edge_connectors.md)
+- [board_to_wire.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/connectors/board_to_wire.md)
+
+### Electromechanical
+- [relays.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/electromechanical/relays.md)
+- [switches.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/electromechanical/switches.md)
+- [motors.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/electromechanical/motors.md)
+- [solenoids.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/electromechanical/solenoids.md)
+
+### Power Components
+- [voltage_regulators.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/power_components/voltage_regulators.md)
+- [power_diodes.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/power_components/power_diodes.md)
+- [power_transformers.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/power_components/power_transformers.md)
+
 ---
 
 ## Implementations — Emergency Communication

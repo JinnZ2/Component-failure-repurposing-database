@@ -1,23 +1,223 @@
 Component,Failure Mode,Repurpose Application,Effectiveness,Notes
-Diode,Short Circuit,Low-value Resistor,Medium,0.1–5Ω usable range
-Diode,Open Circuit,Parasitic Capacitor,Low,1–5pF between leads
-Diode,Partial Degradation,Random Noise Source,High,Good entropy for RNG
-
-Resistor,Open Circuit,Mechanical Spacer,High,Preserves PCB spacing and stability
-Resistor,Value Drift,Temperature Sensor,Medium,100–1000ppm/°C sensitivity
-Resistor,Short Circuit,Jumper Wire,Medium,Lead gauge ~1–5A capacity
-
-Capacitor (Ceramic),Open Circuit,PCB Spacer/Parasitic Cap,Low,0.1–2pF remains
+Diode (Silicon),Short Circuit,Low-value Resistor,Medium,0.05–2Ω usable range
+Diode (Silicon),Short Circuit,Current Path/Jumper,High,1–3A capacity; 50–100mV drop
+Diode (Silicon),Short Circuit,Temperature Sensor,Medium,2–3mV/°C; ±3–5°C accuracy
+Diode (Silicon),Open Circuit,Mechanical Spacer,High,Preserves PCB spacing and stability
+Diode (Silicon),Open Circuit,Antenna Element,Medium,Quarter-wave monopole from leads
+Diode (Silicon),Open Circuit,Parasitic Capacitor,Low,0.5–3pF inter-lead capacitance
+Diode (Silicon),Parametric Degradation,Environmental Sensor,High,Multi-parameter: temp/humidity/radiation
+Diode (Silicon),Parametric Degradation,Random Number Generator,High,1–100 kbits/sec entropy
+Diode (Silicon),Parametric Degradation,Degraded Voltage Reference,Medium,±20–100mV stability
+Diode (Zener),Voltage Shift,Non-Critical Voltage Reference,Medium,±100–500mV accuracy
+Diode (Zener),Voltage Shift,Enhanced Temperature Sensor,High,5–15mV/°C; ±1–2°C accuracy
+Diode (Zener),Voltage Shift,Adaptive Voltage Regulation,Medium,Variable reference; environmental compensation
+Diode (Zener),Increased Dynamic Resistance,Noise Generator,Medium,DC to several MHz bandwidth
+Diode (Zener),Increased Dynamic Resistance,Current Limiting Element,High,Soft limiter; LED/sensor protection
+Diode (Zener),Short Circuit,Low-Value Precision Resistor,Medium,0.1–3Ω; current sensing; overcurrent detection
+Diode (Zener),Short Circuit,Precision Heat Sink,High,0.25W–5W capacity
+Diode (Zener),Open Circuit,Precision Mechanical Spacer,High,Voltage-rated spacing; HV isolation
+Diode (Schottky),Short Circuit,Low-Value Shunt Resistor,Medium,Current sense element
+Diode (Schottky),Open Circuit,PCB Spacer,High,Maintains board geometry
+Diode (Schottky),Leakage Increase,Humidity/Temperature Proxy,Medium,Leakage correlates with environment
+Diode (LED),Reduced Light Output,Low-Level Indicator,High,Standby indicators; 8/10 effectiveness
+Diode (LED),Reduced Light Output,Temperature Sensor,High,3–8mV/°C; 9/10 effectiveness
+Diode (LED),Reduced Light Output,Photodiode (Reverse Bias),Medium,Spectral selectivity preserved; 7/10
+Diode (LED),Reduced Light Output,Wavelength-Shifted Source,Medium,±5–20nm shift; 6/10
+Diode (LED),Complete Light Failure,Standard Diode Function,Medium,Rectification; 20mA–1A; 6/10
+Diode (LED),Complete Light Failure,Photodiode,High,Pure photodetection; 8/10
+Diode (LED),Complete Light Failure,Random Event Generator,Medium,Entropy from timing jitter; 7/10
+Diode (LED),Intermittent Operation,Thermal Stress Indicator,High,Temperature-dependent operation; 8/10
+Diode (Photodiode),Dark Current Increase,Noise Source / RNG,Medium,Dark current fluctuation entropy
+Diode (Photodiode),Dark Current Increase,Radiation Detector,Medium,Crude dosimeter
+Diode (Photodiode),Sensitivity Loss,Binary Light/Dark Detector,Medium,Simple threshold only
+Diode (Photodiode),Open Circuit,Antenna Stub,Low,Lead length sets frequency
+Resistor (Carbon Film),Open Circuit,PCB Spacer,High,Preserves board spacing
+Resistor (Carbon Film),Open Circuit,RF Parasitic Capacitor,Low,0.2–2pF between leads
+Resistor (Carbon Film),Value Drift,Humidity/Temperature Proxy,Medium,ppm/°C increase maps to environment
+Resistor (Carbon Film),Short/Low-Ohm Scar,Jumper Wire,Medium,1–3A by lead gauge
+Resistor (Metal Film),Open Circuit,Mechanical Spacer,High,Very low parasitic C; RF decoupling
+Resistor (Metal Film),Value Drift,Temperature Probe,Medium,More stable than carbon film
+Resistor (Metal Film),Short Circuit,Low-Ohm Current Sensor,Medium,mV per amp measurement
+Resistor (Wire-Wound),Open Winding,Inductor Form / EMI Choke,Medium,Partial turns for LC tank
+Resistor (Wire-Wound),Open Winding,Thermal Mass Spacer,High,Good heat spreading
+Resistor (Wire-Wound),Hot-Spot Damage,Low-Value Heater,Medium,Partial short creates heater
+Resistor (Wire-Wound),Hot-Spot Damage,Current Shunt,Medium,Low-value resistance path
+Resistor (Potentiometer),Dead Spots/Wiper Noise,Multi-Position Switch,Medium,Use good segments of track
+Resistor (Potentiometer),Open Track,Fixed Voltage Divider,Medium,Intact end segment functions
+Resistor (Thermistor),Value Drift,Relative Trend Sensor,Medium,Tracks temperature trends despite drift
+Resistor (Thermistor),Open Circuit,Spacer with Minimal RF Cap,High,Minimal parasitic effects
+Capacitor (Ceramic),Open Circuit,PCB Spacer / Parasitic Cap,Low,0.1–2pF remains
 Capacitor (Ceramic),Value Drift,Humidity Sensor,Medium,Capacitance vs RH drift
 Capacitor (Ceramic),Short Circuit,Fused Link,Low,Sacrificial element only
-
-Transistor (BJT),Collector-Emitter Short,Low-value Resistor,Medium,0.05–1Ω usable
+Capacitor (Electrolytic),Dry-Out / Capacitance Loss,Insulating Spacer,Low,Residual capacitance for timing
+Capacitor (Electrolytic),Short Circuit,Fused Link / Thermal Mass,Low,Heat spreading in emergency
+Capacitor (Electrolytic),Increased ESR,Crude Heating Element,Medium,ESR as resistive load
+Capacitor (Film),Dielectric Breakdown,Fused Protection Element,Low,Parasitic capacitance usable
+Capacitor (Film),Capacitance Drift,Crude Timing Element,Medium,Environmental drift sensor
+Capacitor (Film),Open Leads,Mechanical Spacer,High,Board stability element
+Capacitor (Tantalum),Short Circuit,Fused Link,Low,Non-critical path protection
+Capacitor (Tantalum),Capacitance Loss,Weak Timing Element,Low,Residual capacitance
+Capacitor (Tantalum),Increased Leakage,Environmental Sensor,Medium,Leakage correlates to temp/humidity
+Capacitor (Supercapacitor),Capacitance Fade,Heating Element (ESR),Medium,Large ESR provides resistive heating
+Capacitor (Supercapacitor),Capacitance Fade,Backup Timing Source,Low,Residual capacitance for timing
+Capacitor (Supercapacitor),Increased ESR,Resistive Load / Health Monitor,Medium,ESR as sensing element
+Capacitor (Supercapacitor),Mechanical Swelling,Pressure Indicator,Low,Mechanical stress sensing
+Transistor (BJT),Collector-Emitter Short,Low-Value Resistor,Medium,0.05–1Ω usable
+Transistor (BJT),Collector-Emitter Short,Thermal Sensor,Medium,Junction drop vs temperature
+Transistor (BJT),Open Junction,Mechanical Spacer,High,Preserves PCB geometry
 Transistor (BJT),Open Junction,Antenna Stub,Low,Leads used for RF element
-Transistor (BJT),Gain Degradation,Noise Source,High,Leakage current exploitable
-
+Transistor (BJT),Gain Degradation,Noise Source,High,Leakage current exploitable for RNG
+Transistor (MOSFET),Drain-Source Short,Low-Value Resistor / Shunt,Medium,0.01–0.1Ω; ampere-range sensing
+Transistor (MOSFET),Drain-Source Short,Thermal Pad,Medium,Small heat spreader
+Transistor (MOSFET),Drain-Source Short,Current Sensor,Medium,Voltage drop proportional to current
+Transistor (MOSFET),Open Circuit,Mechanical Spacer,High,Preserves PCB structure
+Transistor (MOSFET),Open Circuit,Capacitive Element,Medium,Gate capacitance 10–1000pF
+Transistor (MOSFET),Open Circuit,Antenna Stub,Low,Lead geometry for RF
+Transistor (MOSFET),Parameter Drift,Voltage Sensor,Medium,Threshold drift as environmental proxy
+Transistor (MOSFET),Parameter Drift,Noise Source / RNG,High,Entropy from leakage fluctuations
+Transistor (MOSFET),Parameter Drift,Radiation Monitor,Medium,Leakage scaling with dose
+Transistor (Power),Short Circuit,Low-Ohm Resistor / Heat Spreader,Medium,Current path or thermal pad
+Transistor (Power),Open Circuit,Spacer / Antenna Stub,Medium,Mechanical or RF element
+Transistor (Power),Gain Degradation,Noise Source,Medium,Leakage-based entropy
+Transistor (RF),Gain Collapse,Noise Source,Medium,Broadband noise generator
+Transistor (RF),Open Junction,Antenna Stub,Low,Frequency-dependent RF element
+Transistor (RF),Partial Leakage,Crude RF Detector,Medium,Leakage as RF energy indicator
+Transistor (Switching),Open Junction,Spacer / Antenna Stub,Low,Lead length useful at HF/VHF
+Transistor (Switching),Shorted Junction,Low-Value Jumper,Medium,Current shunt in non-critical paths
+Transistor (Switching),Gain Loss / Parameter Drift,Noise Source / Drift Sensor,Medium,Environmental sensing
 Inductor (Ferrite Core),Open Winding,EMI Absorber,Medium,Ferrite core still effective
-Inductor (Ferrite Core),Core Crack,Spacer/Thermal Mass,Low,Limited but usable
+Inductor (Ferrite Core),Open Winding,Mechanical Spacer,High,Board spacing maintained
+Inductor (Ferrite Core),Core Saturation / Damage,Partial Transformer / Thermal Sink,Low,Reduced but usable inductance
 Inductor (Ferrite Core),Resistance Increase,Heating Element,Low,Low-power applications
-Resistor (Open),Emergency RF,Antenna Element,Medium,Lead length sets band; near-field workable
-MOSFET (Shorted),Emergency RF,OOK Shunt Switch,Medium,Low-ohm reliable; keep duty low
-Wire-wound Resistor (Open),Emergency RF,Inductor for LC Tank,Medium,Use partial turns; trim C by lead length
+Inductor (Air Core),Open Winding,Antenna Coil Form,Medium,Coil geometry for RF
+Inductor (Air Core),Open Winding,PCB Spacer,High,Board layout maintained
+Inductor (Air Core),Mechanical Deformation,Crude Strain Sensor,Low,Inductance tracks deformation
+Inductor (Choke),Open Winding,EMI Absorber,Medium,Ferrite body still absorbs
+Inductor (Choke),Saturation / Core Damage,Crude Thermal Sink,Low,Partial filtering
+Inductor (Choke),Resistance Drift,Heating Element / Stress Indicator,Low,Resistance tracks degradation
+Inductor (Transformer),Open Winding,Single-Winding Inductor,Medium,Remaining windings functional
+Inductor (Transformer),Shorted Turns,Crude Heating Element,Low,Resistive heating
+Inductor (Transformer),Core Damage,EMI Absorber Fragments,Low,Ferrite fragments for suppression
+IC (Microcontroller),Flash Wear-Out,Fixed-Function Controller,Medium,ROM firmware locked
+IC (Microcontroller),Peripheral Failure,Signal Router (Remaining GPIOs),Medium,Fixed pull-ups; partial I/O
+IC (Microcontroller),CPU Lockup,Oscillator Source,Low,Internal clock as timing element
+IC (Processor),Partial Core Failure,Reduced-Core Computing,High,Task-specific engine
+IC (Processor),Cache Errors,Entropy Source,Medium,Bit flips as random data
+IC (Processor),I/O Bus Failure,Internal ALU Reuse,Low,Math co-processor if accessible
+IC (Memory Controller),Address Line Failure,Reduced Memory Space,Medium,Address remapping
+IC (Memory Controller),Timing Drift,Variable Delay Element,Low,Crude timing generator
+IC (Power Management),Shorted Regulator,Low-Value Resistor / Thermal Pad,Medium,Heat spreading
+IC (Power Management),Open Control Loop,Fixed Voltage Drop Element,Low,Passive voltage offset
+IC (Power Management),Drifted Reference,Environmental Voltage Sensor,Medium,Temperature-dependent drift
+IC (Communication),Transmitter Burnout,Receiver-Only Mode,Medium,Half-duplex preserved
+IC (Communication),Transmitter Burnout,Noise Detector,Low,Broadband detection
+IC (Communication),Frequency Drift,Crude RF Oscillator,Medium,Drift as sensing element
+IC (Communication),Protocol Logic Failure,Partial Repeater,Low,Limited protocol relay
+Sensor (Temperature),Open Circuit,Mechanical Spacer,High,Parasitic capacitance element
+Sensor (Temperature),Value Drift,Relative Trend Sensor,Medium,Direction of change; not absolute
+Sensor (Temperature),Increased Noise,Entropy Source,Medium,Junction noise as random data
+Sensor (Pressure),Reduced Sensitivity,Binary Threshold Detector,Medium,On/off pressure detection
+Sensor (Pressure),Mechanical Damage,Vibration / Shock Indicator,Low,Impact detection only
+Sensor (Optical),Dark Current Increase,Random Noise Generator,Medium,Dark current entropy
+Sensor (Optical),Dark Current Increase,Radiation Detector,Medium,Crude dosimeter
+Sensor (Optical),Reduced Sensitivity,Binary Light/Dark Detector,Medium,Simple threshold
+Sensor (Magnetic),Offset Drift,Relative Change Detector,Medium,Motion or presence sensing
+Sensor (Magnetic),Loss of Sensitivity,Threshold Switch,Low,Large-field detection only
+Sensor (Chemical),Sensitivity Drift,Relative Indicator,Low,Long-term environmental trend
+Sensor (Chemical),Open Circuit,Spacer / Humidity Proxy,Low,Package absorbs moisture
+Storage (Flash Memory),Stuck Bits,ROM with Fixed Data,Medium,Firmware stubs; lookup tables
+Storage (Flash Memory),Endurance Limit,Append-Only Logging,Medium,Write-limited but readable
+Storage (Flash Memory),Endurance Limit,Entropy Source,Medium,Read errors as random data
+Storage (EEPROM),Write Failure,Permanent Calibration Storage,Medium,Locked data still readable
+Storage (EEPROM),Data Retention Loss,Drift Tracker / Entropy Source,Low,Bit decay as random/trend data
+Storage (Hard Drive),Head Crash,Spindle Motor Generator,Medium,Mechanical energy conversion
+Storage (Hard Drive),Head Crash,Reflective Optical Element,Low,Platter as mirror/reflector
+Storage (Hard Drive),Bad Sectors,Partial Capacity Storage,Medium,Remap around bad sectors
+Storage (Hard Drive),Bad Sectors,Entropy Source,Low,Error distribution as random data
+Storage (Optical Media),Surface Scratches,Diffraction Element,Medium,Optical calibration grating
+Storage (Optical Media),Read Errors,Entropy Source / Calibration Tool,Low,Error patterns as random data
+Storage (SD Card),File System Corruption,Raw Block Storage,Medium,Bypass filesystem; append-only
+Storage (SD Card),Bad Blocks,Circular Buffer (Partial),Low,Reduced capacity
+Storage (SD Card),Bad Blocks,Entropy Source,Low,Block error patterns as random data
+Connector (Pin Header),Contact Corrosion,Humidity Sensor,High,40–95% RH; ±5% RH with calibration
+Connector (Pin Header),Contact Corrosion,Contamination Detector,Medium,Dendritic growth via resistance change
+Connector (Pin Header),Contact Corrosion,Environmental Logger,Medium,Cumulative humidity dosimeter
+Connector (Pin Header),Mechanical Wear,Vibration Sensor,Medium,Intermittent contact as vibration switch
+Connector (Pin Header),Mechanical Wear,Cycle Counter,Medium,Degradation correlates with mating cycles
+Connector (Pin Header),Solder Joint Failure,Thermal Cycling Indicator,Medium,Crack progression = thermal stress history
+Connector (Edge),Contact Oxidation,Air Quality Sensor,Medium,Tarnish rate correlates with contaminants
+Connector (Edge),Contact Oxidation,Humidity Monitor,Medium,Oxidation rate varies with humidity
+Connector (Edge),Mechanical Misalignment,Reduced-Channel Interface,Medium,Use remaining good contacts
+Connector (Edge),Fretting Corrosion,Vibration Detector,Medium,Resistance spikes = vibration events
+Connector (Edge),Fretting Corrosion,Environmental Stress Logger,Medium,Fretting rate tracks mechanical stress
+Connector (Board-to-Wire),Crimp Degradation,Temperature Indicator,Medium,Localized heating at bad crimp
+Connector (Board-to-Wire),Crimp Degradation,Vibration-Activated Switch,Medium,Intermittent connection under vibration
+Connector (Board-to-Wire),Housing Fatigue,Wire Guide,High,Form factor maintained for wire routing
+Connector (Board-to-Wire),Pin Corrosion,Humidity Sensor,Medium,Corrosion resistance = humidity proxy
+Relay,Contact Welding,Permanent Jumper,High,Original current rating maintained; 1–30A
+Relay,Contact Welding,Electromagnetic Actuator,High,Coil for reed switch; magnetic sensing; coupling
+Relay,Contact Welding,Inductance Element,Medium,Coil as inductor; 10–500mH
+Relay,Coil Failure (Open),Mechanical Switch,Medium,Manual actuation; 5–50g force required
+Relay,Coil Failure (Open),Antenna Coil,Medium,Winding as RF element; 1–100 MHz
+Relay,Coil Failure (Open),Spacer / Mount,High,Mechanical form factor preserved
+Relay,Contact Erosion,Signal-Level Switch,Medium,Low-current (<10 mA) still clean
+Relay,Contact Erosion,Environmental Indicator,Medium,Erosion rate = lifecycle tracker
+Relay,Spring Fatigue,Low-Force Switch,Medium,Sensitive to light contact
+Relay,Spring Fatigue,Vibration Sensor,Low,Contact chatter under vibration
+Switch,Contact Bounce,Noise Source / Entropy,Medium,Bounce for random number generation
+Switch,Contact Bounce,Vibration-Activated Trigger,Medium,Degraded contact closes under vibration
+Switch,Stuck Closed,Fixed Jumper,High,Permanent connection; rating preserved
+Switch,Stuck Open,Spacer / Mount,High,Physical form factor maintained
+Switch,Contact Resistance Increase,Pressure-Variable Resistor,Low,Resistance varies with actuation force
+Switch,Contact Resistance Increase,Signal-Level Switch,Medium,Low-current still switches
+Motor,Brush Wear,Generator,High,Proportional voltage from shaft rotation
+Motor,Brush Wear,Tachometer,High,Back-EMF proportional to RPM
+Motor,Brush Wear,Vibration Source,Medium,Unbalanced rotor creates vibration
+Motor,Brush Wear,Noise Source,Medium,Brush arcing as entropy
+Motor,Winding Open,Inductor / Choke,Medium,Intact windings; mH range
+Motor,Winding Open,Mechanical Bearing Assembly,High,Shaft and bearings for mechanical use
+Motor,Winding Short,Heating Element,Medium,Resistive heating from shorted turns
+Motor,Winding Short,Electromagnetic Actuator,Medium,Intact winding(s) for field generation
+Motor,Bearing Failure,Low-Speed Generator,Medium,Reduced efficiency; voltage still generated
+Motor,Bearing Failure,Static Electromagnet,High,Windings energized without rotation
+Motor,Demagnetization,Weak Magnetic Source,Medium,Reed switch actuation at close range
+Motor,Demagnetization,Magnetic Proximity Sensor,Medium,Detectable field for proximity switch
+Solenoid,Coil Burnout (Open),Ferromagnetic Core,High,EMI absorber; field concentrator
+Solenoid,Coil Burnout (Open),Mechanical Plunger,Medium,Manual actuation with spring return
+Solenoid,Coil Burnout (Open),Mechanical Spacer / Mount,High,Form factor preserved
+Solenoid,Plunger Stuck,Static Electromagnet,High,Field generation without motion
+Solenoid,Plunger Stuck,Inductor,Medium,Coil with iron core; mH–H range
+Solenoid,Plunger Stuck,Proximity Sensor,Medium,Field detectable by Hall/reed at distance
+Solenoid,Weak Pull,Low-Force Actuator,Medium,Light-duty: paper feed; flag actuation
+Solenoid,Weak Pull,Vibration Generator,Medium,PWM-driven incomplete actuation
+Voltage Regulator,Increased Dropout,Temperature Sensor,High,2–10 mV/°C; -40 to +125°C; ±3°C
+Voltage Regulator,Increased Dropout,Current Limiter,Medium,Dropout limits current; ±20%
+Voltage Regulator,Increased Dropout,Reduced-Range Regulator,Medium,Still regulates with higher input headroom
+Voltage Regulator,Output Voltage Drift,Non-Critical Voltage Source,Medium,Acceptable for tolerant loads
+Voltage Regulator,Output Voltage Drift,Environmental Voltage Sensor,Medium,Drift correlates with temperature
+Voltage Regulator,Short Circuit (I/O),Low-Value Resistor,Medium,0.05–1Ω; current sensing
+Voltage Regulator,Short Circuit (I/O),Thermal Pad / Heat Spreader,Medium,TO-220/D2PAK thermal management
+Voltage Regulator,Short Circuit (I/O),Jumper,High,Low-resistance connection
+Voltage Regulator,Open Circuit,Mechanical Spacer,High,TO-220 heatsink mount preserved
+Voltage Regulator,Open Circuit,Thermal Mass,Medium,Metal tab retains heat capacity
+Power Diode,Short Circuit,High-Current Jumper,High,3–60A; original current rating
+Power Diode,Short Circuit,Current Shunt Resistor,High,0.01–0.5Ω; millivolt drop
+Power Diode,Short Circuit,Heat Spreader,Medium,TO-220/TO-247 thermal dissipation
+Power Diode,Short Circuit,Temperature Sensor,Medium,Residual junction; 2–5 mV/°C
+Power Diode,Open Circuit,High-Power Spacer,High,Heatsink mounting preserved
+Power Diode,Open Circuit,Thermal Mass Element,Medium,Significant heat capacity
+Power Diode,Increased Forward Voltage,Temperature Sensor,High,Enhanced 5–15 mV/°C sensitivity
+Power Diode,Increased Forward Voltage,Voltage Drop Element,Medium,Fixed offset; crude reference
+Power Diode,Increased Forward Voltage,Current Limiter (Crude),Low,Higher Vf limits series current
+Power Transformer,Winding Open,Single-Winding Inductor,High,mH–H range with core
+Power Transformer,Winding Open,EMI Common-Mode Choke,Medium,Core properties preserved
+Power Transformer,Winding Open,Isolation Barrier,High,Galvanic isolation mechanical
+Power Transformer,Winding Open,Core Material Harvesting,Medium,Laminated/ferrite reusable
+Power Transformer,Shorted Turns,Heating Element,Medium,Resistive loss as heat
+Power Transformer,Shorted Turns,Current Transformer,Medium,Shorted secondary = single-turn CT
+Power Transformer,Core Damage,EMI Absorber,Medium,Damaged core absorbs RF
+Power Transformer,Core Damage,Mechanical Mass / Damper,High,Vibration dampener; ballast
+Power Transformer,Core Damage,Low-Frequency Inductor,Low,Reduced but non-zero inductance
+Power Transformer,Insulation Breakdown,Low-Voltage Transformer,Medium,Reduced isolation for <50V
+Power Transformer,Insulation Breakdown,Autotransformer,Medium,Series windings; no isolation needed
+Power Transformer,Insulation Breakdown,Coupled Inductor,Medium,Magnetic coupling preserved

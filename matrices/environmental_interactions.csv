@@ -1,20 +1,114 @@
 Component,Condition,Observed Effect,Repurpose Impact,Notes
-Diode,High Temperature (+150°C),Leakage current ↑,Better for environmental sensing,Can act as crude temp sensor
-Diode,High Humidity (>70% RH),Corrosion & leakage ↑,Humidity detection possible,Open failures most sensitive
-Diode,Medium Radiation,Breakdown voltage shifts,Voltage reference or radiation sensor,Useful for detection arrays
-
-Resistor,High Temperature (+150°C),Value drift unpredictable,Reliability ↓,Can be used as temp stress indicator
-Resistor,Medium Humidity (30–70% RH),Resistance drift 2–5x faster,Humidity sensing,Works best with carbon film
-Resistor,Mechanical Vibration,Micro-cracks form,Still usable as spacer,No major electrical role
-
+Diode (Silicon),High Temperature (+150°C),Leakage current ↑,Better for environmental sensing,Can act as crude temp sensor
+Diode (Silicon),High Humidity (>70% RH),Corrosion & leakage ↑,Humidity detection possible,Open failures most sensitive
+Diode (Silicon),Medium Radiation,Breakdown voltage shifts,Voltage reference or radiation sensor,Useful for detection arrays
+Diode (Zener),High Temperature,Temperature coefficient shift,Enhanced temp sensing 5–15mV/°C,Low-voltage Zeners have negative TC
+Diode (Zener),Thermal Cycling,Dynamic resistance increases,Better noise generation,Regulation degrades but noise improves
+Diode (Schottky),High Temperature,Leakage rises strongly,Humidity/temperature proxy,More sensitive than silicon diodes
+Diode (LED),High Temperature,Emission wavelength shifts,Wavelength-shifted light source,±5–20nm shift exploitable
+Diode (LED),Radiation Exposure,Wavelength and intensity altered,Radiation detector,Usable as crude dosimeter
+Diode (Photodiode),Radiation Exposure,Dark current increases,Radiation detector / noise source,Entropy from dark current
+Diode (Photodiode),Contamination,Sensitivity permanently altered,Crude scatter sensor,Surface contamination converts device
+Resistor (Carbon Film),High Humidity (>70% RH),Resistance drift 2–5× faster,Humidity sensing,Works best with carbon film
+Resistor (Carbon Film),High Temperature (+150°C),Value drift unpredictable,Temp stress indicator,Can track thermal history
+Resistor (Carbon Film),Mechanical Vibration,Micro-cracks form,Still usable as spacer,No major electrical role
+Resistor (Metal Film),High Humidity,Moisture ingress at ends,Drift maps to humidity,More stable baseline than carbon
+Resistor (Metal Film),High Temperature,Minimal drift,Temperature probe,Stability makes it better for sensing
+Resistor (Wire-Wound),Vibration,Winding fatigue,R change trackable over time,Strain/vibration history sensor
+Resistor (Wire-Wound),High Temperature,Resistance stable; good thermal mass,Heat spreading element,Better thermal performance than film
+Resistor (Thermistor),Humidity + Aging,Beta coefficient shifts,Date-stamped calibration curves,Still tracks relative trends
+Resistor (Potentiometer),Dust / Oxidation,Contact noise increases,Vibration sensor,Noise correlates with movement
 Capacitor (Ceramic),High Temperature,Non-linear capacitance,Repurposed as thermal sensor,X7R/Z5U types most sensitive
 Capacitor (Ceramic),High Humidity,Leakage ↑,Humidity sensor potential,Moisture absorption into dielectric
 Capacitor (Ceramic),Radiation Exposure,Dielectric permittivity change,Environmental monitor,Partially reversible
-
+Capacitor (Electrolytic),High Temperature (>85°C),Dry-out accelerates,Faster capacitance loss,ESR increases; heating element potential
+Capacitor (Electrolytic),High Humidity,Swelling and leakage increase,Case condition indicator,External corrosion visible
+Capacitor (Film),High Temperature (>125°C),Dielectric drift,Environmental drift sensor,Stable below 125°C
+Capacitor (Film),Radiation,Dielectric constant alters,Radiation monitor (slight),Small but measurable change
+Capacitor (Tantalum),High Temperature,Leakage increases with heat,Temperature-correlated leakage,Exploitable for trend sensing
+Capacitor (Tantalum),High Humidity,Accelerates failure progression,Humidity indicator,Package degradation visible
+Capacitor (Supercapacitor),Low Temperature,Cycling stability decreases,ESR increases,Heating element potential improves
+Capacitor (Supercapacitor),High Temperature,Electrolyte degradation accelerates,ESR rises; health monitor,Detectable via voltage sag
 Transistor (BJT),High Temperature,hFE decreases,Temp sensing possible,Gain degradation accelerates
-Transistor (BJT),Radiation Leakage ↑,Noise generation ↑,Entropy source,Radiation dosimeter usage
+Transistor (BJT),Radiation,Leakage ↑ / Noise generation ↑,Entropy source,Radiation dosimeter usage
 Transistor (BJT),High Humidity,Surface leakage paths,Unstable operation,Can be monitored for sensing
-
+Transistor (MOSFET),High Temperature,Rds(on) increases,More useful as thermal sensor,Resistance change is predictable
+Transistor (MOSFET),High Humidity,Gate leakage increases,Humidity detection possible,Gate oxide sensitive to moisture
+Transistor (MOSFET),Radiation,Threshold voltage shifts,Environmental sensing,Dose-dependent shift
+Transistor (Power),High Temperature,Thermal runaway risk ↑,Heat spreader function enhanced,Must derate significantly
+Transistor (RF),High Temperature,Gain shifts with frequency,Frequency-dependent thermal probe,Useful in RF test environments
+Transistor (Switching),Radiation,Leakage increases,Crude radiation sensor,Exploitable for detection
 Inductor (Ferrite Core),High Temperature,Core saturation earlier,Reduced inductance,Still usable as heating element
 Inductor (Ferrite Core),High Humidity,Corrosion ↑,Resistance drift,Environmental stress marker
 Inductor (Ferrite Core),Vibration,Core cracking,Mechanical noise element,May add piezo-like properties
+Inductor (Air Core),High Temperature,Wire resistance increases,Thermal sensing via R change,No core effects; pure resistive
+Inductor (Air Core),Vibration,Coil deformation,Variable inductance,Exploitable as strain sensor
+Inductor (Choke),High Temperature,Increased core losses,Heating element,Thermal output increases
+Inductor (Choke),Humidity,Lead corrosion,Resistance drift as marker,Environmental stress tracking
+Inductor (Transformer),High Temperature,Winding resistance increases,Thermal indicator,Detectable via voltage drop
+Inductor (Transformer),Humidity,Insulation breakdown accelerates,Leakage current increases,Moisture ingress indicator
+IC (Microcontroller),Radiation,Bit flips in flash/RAM,Radiation sensing,Detectable via checksum errors
+IC (Microcontroller),High Temperature,Timing instability,Clock drift as thermal probe,Oscillator frequency shifts
+IC (Processor),Radiation,Cache bit errors accelerate,Entropy source quality improves,More random errors available
+IC (Processor),High Temperature,Core failures more likely,Reduced-core operation,Thermal management critical
+IC (Memory Controller),High Temperature,Refresh cycle changes,Delay-based temperature sensing,Heat alters timing characteristics
+IC (Memory Controller),Radiation,Address errors accelerate,Entropy from bit errors,Error pattern as random data
+IC (Power Management),Thermal Cycling,Reference voltage drifts,Temperature-dependent voltage source,Exploitable as environmental sensor
+IC (Power Management),High Temperature,Dropout voltage increases,Thermal indicator,Detectable as regulation degradation
+IC (Communication),High Temperature,Oscillator instability,Frequency drift as sensing element,Exploitable for temperature tracking
+IC (Communication),Radiation,Logic errors increase,Partial function preservation,Receiver may still work
+Sensor (Temperature),High Temperature,Drift accelerates,Still usable as trend monitor,Relative accuracy preserved
+Sensor (Temperature),Mechanical Stress,Response characteristic alters,Dual sensing: temp + stress,Exploitable for dual-mode sensing
+Sensor (Pressure),Thermal Cycling,Calibration changes,Recalibrate for threshold use,Binary detection still viable
+Sensor (Pressure),Humidity Ingress,Capacitance alters,Repurpose as humidity sensor,Moisture changes capacitance
+Sensor (Optical),Radiation,Dark current increases,Dosimeter function,Proportional to dose
+Sensor (Optical),Contamination,Sensitivity permanently altered,Scatter sensor,Surface effects exploitable
+Sensor (Magnetic),High Temperature,Offset drift accelerates,Relative sensing preserved,Absolute accuracy lost
+Sensor (Magnetic),Radiation,Noise increases,Possible entropy source,Increased noise exploitable
+Sensor (Chemical),High Humidity,Drift accelerates,Relative indicator still works,Long-term trends trackable
+Sensor (Chemical),Temperature Variation,Baseline alters,Trend sensing with compensation,Cross-reference with temp data
+Storage (Flash Memory),Radiation,Bit errors increase,Radiation sensor / entropy source,Detectable via error rates
+Storage (Flash Memory),High Temperature,Charge loss accelerates,Faster wear; entropy source,Read errors increase
+Storage (EEPROM),High Temperature,Retention decreases,Drift as thermal tracker,Bit decay correlates to temp
+Storage (EEPROM),Radiation,Bit flips occur,Radiation detection,Error patterns as dosimeter
+Storage (Hard Drive),Vibration / Shock,Head crash risk ↑,Spindle motor for generator,Mechanical parts still usable
+Storage (Hard Drive),High Humidity,Corrosion accelerates,Platter still reflective,Optical element potential
+Storage (Optical Media),UV Light,Dye degradation accelerates,Optical calibration changes,Diffraction properties altered
+Storage (Optical Media),High Temperature,Warping occurs,Optics experiments,Controlled deformation
+Storage (SD Card),Vibration / Shock,Contact intermittency,Raw block access viable,Bypass filesystem layer
+Storage (SD Card),High Temperature,Wear-out accelerates,Entropy from errors increases,More random block failures
+Connector (Pin Header),High Humidity (>70% RH),Contact corrosion accelerates,Better humidity sensor,Response time 30–300 s
+Connector (Pin Header),Ionic Contamination,Dendritic growth between pins,Contamination detector,Days to weeks to develop
+Connector (Pin Header),Thermal Cycling,Solder fatigue accelerates,Thermal stress history indicator,Cumulative damage trackable
+Connector (Pin Header),Vibration,Intermittent contact,Vibration switch,Threshold depends on wear level
+Connector (Edge),Sulfur Atmosphere,Accelerated tarnish,Air quality correlation,Industrial environments
+Connector (Edge),High Humidity,Oxidation rate increases,Better humidity indicator,50–95% RH sensitivity
+Connector (Edge),Vibration,Fretting corrosion,Vibration detection,Threshold depends on contact force
+Connector (Board-to-Wire),High Humidity,Pin corrosion accelerates,Humidity sensing,Resistance-based detection
+Connector (Board-to-Wire),Vibration,Crimp loosening,Vibration indicator,Detectable via resistance spikes
+Connector (Board-to-Wire),Salt Spray,Rapid corrosion,Corrosion environment indicator,Coastal/marine applications
+Relay,High Temperature,Coil resistance ↑; spring temper changes,Thermal indicator via coil R,Detectable with DMM
+Relay,High Humidity,Contact corrosion accelerates,Humidity sensor via contact R,Requires calibration
+Relay,Vibration,Contact bounce; mechanical fatigue,Vibration detector,Chatter pattern analysis
+Relay,Dust / Contamination,Contact resistance ↑,Environmental exposure indicator,Sealed relays resistant
+Switch,Dust / Contamination,Contact resistance ↑,Environmental exposure indicator,Sealed types more resistant
+Switch,High Humidity,Oxide formation accelerates,Humidity correlation,Measurable via resistance
+Switch,Vibration,Contact chatter,Vibration detector,Bounce frequency analysis
+Switch,Temperature Cycling,Spring temper changes,Thermal stress history,Actuation force changes
+Motor,High Temperature,Insulation degrades; magnets weaken,Generator output ↓; heater ↑,Derate above 80°C
+Motor,High Humidity,Bearing corrosion; insulation absorption,Reduced life; sensing viable,Seal bearings for longevity
+Motor,Vibration,Bearing wear accelerates,Vibration signature analysis,Detectable pattern change
+Motor,Dust / Contamination,Brush wear ↑; bearing contamination,Noise source quality improves,More random arcing
+Solenoid,High Temperature,Coil R ↑; force decreases,Better as inductor (higher R),Derate above 60°C
+Solenoid,High Humidity,Plunger/bore corrosion,Mechanical jam likelihood ↑,Sealed types resistant
+Solenoid,Vibration,Mechanical wear accelerates,Force sensor potential,Actuation change detectable
+Voltage Regulator,High Temperature,Dropout ↑; reference drifts,Better temperature sensor,Sensitivity increases with heat
+Voltage Regulator,Thermal Cycling,Reference voltage shifts,Environmental voltage sensor,Cumulative stress trackable
+Voltage Regulator,Input Voltage Spikes,Catastrophic short risk ↑,Jumper/resistor more likely,Overvoltage protection needed
+Power Diode,High Temperature,Forward voltage ↓; leakage ↑,Better thermal sensor at elevated temps,Negative temperature coefficient
+Power Diode,Surge Current,Junction degradation,Current shunt capability,Derate for reliability
+Power Diode,Thermal Cycling,Wire bond fatigue,Open circuit risk ↑; spacer preserved,Mechanical function maintained
+Power Transformer,High Temperature,Insulation ages faster; core loss ↑,Heating element output ↑,Derate above rated temperature
+Power Transformer,High Humidity,Insulation breakdown accelerates,Leakage current ↑,Moisture ingress indicator
+Power Transformer,Vibration,Lamination loosening; ferrite cracking,Audible indicator,Hum/buzz changes with load
+Power Transformer,DC Bias,Core saturation,Reduced inductance; still usable lower,Partial function preserved
