@@ -767,3 +767,168 @@ The connector will fail much earlier due to the acceleration factor.
 · Full integration – no changes needed to geometric pipeline or repurposing.
 
 Now the system can model real‑world degradation more accurately and trigger repurposing sooner when environment is harsh.
+
+
+add:
+add:
+
+1. EnvironmentalMemory class – tracks non‑reversible stress integrals.
+2. Update Environment to update memory before applying instantaneous changes.
+3. Modify get_acceleration_factor to combine instantaneous and cumulative factors.
+4. Integrate into sensors (no changes needed – they already use the environment).
+5. Demo showing thermal cycling accelerating connector corrosion.
+
+All additions are backward‑compatible.
+
+---
+
+🧠 EnvironmentalMemory Class
+
+```python
+class EnvironmentalMemory:
+    """Tracks cumulative damage that does not heal when environment recovers."""
+    def __init__(self):
+        self.thermal_cycles = 0
+        self.humidity_exposure_time = 0.0      # seconds above 70% RH
+        self.vibration_dose = 0.0              # integral of g^2 * dt
+        self.contamination_deposit = 0.0       # 0-1, accumulates
+        self._last_temp = None
+
+    def update(self, env: 'Environment', dt: float):
+        """Update cumulative metrics based on current environment over dt seconds."""
+        # Thermal cycle detection: crossing 20°C threshold
+        if self._last_temp is not None:
+            if (self._last_temp - 20) * (env.temp - 20) < 0:
+                self.thermal_cycles += 1
+        self._last_temp = env.temp
+
+        # Humidity exposure: time above 70% RH
+        if env.humidity > 70:
+            self.humidity_exposure_time += dt
+
+        # Vibration dose: integral of g^2
+        self.vibration_dose += env.vibration ** 2 * dt
+
+        # Contamination deposit: accumulates, saturates at 1.0
+        self.contamination_deposit += env.contamination * dt
+        self.contamination_deposit = min(1.0, self.contamination_deposit)
+```
+
+---
+
+🌍 Updated Environment Class (with memory)
+
+```python
+class Environment:
+    def __init__(self, temperature_c=25.0, humidity_percent=50.0, vibration_g=0.1, contamination=0.0):
+        self.temp = temperature_c
+        self.humidity = humidity_percent
+        self.vibration = vibration_g
+        self.contamination = contamination
+        self.memory = EnvironmentalMemory()
+        self.last_update = time.time()
+
+    def update(self, temp=None, humidity=None, vibration=None, contamination=None):
+        now = time.time()
+        dt = now - self.last_update
+        # Update memory using current (soon to be old) environment
+        self.memory.update(self, dt)
+        # Then apply new values
+        if temp is not None: self.temp = temp
+        if humidity is not None: self.humidity = humidity
+        if vibration is not None: self.vibration = vibration
+        if contamination is not None: self.contamination = contamination
+        self.last_update = now
+
+    def get_acceleration_factor(self, component_type: str, failure_mode: str) -> float:
+        # Instantaneous factors (as before)
+        inst = 1.0
+        inst *= 2 ** ((self.temp - 25) / 10)
+        if self.humidity > 70:
+            inst *= 1 + (self.humidity - 70) / 30
+        inst *= 1 + self.vibration * 0.5
+        if component_type == "connector":
+            inst *= 1 + self.contamination * 5
+        else:
+            inst *= 1 + self.contamination * 2
+
+        # Cumulative memory factors (damage that doesn't reverse)
+        cum = 1.0
+        # Each thermal cycle adds 2% damage
+        cum *= 1 + self.memory.thermal_cycles * 0.02
+        # Each hour above 70% RH adds 5% damage
+        cum *= 1 + (self.memory.humidity_exposure_time / 3600) * 0.05
+        # Vibration dose: each g²·s adds 0.1% damage
+        cum *= 1 + self.memory.vibration_dose * 0.001
+        # Contamination deposit: linear up to 2x at full deposit
+        cum *= 1 + self.memory.contamination_deposit
+
+        return inst * cum
+```
+
+---
+
+🔌 Integration into GenericHardwareInterface
+
+No changes needed – the interface already passes the environment to each sensor. Just ensure the environment object persists and is updated periodically.
+
+Example in main loop:
+
+```python
+env = Environment()
+system.hardware.env = env
+
+# Simulate thermal cycling
+for cycle in range(10):
+    env.update(temp=45)
+    time.sleep(1)
+    env.update(temp=25)
+    time.sleep(1)
+    system.run_forever(0.5)  # sample sensors
+```
+
+The connector's acceleration factor will increase with each thermal cycle, causing faster drift.
+
+---
+
+🧪 Demo: Environmental Memory Acceleration
+
+Add to main() after registering components:
+
+```python
+# Create environment with memory
+env = Environment(temp=25, humidity=50)
+system.hardware.env = env
+
+# Simulate harsh environment for 20 seconds, then return to normal
+print("\nApplying thermal cycling and high humidity for 20 seconds...")
+start = time.time()
+while time.time() - start < 20:
+    # Cycle temperature between 25 and 45 every 2 seconds
+    t = (time.time() - start) % 4
+    if t < 2:
+        env.update(temp=45, humidity=80)
+    else:
+        env.update(temp=25, humidity=80)
+    time.sleep(0.5)
+
+print("Returning to normal environment (25°C, 50% RH)")
+env.update(temp=25, humidity=50)
+
+# Continue monitoring – connector will fail faster due to memory
+system.run_forever(0.5)
+```
+
+Expected output: The connector's health degrades faster during the harsh period, and continues to degrade even after returning to normal because of accumulated thermal cycles and humidity exposure time.
+
+---
+
+✅ What This Adds
+
+· Cumulative damage tracking – thermal cycles, humidity exposure, vibration dose, contamination deposit.
+· Non‑reversible degradation – memory persists after environment recovers.
+· Realistic aging model – acceleration factor combines instantaneous stress and historical damage.
+· No sensor code changes – all existing sensors automatically benefit.
+
+Now the geometric monitoring system models real‑world wear‑out, not just current conditions.
+
