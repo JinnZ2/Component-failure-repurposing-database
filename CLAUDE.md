@@ -514,3 +514,42 @@ Possible issues to resolve:
    If the LLM outputs malformed compact, the system currently returns ERR unknown command. Could define ERR <code> (e.g., ERR 1 = unknown component) so the LLM can learn to correct itself.
 5. The prompt assumes the LLM will follow rules
    In my experience, even GPT‑4 will occasionally output natural language. The bridge’s nl_to_compact is a good start, but you could also fine‑tune a small model (e.g., Llama 3 8B) on any compact grammar – that would guarantee compliance.
+
+
+
+ADD:
+
+# Add to the top with other imports if not already present
+import time, random, threading, hashlib
+from abc import ABC, abstractmethod
+from collections import deque
+from typing import Dict, List, Optional, Tuple
+
+# ... (include all previous classes: HardwareBridgeEncoder, PhysicalSensor, TokenBuffer,
+#      GeometricProcessingLoop, FailureDatabase, RepurposeOrchestrator,
+#      GeometricMonitoringSystem, GenericHardwareInterface)
+
+# Add SimulatedConnector class as above
+
+# Modify main() to include connector
+def main():
+    print("=" * 70)
+    print("GEOMETRIC FAILURE REPURPOSING WITH CONNECTOR CORROSION")
+    print("Simulating a drifting resistor + corroding connector")
+    print("=" * 70)
+
+    system = GeometricMonitoringSystem(cube_side=3)
+    # Register resistor
+    resistor = SimulatedResistor(nominal_voltage=5.0, fail_voltage=8.0, drift_start=10.0)
+    system.register_sensor("resistor_R1", resistor)
+    # Register connector
+    connector = SimulatedConnector(nominal_resistance_mohm=20.0, fail_resistance_mohm=150.0, drift_start=8.0)
+    system.register_sensor("connector_J1", connector)
+
+    system.start()
+    print("\nMonitoring resistor and connector... (connector corrodes after 8s, resistor drifts after 10s)")
+    print("When a geometric dependency (cube repeat) occurs, repurpose action triggers.\n")
+    system.run_forever(sample_interval=0.5)
+
+if __name__ == "__main__":
+    main()
