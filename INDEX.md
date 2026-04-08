@@ -130,3 +130,4 @@ This index provides **direct raw links** to every major file in the repository, 
 - [repurpose_router.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/repurpose_router.py)
 - [synergy_matrix_sim.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/synergy_matrix_sim.py)
 - [channel_fallback.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/channel_fallback.py)
+- [geometric_sensing_sim.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/geometric_sensing_sim.py)

@@ -2,7 +2,7 @@
 
 **Purpose:** Runnable simulations that explore interfaces and possibilities for component failure repurposing. Each sim models a different aspect of the database's core concepts — degradation curves, repurpose decision-making, multi-component synergies, and emergency channel fallback.
 
-**Dependencies:** Python 3.8+ standard library only. No external packages required.
+**Dependencies:** Python 3.8+ standard library only for most sims. `geometric_sensing_sim.py` requires **numpy**.
 
 -----
 
@@ -14,6 +14,7 @@
 | `sims/repurpose_router.py` | Decision interface that takes a degraded component's health snapshot and routes it to the best repurposing application using a scored rule engine |
 | `sims/synergy_matrix_sim.py` | Monte Carlo exploration of multi-component failure combinations — discovers emergent synergies by randomly pairing degraded components and scoring outcomes |
 | `sims/channel_fallback.py` | Emergency communication channel switching — simulates degradation across RF, optical, acoustic, thermal, and mechanical channels with automatic failover |
+| `sims/geometric_sensing_sim.py` | Real-time 3D geometric sensing — reads accelerometer data (Termux or simulated), encodes to octahedral tokens via GEIS, fills 3D cubes, detects dependencies via cube matching and tensor cancellation |
 
 -----
 
@@ -26,6 +27,7 @@ python experiments/sims/component_degradation.py
 python experiments/sims/repurpose_router.py
 python experiments/sims/synergy_matrix_sim.py
 python experiments/sims/channel_fallback.py
+python experiments/sims/geometric_sensing_sim.py   # requires numpy
 ```
 
 All sims print results to stdout. Pipe to a file for post-analysis:
@@ -46,7 +48,8 @@ experiments/
     ├── component_degradation.py
     ├── repurpose_router.py
     ├── synergy_matrix_sim.py
-    └── channel_fallback.py
+    ├── channel_fallback.py
+    └── geometric_sensing_sim.py
 ```
 
 -----
@@ -69,3 +72,17 @@ These sims prototype interfaces described in:
 - **`binary_sensor.md`** — Health scoring and failure mode detection
 - **`Future.md`** — Expanded component templates and validation tiers
 - **`matrices/component_synergies.csv`** — Cross-component pairing data used by `synergy_matrix_sim.py`
+
+## External Dependencies
+
+`geometric_sensing_sim.py` integrates components from the
+[GEIS](https://github.com/JinnZ2/Geometric-to-Binary-Computational-Bridge/tree/main/GEIS)
+(Geometric Information Encoding System) library:
+
+| GEIS Module | What was pulled in |
+|-------------|-------------------|
+| `octahedral_state.py` | `OctahedralState` class — vertex algebra, inversion, distance, token/binary conversion |
+| `geometric_encoder.py` | `GeometricEncoder` class — bidirectional token-to-binary encoding with operators and symbols |
+| `state_tensor.py` | `StateTensor` class — 3x3 symmetric tensor fingerprints, projection, eigenvalues |
+| `geometric_sensor_sim.py` | `find_dependencies()` — tensor cancellation search (pairs, triples, meet-in-the-middle) |
+| `3D_cube_sim.py` | Cube XOR dependency detection, canonical form concepts |
