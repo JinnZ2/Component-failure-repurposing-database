@@ -553,3 +553,19 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+update:
+
+# Relay failures
+self._add_entry("relay", "0|O", "contact_welding", "rf_beacon", priority=2, effectiveness=0.8)
+self._add_entry("relay", "7/Δ", "coil_failure", "magnetic_coupling", priority=3, effectiveness=0.6)
+
+# Switch failures
+self._add_entry("switch", "2|X", "high_resistance", "optical_fallback", priority=2, effectiveness=0.7)
+self._add_entry("switch", "5/Δ", "oxidation", "acoustic_alarm", priority=3, effectiveness=0.5)
+
+# Motor failures
+self._add_entry("motor", "4|O", "winding_short", "thermal_heater", priority=2, effectiveness=0.75)
+self._add_entry("motor", "6|X", "bearing_wear", "mechanical_vibration", priority=1, effectiveness=0.9)
