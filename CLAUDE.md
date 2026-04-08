@@ -588,3 +588,182 @@ system.register_sensor("switch_S1", switch)
 
 motor = SimulatedMotor(nominal_current=0.5, fail_current=2.0, drift_start=18.0)
 system.register_sensor("motor_M1", motor)
+
+
+
+ADD:
+
+1. An Environment class that tracks temperature, humidity, vibration, and contaminants.
+2. Modified PhysicalSensor classes that accept environment and adjust failure progression (acceleration factors).
+3. Updated FailureDatabase entries with environmental sensitivity data.
+4. Integration into GenericHardwareInterface and GeometricMonitoringSystem.
+
+All additions are modular – existing code remains unchanged.
+
+---
+
+🌍 Environment Class
+
+```python
+class Environment:
+    """Tracks environmental conditions that affect failure rates."""
+    def __init__(self, temperature_c=25.0, humidity_percent=50.0, vibration_g=0.1, contamination=0.0):
+        self.temp = temperature_c
+        self.humidity = humidity_percent
+        self.vibration = vibration_g
+        self.contamination = contamination   # 0-1, e.g., dust, salt spray
+        self.last_update = time.time()
+
+    def update(self, temp=None, humidity=None, vibration=None, contamination=None):
+        if temp is not None: self.temp = temp
+        if humidity is not None: self.humidity = humidity
+        if vibration is not None: self.vibration = vibration
+        if contamination is not None: self.contamination = contamination
+        self.last_update = time.time()
+
+    def get_acceleration_factor(self, component_type: str, failure_mode: str) -> float:
+        """
+        Return multiplier for failure progression rate based on environment.
+        Simplified model: each factor contributes multiplicatively.
+        """
+        base = 1.0
+        # Temperature (Arrhenius: 10°C increase doubles rate)
+        base *= 2 ** ((self.temp - 25) / 10)
+        # Humidity (exponential above 70%)
+        if self.humidity > 70:
+            base *= 1 + (self.humidity - 70) / 30
+        # Vibration (linear)
+        base *= 1 + self.vibration * 0.5
+        # Contamination (strong effect for connectors)
+        if component_type == "connector":
+            base *= 1 + self.contamination * 5
+        else:
+            base *= 1 + self.contamination * 2
+        return base
+```
+
+---
+
+🔧 Modified PhysicalSensor Base Class (to accept environment)
+
+We'll add an optional env parameter to sample() – existing sensors without env will ignore it.
+
+```python
+class PhysicalSensor(ABC):
+    @abstractmethod
+    def sample(self, env: Environment = None) -> dict:
+        pass
+```
+
+Then update each sensor to use env.get_acceleration_factor() to accelerate drift.
+
+Example: Updated SimulatedConnector
+
+```python
+class SimulatedConnector(PhysicalSensor):
+    def __init__(self, nominal_resistance_mohm=20.0, fail_resistance_mohm=150.0, drift_start=15.0):
+        self.nominal = nominal_resistance_mohm
+        self.fail = fail_resistance_mohm
+        self.drift_start = drift_start
+        self.start_time = time.time()
+
+    def sample(self, env: Environment = None) -> dict:
+        elapsed = time.time() - self.start_time
+        # Apply environmental acceleration
+        accel = 1.0
+        if env:
+            accel = env.get_acceleration_factor("connector", "corrosion")
+        effective_time = elapsed * accel
+        if effective_time < self.drift_start:
+            r = self.nominal + random.uniform(-0.5, 0.5)
+            mode = "none"
+        else:
+            drift_factor = min(1.0, (effective_time - self.drift_start) / 10.0)
+            r = self.nominal + drift_factor * (self.fail - self.nominal)
+            r += random.uniform(-2, 2)
+            mode = "corrosion" if r > self.nominal * 3 else "oxidation"
+        health = max(0.0, 1.0 - (r - self.nominal) / (self.fail - self.nominal)) if self.fail != self.nominal else 1.0
+        drift_pct = (r - self.nominal) / self.nominal * 100 if self.nominal != 0 else 0
+        v = r * 0.001
+        return {
+            "type": "connector",
+            "mode": mode,
+            "health_score": health,
+            "drift_pct": drift_pct,
+            "v": v,
+            "i": 0.001,
+            "t": env.temp if env else 25.0,
+            "salvageable": health < 0.5,
+            "nominal": self.nominal,
+            "fail_threshold": self.fail,
+            "environment": {"temp": env.temp, "humidity": env.humidity} if env else {}
+        }
+```
+
+Similarly update other sensors (SimulatedResistor, SimulatedRelay, etc.) to accept env and apply acceleration.
+
+---
+
+📚 Extend FailureDatabase with Environmental Synergies
+
+Add a new section to each failure entry (can be stored as a dict):
+
+```python
+self._add_entry("connector", "3/Δ", "corrosion", "magnetic_coupling", priority=1, effectiveness=0.7,
+                environmental_synergy={"humidity": 0.8, "contamination": 0.9})
+```
+
+Then modify FailureDatabase.lookup to return the synergy dict as well.
+
+---
+
+🔌 Integrate Environment into GenericHardwareInterface
+
+Add an environment attribute to GenericHardwareInterface and pass it to each sensor during sampling.
+
+```python
+class GenericHardwareInterface:
+    def __init__(self, encoder, geo_monitor=None, environment=None):
+        self.encoder = encoder
+        self.geo_monitor = geo_monitor
+        self.sensors = {}
+        self.history = []
+        self.env = environment or Environment()
+
+    def set_environment(self, temp=None, humidity=None, vibration=None, contamination=None):
+        self.env.update(temp, humidity, vibration, contamination)
+
+    def get_system_state(self):
+        report = {}
+        for name, sensor in self.sensors.items():
+            raw = sensor.sample(env=self.env)   # pass environment
+            # ... rest unchanged
+```
+
+---
+
+🧪 Demo: Environmental Acceleration
+
+In main(), create an environment and gradually increase humidity/contamination to accelerate connector corrosion.
+
+```python
+env = Environment(temperature_c=25, humidity_percent=50, contamination=0)
+# Over time, increase humidity
+for i in range(100):
+    if i > 50:
+        env.update(humidity=80 + (i-50)*0.5)
+    # ... sample sensors
+```
+
+The connector will fail much earlier due to the acceleration factor.
+
+---
+
+✅ What This Adds
+
+· Environmental awareness – failure rates adapt to real conditions.
+· Acceleration factors – temperature, humidity, vibration, contamination.
+· Component‑specific sensitivities (connectors highly sensitive to contamination).
+· Full integration – no changes needed to geometric pipeline or repurposing.
+
+Now the system can model real‑world degradation more accurately and trigger repurposing sooner when environment is harsh.
