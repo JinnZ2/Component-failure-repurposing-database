@@ -410,3 +410,92 @@ class GeometricMonitoringSystem:
 ```
 
 Now GenericHardwareInterface.get_system_state() can call feed_geometry directly.
+
+
+  also update:
+
+  class GenericHardwareInterface:
+    def __init__(self, encoder, geo_monitor=None):
+        self.encoder = encoder
+        self.geo_monitor = geo_monitor   # GeometricMonitoringSystem instance
+        self.sensors = {}
+        self.history = []
+
+    def register_sensor(self, name, sensor_obj):
+        self.sensors[name] = sensor_obj
+
+    def get_system_state(self):
+        system_report = {}
+        for name, sensor in self.sensors.items():
+            raw = sensor.sample()
+            h_score = self._calculate_health(raw)
+            d_pct = self._calculate_drift(raw)
+            geometry = {
+                "component_type": raw.get("type", "default"),
+                "failure_mode": raw.get("mode", "none"),
+                "health_score": h_score,
+                "drift_pct": d_pct,
+                "voltage_v": raw.get("v", 0.0),
+                "current_a": raw.get("i", 0.0),
+                "temperature_c": raw.get("t", 25.0),
+                "salvageable": h_score < 0.5
+            }
+            # Feed into geometric monitoring if available
+            if self.geo_monitor:
+                self.geo_monitor.feed_geometry(name, geometry)
+            # Encode to binary
+            binary_sig = self.encoder.from_geometry(geometry).to_binary()
+            system_report[name] = {
+                "binary": binary_sig,
+                "hex": hex(int(binary_sig, 2)),
+                "status": "OPERATIONAL" if h_score > 0.7 else "REPURPOSE_TARGET"
+            }
+        return system_report
+
+    def _calculate_health(self, data):
+        # Use the formula H = max(0, 1 − |x − x₀| / |x_fail − x₀|)
+        x0 = data.get("nominal", 5.0)   # nominal voltage
+        x_fail = data.get("fail_threshold", 8.0)
+        x = data.get("v", x0)
+        if x_fail == x0:
+            return 1.0
+        health = max(0.0, 1.0 - abs(x - x0) / abs(x_fail - x0))
+        return health
+
+    def _calculate_drift(self, data):
+        x0 = data.get("nominal", 5.0)
+        x = data.get("v", x0)
+        if x0 == 0:
+            return 0.0
+        return abs(x - x0) / abs(x0) * 100.0
+
+        
+
+then integrate test:
+
+from geometric_monitoring import GeometricMonitoringSystem
+from generic_hardware_interface import GenericHardwareInterface
+from hardware_bridge_encoder import HardwareBridgeEncoder
+
+geo = GeometricMonitoringSystem(cube_side=3)
+geo.start()
+encoder = HardwareBridgeEncoder()
+hw = GenericHardwareInterface(encoder, geo_monitor=geo)
+
+# Register a real sensor (e.g., from earlier fallback examples)
+# For demo, use SimulatedResistor as above
+class SimulatedResistor(PhysicalSensor):
+    def sample(self):
+        # ... same as before ...
+        pass
+
+hw.register_sensor("R1", SimulatedResistor())
+
+# Main loop
+try:
+    while True:
+        report = hw.get_system_state()
+        print(f"R1 status: {report['R1']['status']}")
+        time.sleep(0.5)
+except KeyboardInterrupt:
+    geo.stop()
