@@ -1,3 +1,7 @@
+import time
+from components.physical_sensor import PhysicalSensor
+
+
 class BitChunkSensor(PhysicalSensor):
     """Emits tokens from a binary string by chunking into 6‑bit pieces."""
     def __init__(self, binary_string: str, repeat_interval: float = 1.0):

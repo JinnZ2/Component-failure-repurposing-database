@@ -1,3 +1,8 @@
+import time
+import random
+from components.physical_sensor import PhysicalSensor
+
+
 class SimulatedSwitch(PhysicalSensor):
     """Simulates a switch with increasing contact resistance or sticking."""
     def __init__(self, nominal_resistance_mohm=5.0, fail_resistance_mohm=100.0, drift_start=12.0):

@@ -9,28 +9,23 @@ Integrates component failure database and AI self-diagnosis.
 import time
 import threading
 import hashlib
+import sys
+from pathlib import Path
 import numpy as np
 from collections import deque
 from typing import Dict, List, Optional, Tuple, Callable
 from dataclasses import dataclass
 
-# ----------------------------------------------------------------------
-# 1. Geometric primitives (from earlier)
-# ----------------------------------------------------------------------
-class OctahedralState:
-    POSITIONS = []
-    for ix in (-1,1):
-        for iy in (-1,1):
-            for iz in (-1,1):
-                v = np.array([ix,iy,iz], dtype=float)
-                v /= np.linalg.norm(v)
-                POSITIONS.append(v)
+# Import canonical GEIS classes from experiments/sims
+_SIMS = Path(__file__).resolve().parent / "experiments" / "sims"
+if str(_SIMS) not in sys.path:
+    sys.path.insert(0, str(_SIMS))
 
-    @classmethod
-    def closest(cls, vec: np.ndarray) -> int:
-        vec = vec / np.linalg.norm(vec)
-        dots = [np.dot(vec, p) for p in cls.POSITIONS]
-        return int(np.argmax(dots))
+from geometric_sensing_sim import (  # noqa: E402
+    OctahedralState,
+    GeometricEncoder,
+    StateTensor,
+)
 
 def value_to_token(reading: float, units: str, component_type: str) -> str:
     """

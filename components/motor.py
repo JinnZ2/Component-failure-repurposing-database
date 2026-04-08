@@ -1,3 +1,8 @@
+import time
+import random
+from components.physical_sensor import PhysicalSensor
+
+
 class SimulatedMotor(PhysicalSensor):
     """Simulates a DC motor with bearing wear (vibration) or winding short."""
     def __init__(self, nominal_current=0.5, fail_current=2.0, drift_start=18.0):

@@ -1,3 +1,8 @@
+import time
+import random
+from components.physical_sensor import PhysicalSensor
+
+
 class SimulatedConnector(PhysicalSensor):
     """Simulates a connector with contact resistance that increases over time."""
     def __init__(self, nominal_resistance_mohm=10.0, fail_resistance_mohm=100.0, drift_start=15.0):
