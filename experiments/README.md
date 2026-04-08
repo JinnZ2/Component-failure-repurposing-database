@@ -2,7 +2,7 @@
 
 **Purpose:** Runnable simulations that explore interfaces and possibilities for component failure repurposing. Each sim models a different aspect of the database's core concepts — degradation curves, repurpose decision-making, multi-component synergies, and emergency channel fallback.
 
-**Dependencies:** Python 3.8+ standard library only for most sims. `geometric_sensing_sim.py` requires **numpy**.
+**Dependencies:** Python 3.8+ standard library only for most sims. The geometric sims require **numpy**.
 
 -----
 
@@ -15,6 +15,8 @@
 | `sims/synergy_matrix_sim.py` | Monte Carlo exploration of multi-component failure combinations — discovers emergent synergies by randomly pairing degraded components and scoring outcomes |
 | `sims/channel_fallback.py` | Emergency communication channel switching — simulates degradation across RF, optical, acoustic, thermal, and mechanical channels with automatic failover |
 | `sims/geometric_sensing_sim.py` | Real-time 3D geometric sensing — reads accelerometer data (Termux or simulated), encodes to octahedral tokens via GEIS, fills 3D cubes, detects dependencies via cube matching and tensor cancellation |
+| `sims/geometric_failure_diagnosis.py` | Maps database failure modes to octahedral tokens, simulates component degradation driven by `matrices/*.csv`, detects periodic failure signatures via cube cancellation, includes AI self-diagnosis loop |
+| `sims/geometric_transport_sieve.py` | Self-organising probability field over offset space for number-theoretic relation collection — compares ring vs SOMS 32-vertex polyhedron topology, encodes sieve state as geometric tokens |
 
 -----
 
@@ -27,7 +29,9 @@ python experiments/sims/component_degradation.py
 python experiments/sims/repurpose_router.py
 python experiments/sims/synergy_matrix_sim.py
 python experiments/sims/channel_fallback.py
-python experiments/sims/geometric_sensing_sim.py   # requires numpy
+python experiments/sims/geometric_sensing_sim.py           # requires numpy
+python experiments/sims/geometric_failure_diagnosis.py     # requires numpy
+python experiments/sims/geometric_transport_sieve.py       # requires numpy
 ```
 
 All sims print results to stdout. Pipe to a file for post-analysis:
@@ -49,7 +53,9 @@ experiments/
     ├── repurpose_router.py
     ├── synergy_matrix_sim.py
     ├── channel_fallback.py
-    └── geometric_sensing_sim.py
+    ├── geometric_sensing_sim.py
+    ├── geometric_failure_diagnosis.py
+    └── geometric_transport_sieve.py
 ```
 
 -----
@@ -86,3 +92,10 @@ These sims prototype interfaces described in:
 | `state_tensor.py` | `StateTensor` class — 3x3 symmetric tensor fingerprints, projection, eigenvalues |
 | `geometric_sensor_sim.py` | `find_dependencies()` — tensor cancellation search (pairs, triples, meet-in-the-middle) |
 | `3D_cube_sim.py` | Cube XOR dependency detection, canonical form concepts |
+
+`geometric_failure_diagnosis.py` reads live data from `matrices/*.csv` (failure modes,
+repurpose effectiveness, environmental interactions, synergies, redundancy channels, decay).
+
+`geometric_transport_sieve.py` integrates the 32-vertex truncated icosidodecahedron from the
+[SOMS](https://github.com/JinnZ2/Sovereign-Octahedral-Mandala-Substrate-SOMS-)
+(Sovereign Octahedral Mandala Substrate) repository as a transport graph topology.
