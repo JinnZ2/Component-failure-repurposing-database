@@ -17,6 +17,7 @@
 | `sims/geometric_sensing_sim.py` | Real-time 3D geometric sensing — reads accelerometer data (Termux or simulated), encodes to octahedral tokens via GEIS, fills 3D cubes, detects dependencies via cube matching and tensor cancellation |
 | `sims/geometric_failure_diagnosis.py` | Maps database failure modes to octahedral tokens, simulates component degradation driven by `matrices/*.csv`, detects periodic failure signatures via cube cancellation, includes AI self-diagnosis loop |
 | `sims/geometric_transport_sieve.py` | Self-organising probability field over offset space for number-theoretic relation collection — compares ring vs SOMS 32-vertex polyhedron topology, encodes sieve state as geometric tokens |
+| `sims/quantum_chemistry_geo.py` | Maps molecular electron density to octahedral tokens — Slater-type atomic orbitals on a 3D grid, density gradient -> vertex, magnitude -> operator, orbital character -> symbol. Detects molecular symmetry via cube rotation invariance, finds bonding interactions via tensor cancellation, simulates H2 dissociation curve |
 
 -----
 
@@ -32,6 +33,7 @@ python experiments/sims/channel_fallback.py
 python experiments/sims/geometric_sensing_sim.py           # requires numpy
 python experiments/sims/geometric_failure_diagnosis.py     # requires numpy
 python experiments/sims/geometric_transport_sieve.py       # requires numpy
+python experiments/sims/quantum_chemistry_geo.py           # requires numpy
 ```
 
 All sims print results to stdout. Pipe to a file for post-analysis:
@@ -55,7 +57,8 @@ experiments/
     ├── channel_fallback.py
     ├── geometric_sensing_sim.py
     ├── geometric_failure_diagnosis.py
-    └── geometric_transport_sieve.py
+    ├── geometric_transport_sieve.py
+    └── quantum_chemistry_geo.py
 ```
 
 -----
