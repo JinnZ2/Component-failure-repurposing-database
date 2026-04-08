@@ -569,3 +569,22 @@ self._add_entry("switch", "5/Δ", "oxidation", "acoustic_alarm", priority=3, eff
 # Motor failures
 self._add_entry("motor", "4|O", "winding_short", "thermal_heater", priority=2, effectiveness=0.75)
 self._add_entry("motor", "6|X", "bearing_wear", "mechanical_vibration", priority=1, effectiveness=0.9)
+
+
+in main register:
+
+# Register components
+resistor = SimulatedResistor(nominal_voltage=5.0, fail_voltage=8.0, drift_start=10.0)
+system.register_sensor("resistor_R1", resistor)
+
+connector = SimulatedConnector(nominal_resistance_mohm=20.0, fail_resistance_mohm=150.0, drift_start=8.0)
+system.register_sensor("connector_J1", connector)
+
+relay = SimulatedRelay(nominal_coil_resistance=100.0, fail_time=20.0)
+system.register_sensor("relay_K1", relay)
+
+switch = SimulatedSwitch(nominal_resistance_mohm=5.0, fail_resistance_mohm=100.0, drift_start=12.0)
+system.register_sensor("switch_S1", switch)
+
+motor = SimulatedMotor(nominal_current=0.5, fail_current=2.0, drift_start=18.0)
+system.register_sensor("motor_M1", motor)
