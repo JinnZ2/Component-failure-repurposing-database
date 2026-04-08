@@ -499,3 +499,18 @@ try:
         time.sleep(0.5)
 except KeyboardInterrupt:
     geo.stop()
+
+
+Possible issues to resolve:
+
+1. Ambiguity in tokens
+   "R1|O 85" – is the 1 part of the vertex or the component ID?
+   Suggestion: use a separator, e.g., R[1|O] 85 or R:1|O 85. Right now, R1 could be component R1 with token starting at |, but 1|O is a valid token (vertex 1). This will break if you have component IDs longer than one character (e.g., R12). Fix: always separate component ID and token with a colon or space.
+2. Missing timestamp in compact health query
+   The LLM might ask QUERY R1 but get back R1 85 – no way to know if that’s current or cached. Add @t like events: R1@12.3 85.
+3. Action codes are English‑centric
+   RF, OPT, AC – fine, but consider numeric codes for extremely low‑token scenarios (e.g., 0=RF, 1=OPT). That’s only useful if you’re at <10 tokens per message.
+4. No error recovery grammar
+   If the LLM outputs malformed compact, the system currently returns ERR unknown command. Could define ERR <code> (e.g., ERR 1 = unknown component) so the LLM can learn to correct itself.
+5. The prompt assumes the LLM will follow rules
+   In my experience, even GPT‑4 will occasionally output natural language. The bridge’s nl_to_compact is a good start, but you could also fine‑tune a small model (e.g., Llama 3 8B) on any compact grammar – that would guarantee compliance.
