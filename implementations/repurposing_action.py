@@ -1,45 +1,65 @@
-class GeometricMonitoringSystem:
-    def __init__(self, cube_side=4):
-        self.token_buffer = TokenBuffer()
-        self.processing = GeometricProcessingLoop(self.token_buffer, cube_side)
-        self.ai_diag = AISelfDiagnosis(interval_sec=3, cube_side=3)
-        self.db = FailureDatabase()
-        self.component_last_token = {}  # component_id -> last token
-        self.processing.on_dependency(self._on_dependency)
+"""
+Repurposing Action Dispatcher
+==============================
+Shows how the geometric monitoring system dispatches hardware actions
+when a dependency (repeated failure cube) is detected.
 
-    def feed_sensor(self, component_id: str, value: float, units: str, comp_type: str):
-        token = value_to_token(value, units, comp_type)
-        self.token_buffer.push(component_id, token)
-        self.component_last_token[component_id] = token
+Hardware imports (RPi.GPIO, optical_fallback, rf_fallback) are guarded
+so the module loads safely on non-Raspberry Pi systems.
+"""
+import time
 
-    def _on_dependency(self, prev_idx, curr_idx):
-        print(f"🔔 GEOMETRIC DEPENDENCY: Cube {curr_idx} repeats cube {prev_idx}")
-        # For each component that contributed to this cube (we need to know which components were in the cube)
-        # Simplified: for now, check the last token of each component
-        for comp_id, token in self.component_last_token.items():
-            # Determine component type from registration (simplified: extract from comp_id)
-            comp_type = comp_id.split('_')[0] if '_' in comp_id else comp_id
-            failure_info = self.db.lookup(comp_type, token)
-            if failure_info:
-                mode, action, effectiveness = failure_info
-                print(f"   → Component {comp_id} matches failure '{mode}' (eff={effectiveness})")
-                self._execute_repurpose(comp_id, action)
 
-    def _execute_repurpose(self, component_id: str, action: str):
-        """Execute a repurposing action (fallback channel, mode switch, etc.)."""
-        print(f"   → Executing repurpose action '{action}' for {component_id}")
+class RepurposeDispatcher:
+    """Routes repurpose actions to hardware fallback channels."""
+
+    def __init__(self):
+        self.optical_tx = None
+        self.rf_tx = None
+
+    def execute(self, component_id: str, action: str):
+        print(f"  Executing repurpose action '{action}' for {component_id}")
+
         if action == "optical_fallback":
-            # Example: blink an LED (GPIO write)
-            print("      Blinking LED in SOS pattern...")
-            # Here you would call hardware-specific code (e.g., RPi.GPIO, termux-gpio)
+            try:
+                from implementations.optical_fallback import OpticalTransmitter
+                if self.optical_tx is None:
+                    self.optical_tx = OpticalTransmitter(led_pin=18)
+                self.optical_tx.blink_sos()
+            except ImportError:
+                print("    [sim] LED SOS blink (no RPi.GPIO)")
+
         elif action == "rf_beacon":
-            print("      Transmitting RF beacon (OOK)...")
-            # Use simple_ook_tx implementation
+            try:
+                from implementations.rf_fallback import RFTransmitter
+                if self.rf_tx is None:
+                    self.rf_tx = RFTransmitter(data_pin=27)
+                self.rf_tx.send_message(f"FAIL:{component_id}")
+            except ImportError:
+                print("    [sim] RF OOK beacon (no RPi.GPIO)")
+
         elif action == "acoustic_alarm":
-            print("      Sounding piezo buzzer...")
+            try:
+                import RPi.GPIO as GPIO
+                buzzer_pin = 23
+                GPIO.setup(buzzer_pin, GPIO.OUT)
+                for _ in range(3):
+                    GPIO.output(buzzer_pin, 1)
+                    time.sleep(0.2)
+                    GPIO.output(buzzer_pin, 0)
+                    time.sleep(0.1)
+                GPIO.cleanup(buzzer_pin)
+            except ImportError:
+                print("    [sim] Piezo buzzer alarm (no RPi.GPIO)")
+
         elif action == "magnetic_coupling":
-            print("      Engaging magnetic loop coupling...")
+            print("    Engaging magnetic loop coupling...")
+
         elif action == "thermal_heater":
-            print("      Activating resistor heater...")
+            print("    Activating resistor heater...")
+
+        elif action == "log_only":
+            print("    Logging only - no hardware action.")
+
         else:
-            print(f"      Unknown action '{action}', logging only.")
+            print(f"    Unknown action '{action}', logging only.")

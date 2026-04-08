@@ -124,6 +124,43 @@ This index provides **direct raw links** to every major file in the repository, 
 
 ---
 
+## Geometric Engine (root-level Python modules)
+- [geometric_monitoring_engine.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/geometric_monitoring_engine.py)
+- [geometric_failure_diagnosis.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/geometric_failure_diagnosis.py)
+- [geometric_failure_repurposing_system.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/geometric_failure_repurposing_system.py)
+- [geometric_computation_selector.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/geometric_computation_selector.py)
+- [hardware_bridge_encoder.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/hardware_bridge_encoder.py)
+- [llm_geometric_optimizer.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/llm_geometric_optimizer.py)
+- [rhombic_network.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/rhombic_network.py)
+- [integrated_monitor.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/integrated_monitor.py)
+- [bitchunk_sensor.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/bitchunk_sensor.py)
+- [reference.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/reference.py)
+
+### Component Sensor Simulators
+- [physical_sensor.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/physical_sensor.py)
+- [connector_sensor_class.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/connector_sensor_class.py)
+- [electromechanical_component.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/electromechanical_component.py)
+- [motor.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/motor.py)
+- [switch.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/switch.py)
+
+### Implementation Modules
+- [DB_to_token.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/DB_to_token.py)
+- [example.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/example.py)
+- [integrate_sample.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/integrate_sample.py)
+- [repurposing_action.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/repurposing_action.py)
+- [optical_fallback.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/optical_fallback.py)
+- [rf_fallback.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/rf_fallback.py)
+
+### Hardware Fallback Implementations (Python)
+- [acoustic_fallback.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/circuit_examples/emergency_communication/acoustic_fallback/acoustic_fallback.py)
+- [magnetic_fallback.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/circuit_examples/emergency_communication/magnetic_fallback/magnetic_fallback.py)
+- [mechanical_fallback.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/circuit_examples/emergency_communication/mechanical_fallback/mechanical_fallback.py)
+- [optical_fallback_geo.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/circuit_examples/emergency_communication/optical_fallback/optical_fallback_geo.py)
+- [tf_fallback_geo.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/circuit_examples/emergency_communication/rf_fallback/tf_fallback_geo.py)
+- [thermal_fallback.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/circuit_examples/emergency_communication/thermal_fallback/thermal_fallback.py)
+
+---
+
 ## Experiments — Sample Simulations
 - [README.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/README.md)
 - [component_degradation.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/component_degradation.py)

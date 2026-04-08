@@ -1,8 +1,9 @@
 # integrated_monitor.py
 import time
 import random
-from geometric_monitoring import GeometricMonitoringSystem
-from generic_hardware_interface import GenericHardwareInterface, PhysicalSensor
+from geometric_monitoring_engine import GeometricMonitoringSystem
+from hardware_bridge_encoder import HardwareBridgeEncoder
+from components.physical_sensor import PhysicalSensor
 
 # Dummy sensor for demonstration
 class SimulatedResistor(PhysicalSensor):
@@ -36,27 +37,29 @@ if __name__ == "__main__":
     geo_system = GeometricMonitoringSystem(cube_side=3)
     geo_system.start()
 
-    # Setup hardware interface with encoder (already inside geo_system)
-    hw_interface = GenericHardwareInterface(encoder=geo_system.encoder)
+    # Setup sensor and encoder
+    encoder = HardwareBridgeEncoder()
     resistor = SimulatedResistor()
-    hw_interface.register_sensor("R1", resistor)
 
-    # Monitor loop
+    # Monitor loop — feed sensor samples into the geometric system
     try:
-        for _ in range(300):   # 30 seconds
-            state = hw_interface.get_system_state()
-            for comp_id, info in state.items():
-                # The state dict already contains binary, hex, status
-                # But we also want to feed geometry for cube detection
-                # We need to rebuild geometry from info? Better: let hardware interface push directly.
-                # For simplicity, we call feed_geometry with the raw sample data.
-                # But get_system_state already computed health/drift – we can reuse.
-                # We'll just feed the geometry we already have in the loop.
-                # Actually, we should modify get_system_state to return the geometry dict.
-                # For now, we manually feed.
-                pass
-            # Simpler: just feed sensor samples directly
-            geo_system.feed_geometry("R1", resistor.sample())
+        for _ in range(300):   # 30 seconds at 0.1s interval
+            sample = resistor.sample()
+            # Feed raw reading to geometric monitoring
+            geo_system.feed_sensor("R1", sample["v"], "V", sample["type"])
+            # Also encode via hardware bridge for binary/token view
+            geo = {
+                "component_type": sample["type"],
+                "failure_mode": sample["mode"],
+                "health_score": sample["health_score"],
+                "drift_pct": sample["drift_pct"],
+                "voltage_v": sample["v"],
+                "current_a": sample["i"],
+                "temperature_c": sample["t"],
+                "salvageable": sample["salvageable"],
+            }
+            encoder.from_geometry(geo)
             time.sleep(0.1)
     except KeyboardInterrupt:
-        geo_system.stop()
+        pass
+    geo_system.stop()

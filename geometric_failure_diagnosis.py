@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """
-Geometric Failure Diagnosis
-===========================
+Geometric Failure Diagnosis (standalone version)
+=================================================
 Maps component failure modes to octahedral tokens, simulates degradation,
 and detects repeated patterns (dependencies) via 3D cube cancellation.
 Also demonstrates AI self-diagnosis via internal state cubes.
+
+Note: An enhanced version that loads real data from the database CSVs
+lives at ``experiments/sims/geometric_failure_diagnosis.py``.
 """
 
 import hashlib

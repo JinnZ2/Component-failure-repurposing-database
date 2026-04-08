@@ -1,3 +1,8 @@
+import time
+import random
+from components.physical_sensor import PhysicalSensor
+
+
 class SimulatedRelay(PhysicalSensor):
     """Simulates a relay with contact welding or coil failure."""
     def __init__(self, nominal_coil_resistance=100.0, fail_time=20.0):

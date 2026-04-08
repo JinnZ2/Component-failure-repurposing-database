@@ -3,8 +3,26 @@ Optical fallback communication using LED (TX) and photodiode (RX).
 Works on Raspberry Pi with GPIO.
 """
 
-import RPi.GPIO as GPIO
 import time
+
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    # Mock GPIO for non-Raspberry Pi environments
+    class _MockGPIO:
+        BCM = OUT = IN = 0
+        def setmode(self, *a): pass
+        def setup(self, *a, **kw): pass
+        def output(self, *a): pass
+        def input(self, *a): return 0
+        def cleanup(self, *a): pass
+        def PWM(self, pin, freq):
+            return type('PWM', (), {
+                'start': lambda s, d: None,
+                'stop': lambda s: None,
+                'ChangeDutyCycle': lambda s, d: None,
+            })()
+    GPIO = _MockGPIO()
 
 class OpticalTransmitter:
     def __init__(self, led_pin=18, carrier_freq_hz=38000):  # 38kHz IR carrier (optional)

@@ -1,33 +1,53 @@
-class GeometricMonitoringSystem:
+"""
+Integration Sample
+==================
+Shows how GeometricMonitoringSystem connects: token buffer -> processing
+loop -> dependency detection -> failure database lookup -> repurpose action.
+
+This is a reference snippet, not a standalone script.
+"""
+from geometric_monitoring_engine import (
+    GeometricMonitoringSystem,
+    TokenBuffer,
+    GeometricProcessingLoop,
+    AISelfDiagnosis,
+    value_to_token,
+    lookup_failure,
+)
+
+
+class IntegratedMonitoringSystem(GeometricMonitoringSystem):
+    """Extended system with failure-database-driven repurpose dispatch."""
+
     def __init__(self, cube_side=4):
-        # ... existing init ...
-        self.optical_tx = None
-        self.rf_tx = None
+        super().__init__(cube_side)
+        self.component_last_token = {}
+        # Re-register dependency callback with lookup
+        self.processing.dependency_callbacks.clear()
+        self.processing.on_dependency(self._on_dependency_with_lookup)
+
+    def feed_sensor(self, component_id: str, value: float,
+                    units: str, comp_type: str):
+        token = value_to_token(value, units, comp_type)
+        self.token_buffer.push(component_id, token)
+        self.component_last_token[component_id] = (token, comp_type)
+
+    def _on_dependency_with_lookup(self, prev_idx, curr_idx):
+        print(f"DEPENDENCY: Cube {curr_idx} repeats cube {prev_idx}")
+        for comp_id, (token, comp_type) in self.component_last_token.items():
+            mode = lookup_failure(comp_type, token)
+            if mode:
+                print(f"  {comp_id} matches failure '{mode}'")
+                self._execute_repurpose(comp_id, mode)
 
     def _execute_repurpose(self, component_id: str, action: str):
-        print(f"   → Executing repurpose action '{action}' for {component_id}")
-        if action == "optical_fallback":
-            if self.optical_tx is None:
-                from optical_fallback import OpticalTransmitter
-                self.optical_tx = OpticalTransmitter(led_pin=18)
-            self.optical_tx.blink_sos()  # or send_message("FAILURE")
-        elif action == "rf_beacon":
-            if self.rf_tx is None:
-                from rf_fallback import RFTransmitter
-                self.rf_tx = RFTransmitter(data_pin=27)
-            self.rf_tx.send_message("FAIL:resistor_drift")
-        elif action == "acoustic_alarm":
-            # Use piezo buzzer (simple GPIO tone)
-            import RPi.GPIO as GPIO
-            buzzer_pin = 23
-            GPIO.setup(buzzer_pin, GPIO.OUT)
-            for _ in range(3):
-                GPIO.output(buzzer_pin, 1)
-                time.sleep(0.2)
-                GPIO.output(buzzer_pin, 0)
-                time.sleep(0.1)
-            GPIO.cleanup(buzzer_pin)
-        elif action == "log_only":
-            print("      Logging only – no hardware action.")
-        else:
-            print(f"      Unknown action '{action}', logging only.")
+        """Dispatch repurpose action (fallback channel, mode switch, etc.)."""
+        print(f"  Executing repurpose '{action}' for {component_id}")
+        dispatch = {
+            "optical_fallback": "Blinking LED in SOS pattern...",
+            "rf_beacon":        "Transmitting RF beacon (OOK)...",
+            "acoustic_alarm":   "Sounding piezo buzzer...",
+            "magnetic_coupling": "Engaging magnetic loop coupling...",
+            "thermal_heater":   "Activating resistor heater...",
+        }
+        print(f"    {dispatch.get(action, f'Logging action: {action}')}")
