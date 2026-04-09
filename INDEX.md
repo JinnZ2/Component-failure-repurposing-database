@@ -8,6 +8,15 @@ This index provides **direct raw links** to every major file in the repository, 
 - [README.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/README.md)
 - [CONTRIBUTING.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/CONTRIBUTING.md)
 - [LICENSE](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/LICENSE)
+- [CLAUDE.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/CLAUDE.md)
+- [Component.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/Component.md)
+- [Core_engine.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/Core_engine.md)
+- [Future.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/Future.md)
+- [PROJECTS.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/PROJECTS.md)
+- [binary_sensor.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/binary_sensor.md)
+- [diode.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/diode.md)
+- [resistor.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/resistor.md)
+- [ABNF.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/ABNF.md)
 
 ---
 
@@ -29,7 +38,11 @@ This index provides **direct raw links** to every major file in the repository, 
 - [photodiodes.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/diodes/photodiodes.md)
 
 ### Resistors
-- [resistor.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/resistors/resistor.md)
+- [carbon_film.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/resistors/carbon_film.md)
+- [metal_film.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/resistors/metal_film.md)
+- [wire_wound.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/resistors/wire_wound.md)
+- [potentiometers.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/resistors/potentiometers.md)
+- [thermistors.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/resistors/thermistors.md)
 
 ### Capacitors
 - [electrolytic.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/capacitors/electrolytic.md)
@@ -156,7 +169,7 @@ This index provides **direct raw links** to every major file in the repository, 
 - [magnetic_fallback.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/circuit_examples/emergency_communication/magnetic_fallback/magnetic_fallback.py)
 - [mechanical_fallback.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/circuit_examples/emergency_communication/mechanical_fallback/mechanical_fallback.py)
 - [optical_fallback_geo.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/circuit_examples/emergency_communication/optical_fallback/optical_fallback_geo.py)
-- [tf_fallback_geo.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/circuit_examples/emergency_communication/rf_fallback/tf_fallback_geo.py)
+- [rf_fallback_geo.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/circuit_examples/emergency_communication/rf_fallback/rf_fallback_geo.py)
 - [thermal_fallback.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/circuit_examples/emergency_communication/thermal_fallback/thermal_fallback.py)
 
 ---
@@ -171,3 +184,4 @@ This index provides **direct raw links** to every major file in the repository, 
 - [geometric_failure_diagnosis.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/geometric_failure_diagnosis.py)
 - [geometric_transport_sieve.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/geometric_transport_sieve.py)
 - [quantum_chemistry_geo.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/quantum_chemistry_geo.py)
+- [molecule_geometric_symmetry.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/molecule_geometric_symmetry.py)

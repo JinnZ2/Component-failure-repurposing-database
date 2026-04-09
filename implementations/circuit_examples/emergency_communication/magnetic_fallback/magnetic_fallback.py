@@ -4,10 +4,28 @@ Drive primary coil, sense secondary. Range: cm to tens of cm.
 Works with degraded transformers or custom coils.
 """
 
-import RPi.GPIO as GPIO
 import time
 import threading
 from typing import Optional, Callable
+
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    class _MockGPIO:
+        BCM = OUT = IN = 0
+        def setmode(self, *a): pass
+        def setup(self, *a, **kw): pass
+        def output(self, *a): pass
+        def input(self, *a): return 0
+        def cleanup(self, *a): pass
+        def PWM(self, pin, freq):
+            return type('PWM', (), {
+                'start': lambda s, d: None,
+                'stop': lambda s: None,
+                'ChangeDutyCycle': lambda s, d: None,
+                'ChangeFrequency': lambda s, f: None,
+            })()
+    GPIO = _MockGPIO()
 
 class MagneticTransmitter:
     def __init__(self, drive_pin=12, carrier_freq_hz=1000, duty_cycle=50):

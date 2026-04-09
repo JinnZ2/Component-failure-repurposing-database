@@ -3,8 +3,19 @@ RF OOK transmitter using a 433MHz module (e.g., FS1000A).
 Data pin connected to GPIO.
 """
 
-import RPi.GPIO as GPIO
 import time
+
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    class _MockGPIO:
+        BCM = OUT = IN = 0
+        def setmode(self, *a): pass
+        def setup(self, *a, **kw): pass
+        def output(self, *a): pass
+        def input(self, *a): return 0
+        def cleanup(self, *a): pass
+    GPIO = _MockGPIO()
 
 class RFTransmitter:
     def __init__(self, data_pin=27, protocol='raw'):

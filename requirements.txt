@@ -1,0 +1,4 @@
+# Component Failure Repurposing Database — Python dependencies
+# Install: pip install -r requirements.txt
+
+numpy
