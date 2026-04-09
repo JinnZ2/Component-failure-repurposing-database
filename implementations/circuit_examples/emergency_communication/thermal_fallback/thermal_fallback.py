@@ -4,11 +4,28 @@ Bandwidth: ~1-10 bits per minute.
 Range: cm (direct contact) or tens of cm (radiant).
 """
 
-import RPi.GPIO as GPIO
 import time
 import threading
 import math
 from typing import Optional
+
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    class _MockGPIO:
+        BCM = OUT = IN = 0
+        def setmode(self, *a): pass
+        def setup(self, *a, **kw): pass
+        def output(self, *a): pass
+        def input(self, *a): return 0
+        def cleanup(self, *a): pass
+        def PWM(self, pin, freq):
+            return type('PWM', (), {
+                'start': lambda s, d: None,
+                'stop': lambda s: None,
+                'ChangeDutyCycle': lambda s, d: None,
+            })()
+    GPIO = _MockGPIO()
 
 class ThermalTransmitter:
     def __init__(self, resistor_pin=18, power_percent=100):

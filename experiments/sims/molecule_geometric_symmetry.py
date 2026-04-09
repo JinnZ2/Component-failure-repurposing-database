@@ -81,8 +81,8 @@ def density_gradient(r, coords, charges, eps=1e-5):
         r_minus = r.copy()
         r_plus[dim] += eps
         r_minus[dim] -= eps
-        rho_plus = molecule_density([r_plus], coords, charges)[0]
-        rho_minus = molecule_density([r_minus], coords, charges)[0]
+        rho_plus = molecule_density(coords, charges, [r_plus])[0]
+        rho_minus = molecule_density(coords, charges, [r_minus])[0]
         grad[dim] = (rho_plus - rho_minus) / (2*eps)
     return grad
 

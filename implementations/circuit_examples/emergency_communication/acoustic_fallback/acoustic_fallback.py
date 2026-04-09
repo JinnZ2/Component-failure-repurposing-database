@@ -5,11 +5,29 @@ Modes:
 - ultrasonic: 40 kHz, range 0.1-3 m (requires receiver with envelope detection)
 """
 
-import RPi.GPIO as GPIO
 import time
 import threading
 import math
 from typing import Optional, Callable
+
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    class _MockGPIO:
+        BCM = OUT = IN = 0
+        def setmode(self, *a): pass
+        def setup(self, *a, **kw): pass
+        def output(self, *a): pass
+        def input(self, *a): return 0
+        def cleanup(self, *a): pass
+        def PWM(self, pin, freq):
+            return type('PWM', (), {
+                'start': lambda s, d: None,
+                'stop': lambda s: None,
+                'ChangeDutyCycle': lambda s, d: None,
+                'ChangeFrequency': lambda s, f: None,
+            })()
+    GPIO = _MockGPIO()
 
 class AcousticTransmitter:
     def __init__(self, piezo_pin=13, mode='audible'):
