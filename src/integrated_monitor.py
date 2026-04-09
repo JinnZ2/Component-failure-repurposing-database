@@ -1,9 +1,17 @@
 # integrated_monitor.py
+import sys
 import time
 import random
+from pathlib import Path
+
+# Resolve sibling imports within src/
+_SRC = Path(__file__).resolve().parent
+if str(_SRC) not in sys.path:
+    sys.path.insert(0, str(_SRC))
+
 from geometric_monitoring_engine import GeometricMonitoringSystem
 from hardware_bridge_encoder import HardwareBridgeEncoder
-from components.physical_sensor import PhysicalSensor
+from sensors.physical_sensor import PhysicalSensor
 
 # Dummy sensor for demonstration
 class SimulatedResistor(PhysicalSensor):

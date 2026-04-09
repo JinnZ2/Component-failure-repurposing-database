@@ -6,6 +6,10 @@ loop -> dependency detection -> failure database lookup -> repurpose action.
 
 This is a reference snippet, not a standalone script.
 """
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
+
 from geometric_monitoring_engine import (
     GeometricMonitoringSystem,
     TokenBuffer,

@@ -1,16 +1,32 @@
 {
   "fieldlink": {
-    "version": "1.0",
-    "role": ["reclaimer", "hardware intelligence"],
+    "version": "1.1",
+    "role": ["reclaimer", "hardware intelligence", "geometric encoder"],
     "sources": [
       {
         "name": "bioatlas",
         "repo": "https://github.com/JinnZ2/BioGrid2.0",
         "ref": "main",
         "paths": ["planned/glyphs/atlas.json", "registry/atlas.glyphs.json"]
+      },
+      {
+        "name": "geometric-bridge",
+        "repo": "https://github.com/JinnZ2/Geometric-to-Binary-Computational-Bridge",
+        "ref": "main",
+        "paths": ["GEIS/**"],
+        "provides": ["OctahedralState", "GeometricEncoder", "StateTensor", "geometric_sensor_sim"],
+        "consumed_by": ["experiments/sims/geometric_sensing_sim.py", "src/geometric_monitoring_engine.py"]
+      },
+      {
+        "name": "soms",
+        "repo": "https://github.com/JinnZ2/Sovereign-Octahedral-Mandala-Substrate-SOMS-",
+        "ref": "main",
+        "paths": ["reference.py", "src/**"],
+        "provides": ["32-vertex truncated icosidodecahedron", "phi-scaled mandala geometry"],
+        "consumed_by": ["experiments/sims/geometric_transport_sieve.py"]
       }
     ],
-    "local_manifests": ["components/**", "matrices/**", "implementations/**"],
+    "local_manifests": ["components/**", "matrices/**", "implementations/**", "experiments/**", "src/**"],
     "offline": true
   }
 }
