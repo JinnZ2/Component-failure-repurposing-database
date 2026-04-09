@@ -49,11 +49,11 @@
 ## In Progress
 
 ### GeometricMonitoringSystem Integration (from CLAUDE.md TODO)
-- [ ] Wire `GeometricMonitoringSystem.feed_geometry()` to accept geometry dicts from `GenericHardwareInterface`
-- [ ] `HardwareBridgeEncoder.to_octahedral_tokens()` feeding `TokenBuffer`
-- [ ] Cube dependency callback → `RepurposeOrchestrator` → fallback channel dispatch
-- [ ] Environment class with `EnvironmentalMemory` (cumulative thermal cycles, humidity exposure, vibration dose)
-- [ ] End-to-end test: sensor → encoder → buffer → cube → dependency → repurpose action
+- [x] Wire `GeometricMonitoringSystem.feed_geometry()` to accept geometry dicts from `GenericHardwareInterface`
+- [x] `HardwareBridgeEncoder.to_octahedral_tokens()` feeding `TokenBuffer`
+- [x] Cube dependency callback → `RepurposeOrchestrator` → fallback channel dispatch
+- [x] Environment class with `EnvironmentalMemory` (cumulative thermal cycles, humidity exposure, vibration dose)
+- [x] End-to-end test: sensor → encoder → buffer → cube → dependency → repurpose action
 
 ### Compact Protocol Refinement
 - [ ] Resolve component ID ambiguity (e.g., `R1|O 85` — separator between ID and token)

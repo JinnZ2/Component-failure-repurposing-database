@@ -212,20 +212,233 @@ class AISelfDiagnosis:
 # ----------------------------------------------------------------------
 # 7. Complete Monitoring System (integrated)
 # ----------------------------------------------------------------------
+# ----------------------------------------------------------------------
+# 7. Environment + Environmental Memory
+# ----------------------------------------------------------------------
+
+class EnvironmentalMemory:
+    """Tracks cumulative damage that does not heal when environment recovers."""
+
+    def __init__(self):
+        self.thermal_cycles = 0
+        self.humidity_exposure_time = 0.0   # seconds above 70% RH
+        self.vibration_dose = 0.0           # integral of g^2 * dt
+        self.contamination_deposit = 0.0    # 0-1, accumulates
+        self._last_temp = None
+
+    def update(self, env: 'Environment', dt: float):
+        # Thermal cycle: crossing 20 deg C threshold
+        if self._last_temp is not None:
+            if (self._last_temp - 20) * (env.temp - 20) < 0:
+                self.thermal_cycles += 1
+        self._last_temp = env.temp
+        # Humidity exposure above 70% RH
+        if env.humidity > 70:
+            self.humidity_exposure_time += dt
+        # Vibration dose: integral of g^2
+        self.vibration_dose += env.vibration ** 2 * dt
+        # Contamination deposit: accumulates, saturates at 1.0
+        self.contamination_deposit = min(
+            1.0, self.contamination_deposit + env.contamination * dt)
+
+
+class Environment:
+    """Tracks environmental conditions that affect failure rates."""
+
+    def __init__(self, temperature_c=25.0, humidity_percent=50.0,
+                 vibration_g=0.1, contamination=0.0):
+        self.temp = temperature_c
+        self.humidity = humidity_percent
+        self.vibration = vibration_g
+        self.contamination = contamination
+        self.memory = EnvironmentalMemory()
+        self.last_update = time.time()
+
+    def update(self, temp=None, humidity=None, vibration=None,
+               contamination=None):
+        now = time.time()
+        dt = now - self.last_update
+        self.memory.update(self, dt)
+        if temp is not None:
+            self.temp = temp
+        if humidity is not None:
+            self.humidity = humidity
+        if vibration is not None:
+            self.vibration = vibration
+        if contamination is not None:
+            self.contamination = contamination
+        self.last_update = now
+
+    def get_acceleration_factor(self, component_type: str,
+                                failure_mode: str) -> float:
+        """
+        Multiplier for failure progression rate.
+        Combines instantaneous stress and cumulative memory damage.
+        """
+        # Instantaneous factors
+        inst = 1.0
+        inst *= 2 ** ((self.temp - 25) / 10)  # Arrhenius
+        if self.humidity > 70:
+            inst *= 1 + (self.humidity - 70) / 30
+        inst *= 1 + self.vibration * 0.5
+        if component_type == "connector":
+            inst *= 1 + self.contamination * 5
+        else:
+            inst *= 1 + self.contamination * 2
+        # Cumulative memory factors
+        cum = 1.0
+        cum *= 1 + self.memory.thermal_cycles * 0.02
+        cum *= 1 + (self.memory.humidity_exposure_time / 3600) * 0.05
+        cum *= 1 + self.memory.vibration_dose * 0.001
+        cum *= 1 + self.memory.contamination_deposit
+        return inst * cum
+
+
+# ----------------------------------------------------------------------
+# 8. Failure Database (token -> action lookup)
+# ----------------------------------------------------------------------
+
+class FailureDatabase:
+    """Maps (component_type, token) -> (failure_mode, action, priority, effectiveness)."""
+
+    def __init__(self):
+        self.db: Dict[Tuple[str, str], Tuple[str, str, int, float]] = {}
+        # Resistor failures
+        self._add("resistor", "001|O", "drift", "rf_beacon", 1, 0.85)
+        self._add("resistor", "101/\u0394", "open", "optical_fallback", 2, 0.7)
+        self._add("resistor", "010||X", "short", "acoustic_alarm", 3, 0.6)
+        # Diode failures
+        self._add("diode", "011/I", "short", "thermal_heater", 1, 0.8)
+        self._add("diode", "111/X", "open", "mechanical_vibration", 2, 0.5)
+        self._add("diode", "101/I", "leakage", "rf_beacon", 2, 0.7)
+        # Connector failures
+        self._add("connector", "110/I", "corrosion", "magnetic_coupling", 1, 0.7)
+        # Relay failures
+        self._add("relay", "000|O", "contact_welding", "rf_beacon", 2, 0.8)
+        self._add("relay", "111/\u0394", "coil_failure", "magnetic_coupling", 3, 0.6)
+        # Motor failures
+        self._add("motor", "100|O", "winding_short", "thermal_heater", 2, 0.75)
+        self._add("motor", "110|X", "bearing_wear", "mechanical_vibration", 1, 0.9)
+
+    def _add(self, comp, token, mode, action, priority, effectiveness):
+        self.db[(comp.lower(), token)] = (mode, action, priority, effectiveness)
+
+    def lookup(self, component_type: str,
+               token: str) -> Optional[Tuple[str, str, int, float]]:
+        return self.db.get((component_type.lower(), token))
+
+    def lookup_by_type(self, component_type: str
+                       ) -> List[Tuple[str, str, str, int, float]]:
+        """All entries for a component type: [(token, mode, action, pri, eff)]."""
+        results = []
+        ct = component_type.lower()
+        for (comp, tok), (mode, action, pri, eff) in self.db.items():
+            if comp == ct:
+                results.append((tok, mode, action, pri, eff))
+        results.sort(key=lambda x: x[3])  # sort by priority
+        return results
+
+
+# ----------------------------------------------------------------------
+# 9. Repurpose Orchestrator
+# ----------------------------------------------------------------------
+
+class RepurposeOrchestrator:
+    """Executes fallback actions by priority."""
+
+    ACTIONS = {
+        "rf_beacon", "optical_fallback", "acoustic_alarm",
+        "thermal_heater", "magnetic_coupling", "mechanical_vibration",
+    }
+
+    def execute(self, action: str, component_id: str,
+                params: Optional[dict] = None) -> bool:
+        if action not in self.ACTIONS:
+            print(f"      Unknown action '{action}'")
+            return False
+        # Glyph-tagged output
+        glyphs = {
+            "rf_beacon": "\U0001f4e1", "optical_fallback": "\U0001f4a1",
+            "acoustic_alarm": "\U0001f50a", "thermal_heater": "\U0001f525",
+            "magnetic_coupling": "\U0001f9f2", "mechanical_vibration": "\U0001f4f3",
+        }
+        g = glyphs.get(action, "")
+        print(f"  {g} Executing {action} for {component_id}")
+        return True
+
+
+# ----------------------------------------------------------------------
+# 10. Complete Geometric Monitoring System (fully wired)
+# ----------------------------------------------------------------------
+
 class GeometricMonitoringSystem:
+    """
+    Main orchestrator. Wires together:
+      sensors -> HardwareBridgeEncoder -> TokenBuffer -> GeometricProcessingLoop
+      -> FailureDatabase lookup -> RepurposeOrchestrator dispatch
+      + Environment awareness + AI self-diagnosis
+    """
+
     def __init__(self, cube_side=4):
         self.token_buffer = TokenBuffer()
         self.processing = GeometricProcessingLoop(self.token_buffer, cube_side)
         self.ai_diag = AISelfDiagnosis(interval_sec=3, cube_side=3)
+        self.failure_db = FailureDatabase()
+        self.orchestrator = RepurposeOrchestrator()
+        self.encoder = GeometricEncoder()
+        self.environment = Environment()
+        self.component_last_tokens: Dict[str, List[str]] = {}
+        self.dependency_log: List[dict] = []
         self.processing.on_dependency(self._on_dependency)
 
     def _on_dependency(self, prev_idx, curr_idx):
-        print(f"🔔 GEOMETRIC DEPENDENCY: Cube {curr_idx} repeats cube {prev_idx}")
-        print("   → Possible component failure or system cycle detected.")
+        """Callback when cube repeats — look up failure and dispatch repurpose."""
+        print(f"\n  DEPENDENCY: Cube {curr_idx} repeats cube {prev_idx}")
+        # Check all recent component tokens against the failure database
+        for comp_id, tokens in self.component_last_tokens.items():
+            for token in tokens[-5:]:  # check last 5 tokens
+                comp_type = comp_id.split("_")[0].lower()
+                result = self.failure_db.lookup(comp_type, token)
+                if result:
+                    mode, action, priority, effectiveness = result
+                    print(f"    {comp_id}: {mode} (eff={effectiveness:.0%}) "
+                          f"-> {action}")
+                    self.orchestrator.execute(action, comp_id)
+                    accel = self.environment.get_acceleration_factor(
+                        comp_type, mode)
+                    self.dependency_log.append({
+                        "time": time.time(),
+                        "component": comp_id,
+                        "mode": mode,
+                        "action": action,
+                        "env_accel": accel,
+                    })
+                    break  # one action per component per dependency
 
-    def feed_sensor(self, component_id: str, value: float, units: str, comp_type: str):
+    def feed_sensor(self, component_id: str, value: float,
+                    units: str, comp_type: str):
+        """Feed a raw scalar reading into the token pipeline."""
         token = value_to_token(value, units, comp_type)
         self.token_buffer.push(component_id, token)
+        self.component_last_tokens.setdefault(component_id, []).append(token)
+        # Keep bounded
+        if len(self.component_last_tokens[component_id]) > 100:
+            self.component_last_tokens[component_id] = \
+                self.component_last_tokens[component_id][-50:]
+
+    def feed_geometry(self, component_id: str, geometry: dict):
+        """
+        Accept a geometry dict from GenericHardwareInterface.
+        Encode to binary via HardwareBridgeEncoder, convert to
+        octahedral tokens, push each into the token buffer.
+        """
+        from hardware_bridge_encoder import HardwareBridgeEncoder
+        enc = HardwareBridgeEncoder()
+        enc.from_geometry(geometry)
+        tokens = enc.to_octahedral_tokens()
+        self.component_last_tokens[component_id] = tokens
+        for token in tokens:
+            self.token_buffer.push(component_id, token)
 
     def start(self):
         self.processing.start()
@@ -234,32 +447,52 @@ class GeometricMonitoringSystem:
     def stop(self):
         self.processing.stop()
 
-    def run_self_diagnosis(self):
+    def run_self_diagnosis(self) -> Optional[Tuple[int, int]]:
         result = self.ai_diag.step()
         if result:
-            print(f"⚠️ AI SELF-DIAGNOSIS: Internal state cube repeated (match {result})")
+            print(f"  AI SELF-DIAGNOSIS: Internal state cube repeated "
+                  f"(match {result})")
         return result
 
+
 # ----------------------------------------------------------------------
-# 8. Demo: Simulate sensor feed and self-diagnosis
+# 11. Demo
 # ----------------------------------------------------------------------
 if __name__ == "__main__":
-    system = GeometricMonitoringSystem(cube_side=3)   # 27 tokens per cube
+    import random as _rng
+
+    system = GeometricMonitoringSystem(cube_side=3)
     system.start()
 
-    # Simulate a degrading resistor over 30 seconds
+    # Set up a harsh environment
+    system.environment.update(temp=55, humidity=75, vibration=0.5)
+    print(f"Environment: {system.environment.temp} deg C, "
+          f"{system.environment.humidity}% RH, "
+          f"{system.environment.vibration} g")
+    accel = system.environment.get_acceleration_factor("resistor", "drift")
+    print(f"Acceleration factor for resistor drift: {accel:.2f}x")
+
+    # Show failure database entries
+    print(f"\nFailure DB entries for resistor:")
+    for tok, mode, action, pri, eff in system.failure_db.lookup_by_type("resistor"):
+        binary = system.encoder.encode_to_binary(tok)
+        print(f"  {tok} (binary={binary}) -> {mode} -> {action} "
+              f"(pri={pri}, eff={eff:.0%})")
+
+    # Simulate degrading resistor for 15 seconds
+    print(f"\nSimulating degrading resistor for 15 seconds...")
     start = time.time()
-    while time.time() - start < 30:
-        # Normal readings (healthy)
-        v = np.random.normal(5.0, 0.1)
-        system.feed_sensor("R1", v, "V", "resistor")
-        # Occasionally inject a failure pattern
-        if np.random.random() < 0.05:
-            # Drift to 8V (out of range)
-            system.feed_sensor("R1", 8.5, "V", "resistor")
-        # Also run AI self-diagnosis every few seconds
+    while time.time() - start < 15:
+        v = _rng.gauss(5.0, 0.1)
+        system.feed_sensor("resistor_R1", v, "V", "resistor")
+        if _rng.random() < 0.08:
+            system.feed_sensor("resistor_R1", 8.5, "V", "resistor")
         system.run_self_diagnosis()
-        time.sleep(0.05)
+        time.sleep(0.02)
 
     system.stop()
+    print(f"\nDependency log: {len(system.dependency_log)} events")
+    for entry in system.dependency_log[:5]:
+        print(f"  {entry['component']}: {entry['mode']} -> "
+              f"{entry['action']} (accel={entry['env_accel']:.2f}x)")
     print("Demo finished.")

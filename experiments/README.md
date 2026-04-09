@@ -19,6 +19,7 @@
 | `sims/geometric_transport_sieve.py` | Self-organising probability field over offset space for number-theoretic relation collection — compares ring vs SOMS 32-vertex polyhedron topology, encodes sieve state as geometric tokens |
 | `sims/quantum_chemistry_geo.py` | Maps molecular electron density to octahedral tokens — Slater-type atomic orbitals on a 3D grid, density gradient -> vertex, magnitude -> operator, orbital character -> symbol. Detects molecular symmetry via cube rotation invariance, finds bonding interactions via tensor cancellation, simulates H2 dissociation curve |
 | `sims/molecule_geometric_symmetry.py` | Fourier cube hash approach to molecular symmetry — builds 8x8x8/10x10x10 state cubes from electron density, detects rotational symmetry via rotation-invariant FFT hashing. Demos: H2 and CH4 |
+| `sims/end_to_end_test.py` | Integration test: sensor -> HardwareBridgeEncoder -> TokenBuffer -> cube dependency -> FailureDatabase -> RepurposeOrchestrator. Exercises Environment, EnvironmentalMemory, feed_geometry(), AI self-diagnosis |
 
 -----
 
@@ -36,6 +37,7 @@ python experiments/sims/geometric_failure_diagnosis.py     # requires numpy
 python experiments/sims/geometric_transport_sieve.py       # requires numpy
 python experiments/sims/quantum_chemistry_geo.py           # requires numpy
 python experiments/sims/molecule_geometric_symmetry.py     # requires numpy
+python experiments/sims/end_to_end_test.py                 # requires numpy
 ```
 
 All sims print results to stdout. Pipe to a file for post-analysis:
@@ -61,7 +63,8 @@ experiments/
     ├── geometric_failure_diagnosis.py
     ├── geometric_transport_sieve.py
     ├── quantum_chemistry_geo.py
-    └── molecule_geometric_symmetry.py
+    ├── molecule_geometric_symmetry.py
+    └── end_to_end_test.py
 ```
 
 -----
