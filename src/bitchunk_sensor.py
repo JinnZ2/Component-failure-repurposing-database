@@ -1,5 +1,5 @@
 import time
-from components.physical_sensor import PhysicalSensor
+from sensors.physical_sensor import PhysicalSensor
 
 
 class BitChunkSensor(PhysicalSensor):

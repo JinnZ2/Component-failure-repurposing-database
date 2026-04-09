@@ -17,7 +17,7 @@ from typing import Dict, List, Optional, Tuple, Callable
 from dataclasses import dataclass
 
 # Import canonical GEIS classes from experiments/sims
-_SIMS = Path(__file__).resolve().parent / "experiments" / "sims"
+_SIMS = Path(__file__).resolve().parent.parent / "experiments" / "sims"
 if str(_SIMS) not in sys.path:
     sys.path.insert(0, str(_SIMS))
 
