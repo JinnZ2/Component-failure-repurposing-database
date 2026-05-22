@@ -14,9 +14,10 @@ from scenario_engine.validators import validate_prediction
 
 class RegistryTests(unittest.TestCase):
     def test_registry_contains_all_scenarios(self):
-        # 15 baseline + SustainedDrift = 16
-        self.assertEqual(len(REGISTRY), 16)
+        # 15 baseline + SustainedDrift + PowerBrownout = 17
+        self.assertEqual(len(REGISTRY), 17)
         self.assertIn("sustained_drift", REGISTRY)
+        self.assertIn("power_brownout", REGISTRY)
         self.assertIn("heat_spike_localized", REGISTRY)
         self.assertIs(REGISTRY["sustained_drift"], SustainedDrift)
 

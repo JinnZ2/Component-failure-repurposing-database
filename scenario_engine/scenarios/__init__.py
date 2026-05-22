@@ -28,6 +28,7 @@ from .mechanical_events import (
     ImpactShock,
     VibrationResonance,
 )
+from .power_brownout import PowerBrownout
 from .power_events import Brownout, GroundLoop, VoltageSag
 from .sustained_drift import SustainedDrift
 from .thermal_events import (
@@ -54,6 +55,7 @@ _ALL_SCENARIOS = (
     EMInterference,
     RadiationBurst,
     SustainedDrift,
+    PowerBrownout,
 )
 
 REGISTRY = {cls.name: cls for cls in _ALL_SCENARIOS}
