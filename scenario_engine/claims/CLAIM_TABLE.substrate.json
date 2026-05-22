@@ -1,0 +1,5 @@
+{
+  "schema_version": "1.0",
+  "description": "Append-only log of falsifiable substrate-state claims and validator verdicts. Populated by ClaimWriter; updated by OutcomeChecker.",
+  "claims": []
+}
