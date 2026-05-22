@@ -132,13 +132,22 @@ class OutcomeChecker:
             ok = (actual == predicted)
             return ok, 0.0 if ok else 1.0, "" if ok else f"actual={actual!r}"
 
-        # Numeric: look up the named measurement
+        # Numeric: look up the named measurement.
+        # Flat schema first (canonical scenarios put it directly in
+        # actual_outcome); fall back to nested 'measurements' (legacy).
         if not isinstance(predicted, (int, float)) or isinstance(predicted, bool):
             return False, float("inf"), f"predicted has invalid type {type(predicted).__name__}"
-        measurements = outcome.get("measurements", {}) or {}
-        if base not in measurements:
-            return False, float("inf"), f"no measurement named {base!r}"
-        actual = float(measurements[base])
+        if base in outcome and not isinstance(outcome[base], (dict, list)):
+            actual_raw = outcome[base]
+        else:
+            measurements = outcome.get("measurements", {}) or {}
+            if base not in measurements:
+                return False, float("inf"), f"no measurement named {base!r}"
+            actual_raw = measurements[base]
+        try:
+            actual = float(actual_raw)
+        except (TypeError, ValueError):
+            return False, float("inf"), f"non-numeric actual={actual_raw!r}"
         err = abs(actual - float(predicted))
         ok = err <= tolerance
         return ok, err, "" if ok else f"|{actual} - {predicted}| = {err:.4f} > tol {tolerance}"

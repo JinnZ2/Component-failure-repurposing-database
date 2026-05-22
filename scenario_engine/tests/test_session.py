@@ -13,12 +13,19 @@ from scenario_engine.validators import validate_prediction
 
 
 class RegistryTests(unittest.TestCase):
-    def test_registry_contains_all_scenarios(self):
-        # 15 baseline + SustainedDrift + PowerBrownout = 17
-        self.assertEqual(len(REGISTRY), 17)
-        self.assertIn("sustained_drift", REGISTRY)
-        self.assertIn("power_brownout", REGISTRY)
-        self.assertIn("heat_spike_localized", REGISTRY)
+    def test_registry_contains_canonical_seven(self):
+        # Canonical library: 7 scenarios.
+        self.assertEqual(len(REGISTRY), 7)
+        for name in (
+            "thermal_drift_localized",
+            "sustained_drift",
+            "power_brownout",
+            "vibration_resonance",
+            "em_interference",
+            "cascade_event",
+            "slow_degradation_electrolytic",
+        ):
+            self.assertIn(name, REGISTRY)
         self.assertIs(REGISTRY["sustained_drift"], SustainedDrift)
 
 

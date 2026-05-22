@@ -1,10 +1,12 @@
-"""Deterministic event generators for the scenario engine.
+"""Canonical scenario library — 7 substrate physics scenarios.
 
-Every scenario is a pure function of (class, seed, params, tick). Replaying
-with the same inputs yields the same `ScenarioState` at the same tick.
+Each scenario is deterministic, stdlib-only, and accepts interventions
+via `receive_intervention(action, tick)`.
 
-`REGISTRY` maps `scenario.name` -> class so callers can look up scenarios by
-string (used by the Session orchestrator).
+REGISTRY maps `scenario.name` → class (used by `runner.session.Session`).
+
+Earlier scaffold scenarios are preserved (but not registered) under
+`scenarios/_attic/`.
 """
 
 from .base import (
@@ -13,49 +15,23 @@ from .base import (
     ScenarioState,
     SensorReading,
 )
-from .cascade_events import (
-    SharedSubstrateFailure,
-    SingleComponentThenPropagation,
-    TimingDriftCascade,
-)
-from .environmental_events import (
-    EMInterference,
-    HumidityIntrusion,
-    RadiationBurst,
-)
-from .mechanical_events import (
-    FatigueCycling,
-    ImpactShock,
-    VibrationResonance,
-)
+from .cascade_event import CascadeEvent
+from .em_interference import EMInterference
 from .power_brownout import PowerBrownout
-from .power_events import Brownout, GroundLoop, VoltageSag
+from .slow_degradation_electrolytic import SlowDegradationElectrolytic
 from .sustained_drift import SustainedDrift
-from .thermal_events import (
-    AmbientDrift,
-    HeatSpikeLocalized,
-    ThermalRunawayCascade,
-)
+from .thermal_drift_localized import ThermalDriftLocalized
+from .vibration_resonance import VibrationResonance
 
 
 _ALL_SCENARIOS = (
-    HeatSpikeLocalized,
-    AmbientDrift,
-    ThermalRunawayCascade,
-    VoltageSag,
-    Brownout,
-    GroundLoop,
-    VibrationResonance,
-    ImpactShock,
-    FatigueCycling,
-    SingleComponentThenPropagation,
-    SharedSubstrateFailure,
-    TimingDriftCascade,
-    HumidityIntrusion,
-    EMInterference,
-    RadiationBurst,
+    ThermalDriftLocalized,
     SustainedDrift,
     PowerBrownout,
+    VibrationResonance,
+    EMInterference,
+    CascadeEvent,
+    SlowDegradationElectrolytic,
 )
 
 REGISTRY = {cls.name: cls for cls in _ALL_SCENARIOS}
@@ -67,20 +43,11 @@ __all__ = [
     "ComponentState",
     "ScenarioState",
     "REGISTRY",
-    "HeatSpikeLocalized",
-    "AmbientDrift",
-    "ThermalRunawayCascade",
-    "VoltageSag",
-    "Brownout",
-    "GroundLoop",
-    "VibrationResonance",
-    "ImpactShock",
-    "FatigueCycling",
-    "SingleComponentThenPropagation",
-    "SharedSubstrateFailure",
-    "TimingDriftCascade",
-    "HumidityIntrusion",
-    "EMInterference",
-    "RadiationBurst",
+    "ThermalDriftLocalized",
     "SustainedDrift",
+    "PowerBrownout",
+    "VibrationResonance",
+    "EMInterference",
+    "CascadeEvent",
+    "SlowDegradationElectrolytic",
 ]
