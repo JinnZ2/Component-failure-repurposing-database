@@ -7,11 +7,13 @@ from .schema import (
     is_falsifiable,
     validate_claim,
 )
+from .table import ClaimTable
 from .writer import ClaimWriter
 
 __all__ = [
     "Claim",
     "ClaimRejected",
+    "ClaimTable",
     "ClaimWriter",
     "PredictionType",
     "is_falsifiable",
