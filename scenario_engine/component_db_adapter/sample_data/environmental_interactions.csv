@@ -1,0 +1,20 @@
+Component,Condition,Observed Effect,Repurpose Impact,Notes
+Diode,High Temperature (+150°C),Leakage current ↑,Better for environmental sensing,Can act as crude temp sensor
+Diode,High Humidity (>70% RH),Corrosion & leakage ↑,Humidity detection possible,Open failures most sensitive
+Diode,Medium Radiation,Breakdown voltage shifts,Voltage reference or radiation sensor,Useful for detection arrays
+
+Resistor,High Temperature (+150°C),Value drift unpredictable,Reliability ↓,Can be used as temp stress indicator
+Resistor,Medium Humidity (30–70% RH),Resistance drift 2–5x faster,Humidity sensing,Works best with carbon film
+Resistor,Mechanical Vibration,Micro-cracks form,Still usable as spacer,No major electrical role
+
+Capacitor (Ceramic),High Temperature,Non-linear capacitance,Repurposed as thermal sensor,X7R/Z5U types most sensitive
+Capacitor (Ceramic),High Humidity,Leakage ↑,Humidity sensor potential,Moisture absorption into dielectric
+Capacitor (Ceramic),Radiation Exposure,Dielectric permittivity change,Environmental monitor,Partially reversible
+
+Transistor (BJT),High Temperature,hFE decreases,Temp sensing possible,Gain degradation accelerates
+Transistor (BJT),Radiation Leakage ↑,Noise generation ↑,Entropy source,Radiation dosimeter usage
+Transistor (BJT),High Humidity,Surface leakage paths,Unstable operation,Can be monitored for sensing
+
+Inductor (Ferrite Core),High Temperature,Core saturation earlier,Reduced inductance,Still usable as heating element
+Inductor (Ferrite Core),High Humidity,Corrosion ↑,Resistance drift,Environmental stress marker
+Inductor (Ferrite Core),Vibration,Core cracking,Mechanical noise element,May add piezo-like properties
