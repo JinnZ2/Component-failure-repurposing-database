@@ -55,21 +55,37 @@ class InstantaneousFactorTests(unittest.TestCase):
 
 class MemoryTests(unittest.TestCase):
     def test_thermal_cycle_detected_on_crossing_20C(self):
-        # memory.update sees the PRIOR env state, so the first env.update
-        # only seeds last_temp_c; cycles register on subsequent crossings.
-        env = EnvironmentState(temp_c=15.0)
-        env.update(temp_c=25.0, dt=1.0)   # seeds last_temp_c=15
+        # Cycle = peak-to-peak ΔT ≥ 20°C. memory.update sees the PRIOR env
+        # state, so peaks track with a one-tick lag from env.update calls.
+        env = EnvironmentState(temp_c=20.0)
+        env.update(temp_c=20.0, dt=1.0)            # seed peaks (20, 20)
         self.assertEqual(env.memory.thermal_cycles, 0)
-        env.update(temp_c=10.0, dt=1.0)   # prior=25, now reading 25 crossed from 15 → cycle
+        env.update(temp_c=45.0, dt=1.0)            # peaks still (20, 20)
+        self.assertEqual(env.memory.thermal_cycles, 0)
+        env.update(temp_c=45.0, dt=1.0)            # peak_high → 45, range=25 → cycle
         self.assertEqual(env.memory.thermal_cycles, 1)
-        env.update(temp_c=30.0, dt=1.0)   # prior=10 vs 25 → another cycle
+        # After the cycle, peaks reset to 45. Another swing back to 20
+        # needs to register in memory.update, which sees prior env=45 then 20.
+        env.update(temp_c=20.0, dt=1.0)            # peaks still (45, 45)
+        self.assertEqual(env.memory.thermal_cycles, 1)
+        env.update(temp_c=20.0, dt=1.0)            # peak_low → 20, range=25 → cycle
         self.assertEqual(env.memory.thermal_cycles, 2)
 
-    def test_no_cycle_when_staying_on_one_side(self):
+    def test_no_cycle_when_swings_stay_small(self):
         env = EnvironmentState(temp_c=30.0)
+        env.update(temp_c=35.0, dt=1.0)
         env.update(temp_c=40.0, dt=1.0)
-        env.update(temp_c=50.0, dt=1.0)
-        env.update(temp_c=25.0, dt=1.0)  # still above 20
+        env.update(temp_c=42.0, dt=1.0)
+        env.update(temp_c=44.0, dt=1.0)
+        # All swings ≤ 14°C, well below the 20°C threshold.
+        self.assertEqual(env.memory.thermal_cycles, 0)
+
+    def test_cycle_threshold_is_configurable(self):
+        env = EnvironmentState(temp_c=25.0)
+        env.memory.thermal_cycle_threshold_c = 50.0  # much higher bar
+        env.update(temp_c=25.0, dt=1.0)
+        env.update(temp_c=70.0, dt=1.0)
+        env.update(temp_c=70.0, dt=1.0)  # 45°C swing, but threshold is 50
         self.assertEqual(env.memory.thermal_cycles, 0)
 
     def test_humidity_exposure_only_above_70(self):

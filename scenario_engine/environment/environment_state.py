@@ -25,21 +25,40 @@ from typing import Dict, Any, Optional
 
 @dataclass
 class EnvironmentalMemory:
-    """Cumulative damage that does not heal when conditions recover."""
+    """Cumulative damage that does not heal when conditions recover.
+
+    Thermal cycle detection: peak-to-peak ΔT amplitude. A cycle counts
+    whenever the running min/max temperature spread since the last cycle
+    event exceeds `thermal_cycle_threshold_c` (default 20°C). This
+    matches the Coffin-Manson model where solder fatigue is driven by
+    ΔT amplitude, not by crossing any specific absolute temperature.
+    """
     thermal_cycles: int = 0
     humidity_exposure_seconds: float = 0.0      # time above 70% RH
     vibration_dose: float = 0.0                 # integral of g^2 * dt
     contamination_deposit: float = 0.0          # 0-1, accumulates
-    last_temp_c: Optional[float] = None
+    peak_high: Optional[float] = None           # running max since last cycle
+    peak_low: Optional[float] = None            # running min since last cycle
+    thermal_cycle_threshold_c: float = 20.0     # ΔT that triggers a cycle
     started_at: float = field(default_factory=time.time)
 
     def update(self, temp_c: float, humidity_pct: float,
                vibration_g: float, contamination: float, dt: float):
-        # Thermal cycle: temp crossed the 20°C threshold
-        if self.last_temp_c is not None:
-            if (self.last_temp_c - 20.0) * (temp_c - 20.0) < 0:
+        # Peak-to-peak cycle detection
+        if self.peak_high is None:
+            # First observation seeds the peaks.
+            self.peak_high = temp_c
+            self.peak_low = temp_c
+        else:
+            if temp_c > self.peak_high:
+                self.peak_high = temp_c
+            if temp_c < self.peak_low:
+                self.peak_low = temp_c
+            if self.peak_high - self.peak_low >= self.thermal_cycle_threshold_c:
                 self.thermal_cycles += 1
-        self.last_temp_c = temp_c
+                # Reset peaks so the next equal-magnitude swing counts again.
+                self.peak_high = temp_c
+                self.peak_low = temp_c
 
         # Humidity exposure
         if humidity_pct > 70.0:
