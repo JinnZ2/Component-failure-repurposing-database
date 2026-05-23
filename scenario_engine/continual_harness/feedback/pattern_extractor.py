@@ -12,6 +12,13 @@ Outputs are themselves falsifiable observations, written as a
 structured PATTERN_TABLE.json that can be cross-validated.
 
 No interpretation. Just structural facts about the claim record.
+
+Field-name compatibility note: claims stored by Session use
+  claim["validator"]["error_margins"] (numeric margins) and a
+  claim["validator"]["notes"] string with actual=X for failed
+  categorical predictions. Earlier upstream specs used
+  claim["validation"]["errors"]. Every reader below tolerates both
+  layouts so spec text and live claim files both flow through.
 """
 
 import json
@@ -19,6 +26,14 @@ import os
 from collections import defaultdict, Counter
 from typing import Dict, Any, List, Optional, Tuple
 from statistics import mean, stdev
+
+
+def _validator_block(claim: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    return claim.get("validator") or claim.get("validation")
+
+
+def _errors_block(val: Dict[str, Any]) -> Dict[str, Any]:
+    return val.get("error_margins") or val.get("errors") or {}
 
 
 def _numeric_error(claim: Dict[str, Any]) -> Optional[float]:
@@ -29,10 +44,10 @@ def _numeric_error(claim: Dict[str, Any]) -> Optional[float]:
     'system_state_at_tick_N': 'stable') store their match outcome as
     0.0 / 1.0 in error_margins but are not numeric errors.
     """
-    val = claim.get("validator") or claim.get("validation")
+    val = _validator_block(claim)
     if not val:
         return None
-    errors = val.get("error_margins") or val.get("errors") or {}
+    errors = _errors_block(val)
     pred = claim.get("prediction", {})
     nums = []
     for k, v in errors.items():
@@ -110,11 +125,11 @@ def systematic_bias(
     """
     signed_errors = []
     for r in records:
-        val = r.get("validator") or r.get("validation")
+        val = _validator_block(r)
         if not val:
             continue
         pred = r.get("prediction", {})
-        errors = val.get("error_margins") or val.get("errors") or {}
+        errors = _errors_block(val)
         for key, err_val in errors.items():
             if field_suffix not in key:
                 continue
@@ -124,10 +139,6 @@ def systematic_bias(
             predicted = pred.get(key)
             if not isinstance(predicted, (int, float)):
                 continue
-            # err_val is abs(predicted - actual). We need sign.
-            # Reconstruct sign from stored "from"/"to" if available.
-            # Here we just record magnitude; bias detection uses count of
-            # high-error claims.
             signed_errors.append({"key": key, "err": err_val, "predicted": predicted})
 
     if not signed_errors:
@@ -179,9 +190,7 @@ def db_effectiveness_audit(
 ) -> List[Dict[str, Any]]:
     """
     For claims with db_evidence, compare DB-claimed effectiveness
-    against actual validation rate. If a DB intervention is rated
-    High (0.9) but validates only 60% of the time, that's a
-    measurable mismatch worth flagging.
+    against actual validation rate.
     """
     by_intervention = defaultdict(list)
     for r in records:
@@ -206,44 +215,6 @@ def db_effectiveness_audit(
             "samples": total,
         })
     return out
-
-
-def signed_numeric_errors(
-    records: List[Dict[str, Any]],
-) -> Optional[Dict[str, Any]]:
-    """
-    Reconstruct signed errors: predicted - actual.
-    The validation only stores abs(error), but we can compute the sign
-    by re-deriving from claim.prediction and validation context.
-
-    For now, since we don't store actual outcomes in the claim, we
-    estimate sign by checking if the predicted value was below or
-    above the predicted nominal range. A more robust version would
-    store actual values in the validation record.
-
-    Returns: {predicted_high_count, predicted_low_count, mean_abs}
-    """
-    over = 0  # predicted value higher than actual
-    under = 0  # predicted value lower than actual
-    samples = 0
-    for r in records:
-        pred = r.get("prediction", {})
-        val = r.get("validator") or r.get("validation")
-        if not val:
-            continue
-        errors = val.get("error_margins") or val.get("errors") or {}
-        for k, predicted in pred.items():
-            if not isinstance(predicted, (int, float)):
-                continue
-            err = errors.get(k)
-            if not isinstance(err, (int, float)):
-                continue
-            samples += 1
-            # Heuristic: if prediction was near nominal (low value for temp),
-            # AI predicted aggressive cooling. If prediction was high, AI
-            # predicted little cooling. We don't have actual here without
-            # more info. Just count occurrences for now.
-    return {"samples": samples}
 
 
 def signed_bias_from_outcomes(
@@ -308,10 +279,22 @@ def extract_all_patterns(
     Read a ClaimHistory JSON file and return all detected patterns.
     Optionally write to PATTERN_TABLE.json.
     """
+    from .state_prediction_calibration import (
+        confusion_matrix,
+        state_accuracy,
+        systematic_state_bias,
+        recommend_threshold_adjustment,
+    )
+
     if not os.path.exists(history_path):
         return {"error": f"history not found: {history_path}"}
     with open(history_path) as f:
         records = json.load(f)
+
+    state_bias = systematic_state_bias(records)
+    state_recommendation = (
+        recommend_threshold_adjustment(state_bias) if state_bias else None
+    )
 
     report = {
         "total_claims": len(records),
@@ -322,6 +305,10 @@ def extract_all_patterns(
         "signed_bias": signed_bias_from_outcomes(records, state_logs_by_session),
         "recurring_failures": recurring_failure_pattern(records),
         "db_effectiveness_audit": db_effectiveness_audit(records),
+        "state_prediction_confusion": confusion_matrix(records),
+        "state_prediction_accuracy": state_accuracy(records),
+        "state_prediction_bias": state_bias,
+        "state_threshold_recommendation": state_recommendation,
     }
 
     if output_path:

@@ -16,6 +16,13 @@ from .pattern_extractor import (
     signed_bias_from_outcomes,
     extract_all_patterns,
 )
+from .state_prediction_calibration import (
+    STATE_VALUES,
+    confusion_matrix,
+    state_accuracy,
+    systematic_state_bias,
+    recommend_threshold_adjustment,
+)
 
 __all__ = [
     "by_scenario_accuracy",
@@ -26,4 +33,9 @@ __all__ = [
     "db_effectiveness_audit",
     "signed_bias_from_outcomes",
     "extract_all_patterns",
+    "STATE_VALUES",
+    "confusion_matrix",
+    "state_accuracy",
+    "systematic_state_bias",
+    "recommend_threshold_adjustment",
 ]
