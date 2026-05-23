@@ -176,6 +176,12 @@ class CrossSubstrateDecider:
                 ],
                 "upstream_chosen": upstream["component_id"] if upstream else None,
             },
+            # Coupler provenance: which cross-substrate coupling ratios
+            # were active in the scenario when this claim was made. Lets
+            # the audit trail show BOTH the AI's reasoning source
+            # (source_matrix_row) AND the physics it was reasoning about
+            # (coupler_provenance).
+            "coupler_provenance": state.get("couplers", {}),
         }
         return claim
 

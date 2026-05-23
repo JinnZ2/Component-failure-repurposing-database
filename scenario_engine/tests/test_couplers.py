@@ -75,6 +75,78 @@ class CatalogTests(unittest.TestCase):
         self.assertIn("thermal_expansion_to_strain", c.provenance)
 
 
+class UpstreamCatalogBackfillTests(unittest.TestCase):
+    """Entries adopted verbatim from Geometric-to-Binary fabrication/."""
+
+    def test_horn_acoustic(self):
+        c = build("horn_acoustic", geometry={"area_in": 4.0, "area_out": 1.0})
+        self.assertEqual(c.kind, "transformer")
+        self.assertEqual(c.port_in, "acoustic")
+        self.assertEqual(c.port_out, "acoustic")
+        self.assertEqual(c.ratio, 4.0)
+
+    def test_piezo_disc(self):
+        c = build(
+            "piezo_disc",
+            geometry={"d33": 400e-12, "area": 1e-4, "thickness": 1e-3},
+        )
+        self.assertEqual(c.kind, "gyrator")
+        self.assertEqual(c.port_in, "electrical")
+        self.assertEqual(c.port_out, "mechanical")
+        self.assertAlmostEqual(c.ratio, 400e-12 * 1e-4 / 1e-3, places=18)
+
+    def test_syringe_pump(self):
+        c = build("syringe_pump", geometry={"piston_area": 0.01})
+        self.assertEqual(c.kind, "transformer")
+        self.assertEqual(c.port_in, "mechanical")
+        self.assertEqual(c.port_out, "fluidic")
+        self.assertEqual(c.ratio, 0.01)
+
+    def test_diaphragm_speaker(self):
+        c = build("diaphragm_speaker", geometry={"BL": 5.0})
+        self.assertEqual(c.kind, "gyrator")
+        self.assertEqual(c.port_in, "electrical")
+        self.assertEqual(c.port_out, "acoustic")
+        self.assertEqual(c.ratio, 5.0)
+
+
+class CouplerSerializationTests(unittest.TestCase):
+    def test_to_dict_contains_provenance(self):
+        c = build(
+            "thermal_expansion_to_strain",
+            geometry={"expansion_per_C_mm": 0.012},
+        )
+        d = c.to_dict()
+        self.assertEqual(d["name"], "thermal_expansion_to_strain")
+        self.assertEqual(d["kind"], "transformer")
+        self.assertEqual(d["ratio"], 0.012)
+        self.assertIn("CATALOG", d["provenance"])
+        self.assertEqual(d["geometry"], {"expansion_per_C_mm": 0.012})
+
+
+class ScenarioStateCouplersFieldTests(unittest.TestCase):
+    def test_cross_substrate_step_populates_couplers(self):
+        s = CrossSubstrateCoupling()
+        state = s.step()
+        self.assertIn("thermal_to_strain", state.couplers)
+        self.assertIn("strain_to_esr", state.couplers)
+        self.assertIn("esr_to_noise", state.couplers)
+        # Each entry carries the expected provenance shape.
+        thermal = state.couplers["thermal_to_strain"]
+        self.assertEqual(thermal["kind"], "transformer")
+        self.assertEqual(thermal["ratio"], 0.012)
+        self.assertEqual(thermal["port_in"], "thermal")
+        self.assertEqual(thermal["port_out"], "mechanical")
+
+    def test_to_dict_round_trip_includes_couplers(self):
+        s = CrossSubstrateCoupling()
+        state = s.step()
+        d = state.to_dict()
+        self.assertIn("couplers", d)
+        self.assertEqual(set(d["couplers"].keys()),
+                         {"thermal_to_strain", "strain_to_esr", "esr_to_noise"})
+
+
 class CrossSubstrateRefactorBehaviorTests(unittest.TestCase):
     """The coupler refactor must preserve scenario outputs exactly."""
 

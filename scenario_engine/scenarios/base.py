@@ -39,6 +39,12 @@ class ScenarioState:
     sensors: Dict[str, Dict[str, Any]] = field(default_factory=dict)
     components: Dict[str, Dict[str, Any]] = field(default_factory=dict)
     actual_outcome: Dict[str, Any] = field(default_factory=dict)
+    # Active cross-substrate couplers and their geometric ratios for
+    # this tick. Optional; scenarios that don't model cross-domain
+    # coupling leave it empty. Deciders can attach this to claims
+    # as 'coupler_provenance' alongside source_matrix_row for full
+    # provenance: which physics applied + which CSV row was consulted.
+    couplers: Dict[str, Dict[str, Any]] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -47,6 +53,7 @@ class ScenarioState:
             "sensors": self.sensors,
             "components": self.components,
             "actual_outcome": self.actual_outcome,
+            "couplers": self.couplers,
         }
 
 

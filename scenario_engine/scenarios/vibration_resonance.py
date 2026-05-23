@@ -39,6 +39,13 @@ class VibrationResonance(Scenario):
 
     def __init__(self, seed: int = 0, max_ticks: int = 200):
         super().__init__(seed=seed, max_ticks=max_ticks)
+        # NOTE: PCB plate flexural mode. The scenario_engine.physics
+        # module currently provides acoustic-cavity modes (pipe / box /
+        # cylinder) which target a different physics class. A
+        # plate-mode formula would derive this from
+        #   f_mn = (π/2)·√(D/ρh) · ((m/a)² + (n/b)²),  D=Eh³/(12(1-ν²))
+        # given (a, b, h, E, ρ, ν). For now we keep the literature-
+        # consistent 85 Hz constant; calibration tunes around it.
         self.f_natural_hz = 85.0
         self.amp_base = 0.05  # mm
         self.amp_ramp_per_tick = 0.012

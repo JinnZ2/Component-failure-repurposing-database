@@ -224,6 +224,11 @@ class CrossSubstrateCoupling(Scenario):
             sensors=sensors,
             components=components,
             actual_outcome=actual_outcome,
+            couplers={
+                "thermal_to_strain": self.coupler_thermal_to_strain.to_dict(),
+                "strain_to_esr": self.coupler_strain_to_esr.to_dict(),
+                "esr_to_noise": self.coupler_esr_to_noise.to_dict(),
+            },
         )
         self.tick += 1
         return result

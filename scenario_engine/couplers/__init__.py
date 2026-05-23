@@ -43,12 +43,24 @@ class Coupler:
     def apply(self, x: float) -> float:
         return self.ratio * x
 
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "name": self.name,
+            "kind": self.kind,
+            "ratio": self.ratio,
+            "port_in": self.port_in,
+            "port_out": self.port_out,
+            "geometry": dict(self.geometry),
+            "provenance": self.provenance,
+        }
+
 
 # Catalog of geometric → coupler mappings for scenario use.
 # Each ratio_fn pulls its constants from a caller-supplied geometry dict
 # so the same coupler kind can be instantiated for different
 # configurations without editing this file.
 CATALOG: Dict[str, Dict[str, Any]] = {
+    # ---- scenario-specific entries (ours) -----------------------------
     "thermal_expansion_to_strain": {
         "kind": "transformer",
         "ratio_fn": lambda g: g["expansion_per_C_mm"],
@@ -66,6 +78,32 @@ CATALOG: Dict[str, Dict[str, Any]] = {
         "ratio_fn": lambda g: g["noise_v_per_ohm_esr"],
         "ports": ("electrical", "electrical"),
         "notes": "ESR (ohm) → power rail noise (V), small-signal.",
+    },
+    # ---- backfill from Geometric-to-Binary-Computational-Bridge --------
+    # Verbatim from fabrication/couplers.py:COUPLER_CATALOG (CC0).
+    "horn_acoustic": {
+        "kind": "transformer",
+        "ratio_fn": lambda g: g["area_in"] / g["area_out"],
+        "ports": ("acoustic", "acoustic"),
+        "notes": "Acoustic horn area transform (area_in / area_out).",
+    },
+    "piezo_disc": {
+        "kind": "gyrator",
+        "ratio_fn": lambda g: g["d33"] * g["area"] / g["thickness"],
+        "ports": ("electrical", "mechanical"),
+        "notes": "Piezo disc gyrator: d33·area/thickness.",
+    },
+    "syringe_pump": {
+        "kind": "transformer",
+        "ratio_fn": lambda g: g["piston_area"],
+        "ports": ("mechanical", "fluidic"),
+        "notes": "Mechanical→fluidic via piston area (F→P, v→Q).",
+    },
+    "diaphragm_speaker": {
+        "kind": "gyrator",
+        "ratio_fn": lambda g: g["BL"],
+        "ports": ("electrical", "acoustic"),
+        "notes": "Voice-coil gyrator: force/current = flux·length.",
     },
 }
 
