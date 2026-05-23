@@ -19,3 +19,8 @@ sensor_I2C,electrolytic_cap,bus errors + ESR,bus_pullup_with_filter,parallel cap
 electrolytic_cap,ceramic_cap,ESR drift + bypass,bandwidth_compensation_pair,ceramic in parallel restores HF response
 BJT_NPN,signal_trace,Vbe + trace drift,distributed_calibration_target,trace drift used to calibrate Vbe sensor
 electrolytic_cap_220uF_25V,power_MOSFET,ESR + Rds_on,thermal_state_estimator,joint thermal signature across rail
+electrolytic_cap,inductor,C drift + L drift,lc_tank_rf_beacon,degraded LC tank still resonant for OOK keying
+LED,resistor,Vf drift + R drift,optical_fallback_sensor,LED forward voltage modulated by failed resistor characterizes ambient light
+BJT_NPN,silicon_diode,Vbe + Vf,redundant_thermal_array,two junctions yield independent temp readings
+inductor,signal_trace,L + trace,magnetic_loop_signaling,degraded inductor as transmit loop on impaired trace
+LED,silicon_diode,Vf + Vf,paired_optical_thermal,two junctions on shared rail give combined optical and thermal data

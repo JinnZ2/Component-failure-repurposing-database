@@ -14,8 +14,8 @@ from scenario_engine.validators import validate_prediction
 
 class RegistryTests(unittest.TestCase):
     def test_registry_contains_canonical_scenarios(self):
-        # Canonical library: 8 scenarios (7 + cross_substrate_coupling).
-        self.assertEqual(len(REGISTRY), 8)
+        # Canonical library: 9 scenarios.
+        self.assertEqual(len(REGISTRY), 9)
         for name in (
             "thermal_drift_localized",
             "sustained_drift",
@@ -25,6 +25,7 @@ class RegistryTests(unittest.TestCase):
             "cascade_event",
             "slow_degradation_electrolytic",
             "cross_substrate_coupling",
+            "multi_failure_synergy_required",
         ):
             self.assertIn(name, REGISTRY)
         self.assertIs(REGISTRY["sustained_drift"], SustainedDrift)
