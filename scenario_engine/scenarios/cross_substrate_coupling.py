@@ -30,6 +30,7 @@ Interventions:
 """
 
 from .base import Scenario, ScenarioState
+from ..couplers import build as build_coupler
 
 
 class CrossSubstrateCoupling(Scenario):
@@ -46,18 +47,28 @@ class CrossSubstrateCoupling(Scenario):
         self.Q1_T0 = 65.0
         self.Q1_drift = 0.8  # C/tick after onset
         self.Q1_drift_start = 10
-
-        # Mechanical coupling
-        self.PCB_expansion_per_C = 0.012  # mm/C (rough)
         self.PCB_T0 = 25.0
 
-        # C1 ESR baseline
+        # Baselines (post-coupler offsets)
         self.C1_ESR_baseline = 0.05  # ohms
-        self.C1_ESR_per_mm_strain = 0.4
-
-        # Rail noise baseline
         self.rail_noise_baseline = 0.002  # V
-        self.rail_noise_per_ohm_ESR = 0.8
+
+        # Cross-substrate coupling chain, built from the shared catalog
+        # rather than scattered constants. Ratios are calibration targets:
+        # the calibration loop adjusts the AI's model of these, not the
+        # scenario's ground truth.
+        self.coupler_thermal_to_strain = build_coupler(
+            "thermal_expansion_to_strain",
+            geometry={"expansion_per_C_mm": 0.012},
+        )
+        self.coupler_strain_to_esr = build_coupler(
+            "pcb_strain_to_cap_esr",
+            geometry={"esr_per_mm_strain": 0.4},
+        )
+        self.coupler_esr_to_noise = build_coupler(
+            "cap_esr_to_rail_noise",
+            geometry={"noise_v_per_ohm_esr": 0.8},
+        )
 
         # Intervention state
         self.Q1_rerouted = False
@@ -104,16 +115,16 @@ class CrossSubstrateCoupling(Scenario):
 
     def _PCB_strain_mm(self, Q1_T: float) -> float:
         delta_T = max(0.0, Q1_T - self.PCB_T0)
-        return delta_T * self.PCB_expansion_per_C
+        return self.coupler_thermal_to_strain.apply(delta_T)
 
     def _C1_ESR(self, strain_mm: float) -> float:
         if self.C1_isolated and self.intervention_tick is not None:
             if self.tick >= self.intervention_tick:
                 return 0.0  # disconnected
-        return self.C1_ESR_baseline + self.C1_ESR_per_mm_strain * strain_mm
+        return self.C1_ESR_baseline + self.coupler_strain_to_esr.apply(strain_mm)
 
     def _rail_noise(self, C1_ESR: float) -> float:
-        noise = self.rail_noise_baseline + self.rail_noise_per_ohm_ESR * C1_ESR
+        noise = self.rail_noise_baseline + self.coupler_esr_to_noise.apply(C1_ESR)
         if self.rail_shielded and self.intervention_tick is not None:
             if self.tick >= self.intervention_tick:
                 noise *= 0.2
@@ -168,7 +179,7 @@ class CrossSubstrateCoupling(Scenario):
                 "component_id": "PCB_region_A",
                 "sensor_type": "mechanical",
                 "value": round(strain, 4),
-                "rate": round(Q1_rate * self.PCB_expansion_per_C, 5),
+                "rate": round(self.coupler_thermal_to_strain.apply(Q1_rate), 5),
                 "units": "mm",
                 "threshold": 1.0,
                 "nominal": 0.0,
