@@ -56,21 +56,14 @@ class FailureTimingTests(unittest.TestCase):
 
 
 class EnvMemoryTests(unittest.TestCase):
-    def test_cycling_phase_does_not_cross_20C_threshold(self):
-        """
-        Documents a spec gap: the cycling phase alternates 25°C ↔ 55°C,
-        which never crosses the 20°C threshold that EnvironmentalMemory
-        defines as a thermal cycle. The scenario's docstring says
-        'cumulative damage builds' during cycling but the implementation
-        doesn't actually generate cycle counts. Future refinement:
-        either lower the cool side to below 20°C, or change the
-        memory's threshold to detect peak-to-peak swings.
-        """
+    def test_thermal_cycles_accumulate_in_cycling_phase(self):
+        """The cycling phase oscillates 25°C↔55°C — a 30°C peak-to-peak
+        swing that comfortably exceeds the 20°C cycle threshold, so cycles
+        accumulate. Harsh-phase entry/exit contribute additional cycles."""
         s = EnvironmentModulatedDrift(max_ticks=200)
         for _ in range(160):
             st = s.step()
-        # Today: 0 thermal cycles register (gap).
-        self.assertEqual(st.actual_outcome["thermal_cycles"], 0)
+        self.assertGreater(st.actual_outcome["thermal_cycles"], 5)
 
     def test_humidity_exposure_accumulates_in_harsh_phase(self):
         s = EnvironmentModulatedDrift(max_ticks=100)
