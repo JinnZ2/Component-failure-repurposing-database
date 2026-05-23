@@ -142,7 +142,7 @@ def run_demo():
         shutil.rmtree(workspace)
     os.makedirs(workspace, exist_ok=True)
 
-    store = os.path.join(workspace, "markers.json")
+    store = os.path.join(workspace, "markers.jsonl")
     writer = MarkerWriter(sequence_id="demo_session_001", store_path=store)
     reader = MarkerReader(writer)
 

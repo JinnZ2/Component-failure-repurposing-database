@@ -28,6 +28,10 @@ class MarkerReader:
     def __init__(self, writer: MarkerWriter):
         self._w = writer
 
+    def refresh(self) -> int:
+        """Pull markers other writers have appended since last read."""
+        return self._w.refresh()
+
     def position(self) -> Optional[int]:
         return self._w.current_position()
 
