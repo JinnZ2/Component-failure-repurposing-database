@@ -197,3 +197,8 @@ Power Transformer,Core Damage,EMI Absorber,Medium,Damaged core still absorbs RF
 Power Transformer,Core Damage,Mechanical Mass / Damper,High,Heavy core as vibration dampener
 Power Transformer,Insulation Breakdown,Low-Voltage Transformer,Medium,Reduced isolation adequate for <50V
 Power Transformer,Insulation Breakdown,Coupled Inductor,Medium,Magnetic coupling preserved
+Diode,Short Circuit,Low-value Resistor,Medium,0.1–5 Ω range usable
+Diode,Open Circuit,Capacitive Element,Low,1–5 pF parasitic only
+Resistor,Open Circuit,Mechanical Spacer,High,Preserves PCB spacing
+Resistor,Value Drift,Temperature Sensor,Medium,100–1000 ppm/°C sensitivity
+Resistor,Short Circuit,Jumper Wire,Medium,Lead gauge limits current

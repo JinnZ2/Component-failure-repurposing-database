@@ -900,3 +900,64 @@ if __name__ == "__main__":
 -----
 
 **Document End**
+
+
+
+
+
+Updated:
+┌─────────────────────────────────────────────────────────────────┐
+│                    HARDWARE INTERFACE LAYER                      │
+│  ADC, GPIO, I2C, SPI, Accelerometer, Microphone, Camera...      │
+└───────┬─────────────────────────────────────────────────────────┘
+        │
+┌───────▼─────────────────────────────────────────────────────────┐
+│              GEOMETRIC ACQUISITION ENGINE                       │
+│  - Read raw values (voltage, current, acceleration, etc.)       │
+│  - Convert to octahedral token (vertex|operator|symbol)         │
+│  - Timestamp & enqueue                                          │
+└───────┬─────────────────────────────────────────────────────────┘
+        │
+┌───────▼─────────────────────────────────────────────────────────┐
+│                   TOKEN BUFFER QUEUE                            │
+│  - Lock‑free ring buffer of tokens (strings or packed ints)     │
+│  - Overflow protection, priority                                │
+└───────┬─────────────────────────────────────────────────────────┘
+        │
+┌───────▼─────────────────────────────────────────────────────────┐
+│                GEOMETRIC PROCESSING LOOP                        │
+│  - Pop tokens in batches                                        │
+│  - Accumulate into 3D cubes (side³ tokens)                      │
+│  - For each new cube, compare with history (hash, rotation)     │
+│  - Detect dependencies (cube repeats → cancellation)            │
+└───────┬─────────────────────────────────────────────────────────┘
+        │
+┌───────┴───────────────────────┬─────────────────────────────────┐
+│                               │                                 │
+┌───────▼────────┐       ┌───────▼────────┐       ┌───────────────▼────┐
+│ FAILURE PLUGIN │       │ REPURPOSE PLUGIN│       │ SELF‑DIAG PLUGIN  │
+│ - Match token  │       │ - Lookup token  │       │ - Monitor AI’s    │
+│   to failure   │       │   in DB for     │       │   own internal    │
+│   database     │       │   repurpose     │       │   state cubes     │
+└───────┬────────┘       └───────┬────────┘       └───────────────┬────┘
+        │                         │                               │
+        └─────────────────────────┴───────────────────────────────┘
+                                  │
+                    ┌─────────────▼─────────────┐
+                    │     DECISION ENGINE       │
+                    │  - Aggregate health       │
+                    │  - Trigger repurpose      │
+                    │  - Mode switching         │
+                    └─────────────┬─────────────┘
+                                  │
+                    ┌─────────────▼─────────────┐
+                    │      OUTPUT INTERFACES    │
+                    │  API, Events, Logs, Actuators
+                    └───────────────────────────┘
+
+                    
+
+
+
+
+

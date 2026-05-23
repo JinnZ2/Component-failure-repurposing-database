@@ -8,6 +8,17 @@ This index provides **direct raw links** to every major file in the repository, 
 - [README.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/README.md)
 - [CONTRIBUTING.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/CONTRIBUTING.md)
 - [LICENSE](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/LICENSE)
+- [CLAUDE.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/CLAUDE.md)
+- [Component.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/Component.md)
+- [Core_engine.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/Core_engine.md)
+- [Future.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/Future.md)
+- [PROJECTS.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/PROJECTS.md)
+- [binary_sensor.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/binary_sensor.md)
+- [diode.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/diode.md)
+- [resistor.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/resistor.md)
+- [ABNF.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/ABNF.md)
+- [AI_INDEX.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/AI_INDEX.md)
+- [ROADMAP.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/ROADMAP.md)
 
 ---
 
@@ -29,7 +40,11 @@ This index provides **direct raw links** to every major file in the repository, 
 - [photodiodes.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/diodes/photodiodes.md)
 
 ### Resistors
-- [resistor.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/resistors/resistor.md)
+- [carbon_film.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/resistors/carbon_film.md)
+- [metal_film.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/resistors/metal_film.md)
+- [wire_wound.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/resistors/wire_wound.md)
+- [potentiometers.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/resistors/potentiometers.md)
+- [thermistors.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/resistors/thermistors.md)
 
 ### Capacitors
 - [electrolytic.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/components/capacitors/electrolytic.md)
@@ -137,3 +152,52 @@ This index provides **direct raw links** to every major file in the repository, 
 
 ## Matrices — Documentation
 - [redundancy_glyphs.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/matrices/documentation/redundancy_glyphs.md)
+
+---
+
+## Geometric Engine (src/)
+- [geometric_monitoring_engine.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/src/geometric_monitoring_engine.py)
+- [geometric_failure_diagnosis.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/src/geometric_failure_diagnosis.py)
+- [geometric_failure_repurposing_system.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/src/geometric_failure_repurposing_system.py)
+- [geometric_computation_selector.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/src/geometric_computation_selector.py)
+- [hardware_bridge_encoder.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/src/hardware_bridge_encoder.py)
+- [llm_geometric_optimizer.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/src/llm_geometric_optimizer.py)
+- [rhombic_network.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/src/rhombic_network.py)
+- [integrated_monitor.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/src/integrated_monitor.py)
+- [bitchunk_sensor.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/src/bitchunk_sensor.py)
+- [reference.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/src/reference.py)
+
+### Component Sensor Simulators (src/sensors/)
+- [physical_sensor.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/src/sensors/physical_sensor.py)
+- [connector_sensor_class.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/src/sensors/connector_sensor_class.py)
+- [electromechanical_component.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/src/sensors/electromechanical_component.py)
+- [motor.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/src/sensors/motor.py)
+- [switch.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/src/sensors/switch.py)
+
+### Implementation Modules
+- [DB_to_token.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/DB_to_token.py)
+- [example.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/example.py)
+- [integrate_sample.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/integrate_sample.py)
+- [repurposing_action.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/repurposing_action.py)
+- [optical_fallback.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/optical_fallback.py)
+- [rf_fallback.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/rf_fallback.py)
+
+### Hardware Fallback Implementations (Python)
+- [acoustic_fallback.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/circuit_examples/emergency_communication/acoustic_fallback/acoustic_fallback.py)
+- [magnetic_fallback.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/circuit_examples/emergency_communication/magnetic_fallback/magnetic_fallback.py)
+- [mechanical_fallback.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/circuit_examples/emergency_communication/mechanical_fallback/mechanical_fallback.py)
+- [thermal_fallback.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/implementations/circuit_examples/emergency_communication/thermal_fallback/thermal_fallback.py)
+
+---
+
+## Experiments — Sample Simulations
+- [README.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/README.md)
+- [component_degradation.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/component_degradation.py)
+- [repurpose_router.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/repurpose_router.py)
+- [synergy_matrix_sim.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/synergy_matrix_sim.py)
+- [channel_fallback.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/channel_fallback.py)
+- [geometric_sensing_sim.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/geometric_sensing_sim.py)
+- [geometric_failure_diagnosis.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/geometric_failure_diagnosis.py)
+- [geometric_transport_sieve.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/geometric_transport_sieve.py)
+- [quantum_chemistry_geo.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/quantum_chemistry_geo.py)
+- [molecule_geometric_symmetry.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/molecule_geometric_symmetry.py)
