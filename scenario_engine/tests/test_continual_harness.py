@@ -359,5 +359,96 @@ class HarnessEndToEndTests(unittest.TestCase):
         self.assertTrue(seen["had_history"])
 
 
+class HarnessProstheticTests(unittest.TestCase):
+    def test_no_prosthetic_by_default(self):
+        """Without marker_store_path, HistoryView.prosthetic is None."""
+        seen = {"prosthetic": "unset"}
+
+        def factory():
+            def decider(state, body, op, history):
+                seen["prosthetic"] = history.prosthetic
+                return None
+            return decider
+
+        with tempfile.TemporaryDirectory() as d:
+            stream = repeated("sustained_drift", n=1, max_ticks=10, base_seed=0)
+            ContinualHarness(
+                stream=stream,
+                decider_factory=factory,
+                workspace=d,
+            ).run()
+        self.assertIsNone(seen["prosthetic"])
+
+    def test_session_boundaries_dropped(self):
+        """When marker_store_path is set, each session emits start + end markers."""
+        with tempfile.TemporaryDirectory() as d:
+            store = os.path.join(d, "markers.jsonl")
+            stream = repeated("sustained_drift", n=3, max_ticks=20, base_seed=0)
+            ContinualHarness(
+                stream=stream,
+                decider_factory=_wise_factory,
+                workspace=d,
+                marker_store_path=store,
+                marker_sequence_id="test_harness",
+            ).run()
+
+            from scenario_engine.temporal_prosthetic import MarkerWriter
+            w = MarkerWriter("test_harness", store)
+            starts = w.find_by_tag("session_start")
+            ends = w.find_by_tag("session_end")
+            self.assertEqual(len(starts), 3)
+            self.assertEqual(len(ends), 3)
+            # Each session: start then end, in order.
+            ordinals = [m.ordinal for m in w.sequence.markers]
+            self.assertEqual(ordinals, sorted(ordinals))
+            # session_end carries summary fields.
+            self.assertIn("total_claims", ends[0].state_summary)
+            self.assertIn("validated", ends[0].state_summary)
+            # session_start carries spec fields.
+            self.assertEqual(starts[0].state_summary["scenario_name"], "sustained_drift")
+
+    def test_decider_can_query_session_boundaries_via_prosthetic(self):
+        """Decider looks back through markers to find its own session boundary."""
+        observed = {"found_boundary_in_session_2": False}
+
+        def factory():
+            def decider(state, body, op, history):
+                if history.prosthetic is None:
+                    return None
+                # Look back for any session_start tag.
+                history.prosthetic.refresh()
+                hits = history.prosthetic.find_by_tag("session_start")
+                if len(hits) >= 2:
+                    observed["found_boundary_in_session_2"] = True
+                return None
+            return decider
+
+        with tempfile.TemporaryDirectory() as d:
+            store = os.path.join(d, "markers.jsonl")
+            stream = repeated("sustained_drift", n=2, max_ticks=10, base_seed=0)
+            ContinualHarness(
+                stream=stream,
+                decider_factory=factory,
+                workspace=d,
+                marker_store_path=store,
+            ).run()
+        self.assertTrue(observed["found_boundary_in_session_2"])
+
+    def test_default_sequence_id_includes_workspace_basename(self):
+        with tempfile.TemporaryDirectory() as d:
+            workspace = os.path.join(d, "my_run")
+            os.makedirs(workspace)
+            store = os.path.join(d, "markers.jsonl")
+            stream = repeated("sustained_drift", n=1, max_ticks=10, base_seed=0)
+            h = ContinualHarness(
+                stream=stream,
+                decider_factory=_wise_factory,
+                workspace=workspace,
+                marker_store_path=store,
+            )
+            self.assertEqual(h.marker_writer.sequence_id, "harness:my_run")
+            h.run()
+
+
 if __name__ == "__main__":
     unittest.main()

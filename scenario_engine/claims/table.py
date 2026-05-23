@@ -98,6 +98,55 @@ class ClaimTable:
                 return
         raise KeyError(f"claim_id {claim_id!r} not found")
 
+    # -- audit ------------------------------------------------------------
+
+    def audit_traceability(self) -> Dict[str, Any]:
+        """
+        Report which claims trace to a verified substrate-matrix row.
+
+        Every claim that names a `decision` should also carry a
+        `source_matrix_row` linking back to the CSV row that grounded
+        that decision. Claims without it are "ungrounded" — internal
+        heuristics with no audit trail to the component DB.
+
+        Returns:
+          {
+            "total_claims": int,
+            "decisions": int,                # claims that named a decision
+            "grounded": int,                 # decisions with source_matrix_row
+            "ungrounded": int,               # decisions without it
+            "coverage": float | None,        # grounded / decisions
+            "by_matrix": {matrix_name: int}, # grounded counts per matrix
+            "ungrounded_claim_ids": [claim_id, ...],
+          }
+        """
+        total = len(self.claims)
+        decisions = 0
+        grounded = 0
+        ungrounded_ids: List[str] = []
+        by_matrix: Dict[str, int] = {}
+        for c in self.claims:
+            if not c.get("decision"):
+                continue
+            decisions += 1
+            src = c.get("source_matrix_row")
+            if isinstance(src, dict) and src.get("matrix"):
+                grounded += 1
+                m = src["matrix"]
+                by_matrix[m] = by_matrix.get(m, 0) + 1
+            else:
+                ungrounded_ids.append(c.get("claim_id", ""))
+        coverage = (grounded / decisions) if decisions else None
+        return {
+            "total_claims": total,
+            "decisions": decisions,
+            "grounded": grounded,
+            "ungrounded": decisions - grounded,
+            "coverage": coverage,
+            "by_matrix": by_matrix,
+            "ungrounded_claim_ids": ungrounded_ids,
+        }
+
     # -- summary ----------------------------------------------------------
 
     def accuracy_summary(self) -> Dict[str, Any]:
