@@ -90,6 +90,7 @@ class ContinualHarness:
         resume: bool = True,
         marker_store_path: Optional[str] = None,
         marker_sequence_id: Optional[str] = None,
+        db_adapter=None,
     ):
         """
         decider_factory: called once per session to produce a decider.
@@ -112,6 +113,7 @@ class ContinualHarness:
         self.body_kwargs = body_kwargs or {}
         self.external_thermal_coupling = external_thermal_coupling
         self.wrap_decider_with_history = wrap_decider_with_history
+        self.db_adapter = db_adapter
 
         os.makedirs(workspace, exist_ok=True)
         self.body_path = os.path.join(workspace, "body_state.json")
@@ -191,6 +193,7 @@ class ContinualHarness:
             seed=spec.seed,
             max_ticks=spec.max_ticks,
             external_thermal_coupling=self.external_thermal_coupling,
+            db_adapter=self.db_adapter,
         )
         session.body = body  # override fresh body with persistent one
 
