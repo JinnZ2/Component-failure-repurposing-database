@@ -92,6 +92,7 @@ class Session:
         max_ticks: int = 200,
         body_kwargs: Optional[Dict[str, Any]] = None,
         external_thermal_coupling: float = 0.0,
+        db_adapter=None,
     ):
         if scenario_name not in REGISTRY:
             raise ValueError(
@@ -103,6 +104,7 @@ class Session:
         self.ai_decide = ai_decide
         self.output_dir = output_dir
         self.external_thermal_coupling = external_thermal_coupling
+        self.db_adapter = db_adapter
         os.makedirs(output_dir, exist_ok=True)
 
         self.body = AIBody(**(body_kwargs or {}))
@@ -128,6 +130,8 @@ class Session:
                 body_log.flush()
 
                 op_iface = OpInterface(self.body)
+                if self.db_adapter is not None:
+                    op_iface = self.db_adapter.wrap(op_iface)
 
                 if self.body.compute.cycles_per_tick == 0:
                     self._tick_body_only(external_dict)

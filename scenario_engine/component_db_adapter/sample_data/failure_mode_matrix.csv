@@ -1,0 +1,35 @@
+Component,Failure Mode,Repurpose Option,Effectiveness,Notes
+BJT_NPN,thermal_runaway,reroute_to_spare_BJT,High,direct substitution if Q2/Q3 available
+BJT_NPN,thermal_runaway,reduce_load_50pct,Medium,buys time but does not arrest
+BJT_NPN,beta_loss,use_as_temperature_sensor,Medium,Vbe drift correlates with temp
+BJT_NPN,heatsink_coupling,isolate_failed_BJT,High,prevents propagation to neighbors
+BJT_NPN_2N2222,thermal_runaway,reroute_to_spare_BJT,High,same Q2/Q3 substitution path
+BJT_NPN_2N2222,thermal_runaway,reduce_load_50pct,Medium,buys time but does not arrest
+BJT_NPN_2N2222,beta_loss,use_as_temperature_sensor,Medium,Vbe drift correlates with temp
+electrolytic_cap,ESR_drift,replace_with_spare,High,prefer if drift > 30%
+electrolytic_cap,ESR_drift,parallel_extra_cap,Medium,reduces effective ESR
+electrolytic_cap,ESR_drift,use_as_noise_source,Low,salvage path only
+electrolytic_cap_220uF_25V,ESR_aging,replace_with_spare,High,standard intervention
+electrolytic_cap_220uF_25V,ESR_aging,parallel_with_ceramic,Medium,bandwidth compensation
+ceramic_cap,short_circuit,isolate_and_bypass,High,must isolate to prevent rail collapse
+silicon_diode,short_circuit,use_as_resistor,Medium,characterize forward voltage
+silicon_diode,open_circuit,use_as_thermal_sensor,Medium,leakage current ~ temp
+zener_diode,voltage_drift,recalibrate_as_temp_sensor,High,well-documented temp coefficient
+power_MOSFET,gate_short,use_as_heater_element,Medium,thermal_fallback channel
+power_MOSFET,Rds_on_increase,reroute_to_spare,High,if available
+connector,corrosion,magnetic_coupling,Medium,bypass channel
+connector,oxidation,acoustic_alarm,Low,degraded mode notification
+relay,contact_welding,rf_beacon,Medium,repurpose coil as antenna
+relay,coil_failure,magnetic_coupling,Medium,still usable as inductor
+PCB_assembly,vibration_fatigue,dampen_mechanical,High,address root cause
+solder_joints,fatigue,replace_PCB,High,terminal repair needed
+SAC305_solder,fatigue,replace_joint,High,reflow if accessible
+SAC305_solder,fatigue,monitor_resistance_drift,Medium,joint degradation telemetry
+signal_trace,real_drift,reroute_to_backup_trace,High,if redundancy exists
+signal_trace,real_drift,calibrate_offset,Medium,compensates short-term drift
+logic_CMOS,undervoltage,shed_load,High,reduce rail demand below threshold
+logic_CMOS,undervoltage,switch_backup_rail,High,if alternate supply available
+analog_opamp,undervoltage,switch_backup_rail,High,headroom restored on backup
+analog_opamp,undervoltage,reduce_gain,Medium,operate within shrunken envelope
+sensor_I2C,undervoltage,shed_load,High,non-critical sensors safe to drop
+sensor_I2C,undervoltage,switch_backup_rail,High,bus restored on backup

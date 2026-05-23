@@ -1,4 +1,4 @@
-"""Canonical scenario library — 7 substrate physics scenarios.
+"""Canonical scenario library — 9 substrate physics scenarios.
 
 Each scenario is deterministic, stdlib-only, and accepts interventions
 via `receive_intervention(action, tick)`.
@@ -16,7 +16,9 @@ from .base import (
     SensorReading,
 )
 from .cascade_event import CascadeEvent
+from .cross_substrate_coupling import CrossSubstrateCoupling
 from .em_interference import EMInterference
+from .multi_failure_synergy_required import MultiFailureSynergyRequired
 from .power_brownout import PowerBrownout
 from .slow_degradation_electrolytic import SlowDegradationElectrolytic
 from .sustained_drift import SustainedDrift
@@ -32,6 +34,8 @@ _ALL_SCENARIOS = (
     EMInterference,
     CascadeEvent,
     SlowDegradationElectrolytic,
+    CrossSubstrateCoupling,
+    MultiFailureSynergyRequired,
 )
 
 REGISTRY = {cls.name: cls for cls in _ALL_SCENARIOS}
@@ -50,4 +54,6 @@ __all__ = [
     "EMInterference",
     "CascadeEvent",
     "SlowDegradationElectrolytic",
+    "CrossSubstrateCoupling",
+    "MultiFailureSynergyRequired",
 ]
