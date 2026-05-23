@@ -21,6 +21,7 @@ from typing import Callable, Dict, Any, Optional, List
 
 from ..runner import Session
 from ..internal_substrate import AIBody
+from ..temporal_prosthetic import MarkerWriter
 from .persistence import save_body, load_body, ClaimHistory
 from .stream import ScenarioStream, ScenarioSpec
 from .metrics import (
@@ -39,10 +40,17 @@ ContinualDeciderFn = Callable[
 
 
 class HistoryView:
-    """Read-only view of past claims given to the AI."""
+    """Read-only view of past claims given to the AI.
 
-    def __init__(self, history: ClaimHistory):
+    If the harness was constructed with a marker_store_path, `.prosthetic`
+    exposes the MarkerWriter for the current sequence. The decider can use
+    it to drop per-tick markers or to query session boundaries via
+    look_back_until(lambda m: 'session_start' in m.tags).
+    """
+
+    def __init__(self, history: ClaimHistory, prosthetic: Optional[MarkerWriter] = None):
         self._h = history
+        self.prosthetic = prosthetic
 
     def overall_accuracy(self) -> float:
         return self._h.accuracy_overall()["accuracy"]
@@ -80,6 +88,8 @@ class ContinualHarness:
         external_thermal_coupling: float = 0.0,
         wrap_decider_with_history: bool = True,
         resume: bool = True,
+        marker_store_path: Optional[str] = None,
+        marker_sequence_id: Optional[str] = None,
     ):
         """
         decider_factory: called once per session to produce a decider.
@@ -87,6 +97,14 @@ class ContinualHarness:
             (state, body, op) -> Optional[claim]
           or, if wrap_decider_with_history=True:
             (state, body, op, history_view) -> Optional[claim]
+
+        marker_store_path: if provided, the harness drops 'session_start'
+          and 'session_end' markers into a temporal_prosthetic JSONL log.
+          The decider can reach this log via HistoryView.prosthetic.
+          The store may be shared across processes / harnesses — each
+          gets its own sequence_id filter.
+        marker_sequence_id: sequence_id used by this harness's marker
+          writer. Defaults to 'harness:<workspace basename>'.
         """
         self.stream = stream
         self.decider_factory = decider_factory
@@ -105,6 +123,12 @@ class ContinualHarness:
 
         self.history = ClaimHistory(self.history_path)
         self.progress = self._load_progress() if resume else self._fresh_progress()
+
+        if marker_store_path is not None:
+            seq_id = marker_sequence_id or f"harness:{os.path.basename(os.path.abspath(workspace))}"
+            self.marker_writer: Optional[MarkerWriter] = MarkerWriter(seq_id, marker_store_path)
+        else:
+            self.marker_writer = None
 
     def run(self, max_sessions: Optional[int] = None) -> Dict[str, Any]:
         """
@@ -129,6 +153,19 @@ class ContinualHarness:
         session_dir = os.path.join(self.workspace, f"session_{idx:04d}_{spec.session_id}")
         os.makedirs(session_dir, exist_ok=True)
 
+        # Drop session_start marker before any body/decider work.
+        if self.marker_writer is not None:
+            self.marker_writer.drop_marker(
+                state_summary={
+                    "session_index": idx,
+                    "session_id": spec.session_id,
+                    "scenario_name": spec.scenario_name,
+                    "seed": spec.seed,
+                    "max_ticks": spec.max_ticks,
+                },
+                tags=["session_start", f"session_id:{spec.session_id}"],
+            )
+
         # Load (or initialize) persistent body
         if os.path.exists(self.body_path):
             body = load_body(self.body_path)
@@ -137,7 +174,7 @@ class ContinualHarness:
 
         # Build decider
         raw_decider = self.decider_factory()
-        history_view = HistoryView(self.history)
+        history_view = HistoryView(self.history, prosthetic=self.marker_writer)
 
         if self.wrap_decider_with_history:
             def wrapped(state, body_d, op):
@@ -193,6 +230,24 @@ class ContinualHarness:
         }
         with open(self.session_summaries_path, "a") as f:
             f.write(json.dumps(session_record) + "\n")
+
+        # Drop session_end marker after summary is committed.
+        if self.marker_writer is not None:
+            self.marker_writer.drop_marker(
+                state_summary={
+                    "session_index": idx,
+                    "session_id": spec.session_id,
+                    "scenario_name": spec.scenario_name,
+                    "total_claims": summary.get("total", 0),
+                    "validated": summary.get("validated", 0),
+                    "invalidated": summary.get("invalidated", 0),
+                    "accuracy_validated_over_graded": summary.get(
+                        "accuracy_validated_over_graded"
+                    ),
+                    "elapsed_seconds": round(elapsed, 3),
+                },
+                tags=["session_end", f"session_id:{spec.session_id}"],
+            )
 
     def final_report(self) -> Dict[str, Any]:
         overall = self.history.accuracy_overall()
