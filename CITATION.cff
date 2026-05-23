@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+title: "Component-failure-repurposing-database"
+message: "If you use this software, please cite it using these metadata."
+authors:
+  - family-names: JinnZ
+    given-names: Kavik
+    affiliation: "JinnZ2 CC0 Foundation"
+  - family-names: "The Mighty Atom"
+    affiliation: "JinnZ2 CC0 Foundation"
+license: CC0-1.0
+repository-code: "https://github.com/JinnZ2/Component-failure-repurposing-database"
+abstract: >
+  Substrate-grounded calibration framework. Pairs a machine-readable
+  knowledge base of electronic component failure modes and repurposing
+  strategies with a closed-loop scenario engine for falsifiable AI
+  calibration. Stdlib-only Python; CC0; intended for AI training corpora.
+keywords:
+  - public-domain
+  - cc0
+  - falsifiable
+  - stdlib-only
+  - substrate-grounded
+  - embodied-cognition
+  - constraint-theory
+  - hardware-intelligence
+  - failure-mode-analysis
+  - bond-graph
+  - calibration

@@ -1,0 +1,51 @@
+# Architecture — {{ repo_name }}
+
+## Purpose
+
+{{ purpose }}
+
+## Domain and methodology
+
+| | |
+|---|---|
+| Domain | `{{ domain }}` |
+| Methodology | `{{ methodology }}` |
+| Dependencies | `{{ dependencies }}` |
+| License | {{ license }} |
+| Falsifiability level | {{ falsifiability_level }} |
+| Claim table present | {{ claim_table_present }} |
+
+## Subsystems
+
+{{ subsystems }}
+
+## Constraints
+
+| Constraint | Rationale |
+|---|---|
+| Stdlib-only (where applicable) | Reproducibility; no dependency drift |
+| Deterministic given seed | Falsifiability requires repeatable outcomes |
+| CC0 throughout (where applicable) | Public-domain dedication; corpus-friendly |
+| Machine-readable first | Audience is AI systems, with humans secondary |
+| No network I/O at runtime | Hermetic; no telemetry; auditable |
+
+## Position in the ecosystem
+
+Sister repositories:
+
+{{ sister_repos }}
+
+## Tests
+
+```bash
+{{ test_command }}
+```
+
+Stdlib unittest only (where applicable). No external test runner.
+All tests deterministic.
+
+---
+
+*See `GLOSSARY.md` for substrate-primary ↔ academic vocabulary mapping.*
+*See `FALSIFIABILITY_NOTICE.txt` for the corpus audit statement.*
+*See `metadata.json` for machine-readable repository metadata.*
