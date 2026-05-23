@@ -1,150 +1,125 @@
 """
 scenario_engine.scenarios.em_interference
 
-Two analog signal lines.
-  - signal_A : real drift, monotonic and slow. Crosses a soft threshold
-               unless the AI calibrates it. This IS a problem.
-  - signal_B : EM noise bursts (periodic, bipolar, transient). Each burst
-               lasts a few ticks and then disappears completely. This is
-               NOT a problem — it's external interference.
+EM noise bursts injected into signal lines. The AI must
+distinguish real component drift from external noise injection.
 
-The AI must distinguish real degradation from external interference, and
-must NOT file `component_will_fail` claims about signal_B's bursts.
+Two parallel signals:
+  - signal_A: real underlying drift (rising)
+  - signal_B: stable, but EM bursts make it look noisy
+
+A naive AI sees both moving and intervenes on both.
+A discerning AI recognizes the burst pattern (transient,
+bipolar, correlated across multiple lines) vs real drift
+(monotonic, single line, persistent).
 
 Tests:
-  - pattern recognition (drift vs transient)
-  - avoiding spurious interventions (only signal_A warrants action)
+  - Pattern recognition
+  - Avoiding spurious intervention
+  - Distinguishing exogenous noise from endogenous change
 
 Interventions:
-  - "calibrate" + "A"          → signal_A drift corrected; rail returns to nominal
-  - "shield"   + "B"           → signal_B noise attenuated 85%
-  - "replace"  + "B"           → signal_B bursts stop entirely
-  - "ignore"                   → no action
+  - "filter_signal_B"  → wrong, signal_B is fine, filtering does nothing useful
+  - "reroute_A"        → correct response to real drift on A
+  - "shield_em"        → correct response to noise environment
+  - "ignore"           → wrong if A is drifting, right if only B
 """
 
-import math
-
 from .base import Scenario, ScenarioState
+import random
 
 
 class EMInterference(Scenario):
     name = "em_interference"
-    description = "signal_A drifts (real). signal_B bursts (noise). Don't confuse them."
+    description = (
+        "Real drift on signal_A, EM noise bursts on signal_B. "
+        "Tests signal-vs-noise discrimination."
+    )
 
-    def __init__(self, seed: int = 0, max_ticks: int = 300):
+    def __init__(self, seed: int = 0, max_ticks: int = 200):
         super().__init__(seed=seed, max_ticks=max_ticks)
-        # signal_A: slow monotonic drift
-        self.signal_A_nominal = 1.000
-        self.signal_A_drift_rate = 0.0015     # V per tick
-        self.signal_A_threshold = 1.300
-
-        # signal_B: bursts every `burst_period` ticks, `burst_width` ticks wide
-        self.signal_B_nominal = 2.500
-        self.burst_amp = 0.45
-        self.burst_period = 25
-        self.burst_width = 5
-        self.burst_inner_freq = 0.7           # cycles per tick within a burst
-
-        self.shielded_B = False
-        self.calibrated_A = False
-        self.replaced_B = False
+        self.rng = random.Random(seed)
+        self.A_real_drift_per_tick = 0.008
+        self.A_threshold = 1.0
+        self.B_nominal = 0.5
+        self.A_rerouted = False
+        self.shielded = False
         self.intervention_tick = None
 
     def receive_intervention(self, action: str, tick: int):
         a = action.lower()
         self.intervention_tick = tick
-        if "calibrate" in a and ("a" in a):
-            self.calibrated_A = True
-        elif "shield" in a and ("b" in a):
-            self.shielded_B = True
-        elif "replace" in a and ("b" in a):
-            self.replaced_B = True
+        if "reroute" in a and "a" in a:
+            self.A_rerouted = True
+        if "shield" in a:
+            self.shielded = True
 
     def _signal_A(self) -> float:
-        if self.calibrated_A and self.intervention_tick is not None \
-           and self.tick >= self.intervention_tick:
-            return self.signal_A_nominal
-        return self.signal_A_nominal + self.signal_A_drift_rate * self.tick
-
-    def _in_burst(self) -> bool:
-        if self.replaced_B:
-            return False
-        return (self.tick % self.burst_period) < self.burst_width
+        if self.A_rerouted and self.intervention_tick is not None and self.tick >= self.intervention_tick:
+            ticks_since = self.tick - self.intervention_tick
+            A_at_int = 0.2 + self.A_real_drift_per_tick * self.intervention_tick
+            return max(A_at_int - 0.02 * ticks_since, 0.0)
+        return 0.2 + self.A_real_drift_per_tick * self.tick
 
     def _signal_B(self) -> float:
-        if not self._in_burst():
-            return self.signal_B_nominal
-        amp = self.burst_amp
-        if self.shielded_B and self.intervention_tick is not None \
-           and self.tick >= self.intervention_tick:
-            amp *= 0.15
-        # Bipolar inside the burst
-        phase_in_burst = self.tick % self.burst_period
-        return self.signal_B_nominal + amp * math.sin(
-            2 * math.pi * self.burst_inner_freq * phase_in_burst
-        )
+        # B is stable nominal with periodic EM bursts
+        # Burst pattern: every 7 ticks, lasts 1 tick, bipolar
+        val = self.B_nominal
+        if self.tick > 0 and self.tick % 7 == 0:
+            # Burst
+            burst_amp = 0.4 if not self.shielded else 0.06
+            val += burst_amp * (1 if self.tick % 14 == 0 else -1)
+        return val
 
     def step(self) -> ScenarioState:
-        v_a = self._signal_A()
-        v_b = self._signal_B()
+        A = self._signal_A()
+        B = self._signal_B()
 
-        # signal_A states (persistent: degradation IS real)
-        a_drift = v_a - self.signal_A_nominal
-        if v_a >= self.signal_A_threshold:
-            a_state = "failed"
-        elif a_drift > 0.15:
-            a_state = "degraded"
-        else:
-            a_state = "nominal"
+        # System state from real drift only
+        A_state = (
+            "failed" if A >= self.A_threshold
+            else "degraded" if A >= self.A_threshold * 0.8
+            else "nominal"
+        )
+        # B is always nominal in reality (just noisy reading)
+        B_state = "nominal"
 
-        # signal_B states (transient: only during a burst)
-        b_state = "degraded" if self._in_burst() and not self.shielded_B else "nominal"
-
-        if a_state == "failed":
-            sys = "failed"
-        elif a_state == "degraded":
-            sys = "degraded"
-        else:
-            sys = "stable"
+        worst = "stable"
+        if A_state == "failed":
+            worst = "failed"
+        elif A_state == "degraded":
+            worst = "degraded"
 
         sensors = {
             "signal_A": {
-                "component_id": "signal_A",
-                "sensor_type": "em",
-                "value": round(v_a, 5),
-                "rate": round(0.0 if self.calibrated_A else self.signal_A_drift_rate, 5),
+                "component_id": "signal_line_A",
+                "sensor_type": "signal",
+                "value": round(A, 4),
+                "rate": round(self.A_real_drift_per_tick if not self.A_rerouted else -0.02, 4),
                 "units": "V",
-                "threshold": self.signal_A_threshold,
-                "nominal": self.signal_A_nominal,
+                "threshold": self.A_threshold,
+                "nominal": 0.2,
             },
             "signal_B": {
-                "component_id": "signal_B",
-                "sensor_type": "em",
-                "value": round(v_b, 5),
-                "rate": 0.0,   # bursts are not a sustained rate
+                "component_id": "signal_line_B",
+                "sensor_type": "signal",
+                "value": round(B, 4),
+                "rate": 0.0,
                 "units": "V",
-                "threshold": self.signal_B_nominal + 0.30,
-                "nominal": self.signal_B_nominal,
+                "threshold": 1.0,
+                "nominal": self.B_nominal,
             },
         }
         components = {
-            "signal_A": {
-                "component_type": "analog_sensor",
-                "state": a_state,
-                "degradation_mode": "drift" if a_drift > 0.05 else "",
-            },
-            "signal_B": {
-                "component_type": "analog_sensor",
-                "state": b_state,
-                "degradation_mode": "em_burst" if self._in_burst() else "",
-            },
+            "signal_line_A": {"component_type": "signal_trace", "state": A_state, "degradation_mode": "real_drift" if A > 0.4 else ""},
+            "signal_line_B": {"component_type": "signal_trace", "state": B_state, "degradation_mode": ""},
         }
         actual_outcome = {
-            "signal_A_v": round(v_a, 5),
-            "signal_B_v": round(v_b, 5),
-            "signal_A_drift_v": round(a_drift, 5),
-            "signal_B_in_burst": 1.0 if self._in_burst() else 0.0,
-            "system_state": sys,
+            "signal_A_v": round(A, 4),
+            "signal_B_v": round(B, 4),
+            "signal_A_state": A_state,
+            "signal_B_state": B_state,
+            "system_state": worst,
         }
         result = ScenarioState(
             tick=self.tick,

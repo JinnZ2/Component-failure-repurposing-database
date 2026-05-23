@@ -1,28 +1,30 @@
 """
 scenario_engine.scenarios.slow_degradation_electrolytic
 
-C1 electrolytic capacitor ESR drifts over a long horizon.
-
-Phases:
-   0 - 50 : stable (ESR ≈ nominal)
-  50 - 300: linear growth
- 300 - 500: accelerating
- 500 - 600: plateau (cap nearly dead)
-   ≥ 600 : failed (open circuit)
-
-Optimal replacement window: tick 250 — 350.
-  - Too early (< 250): wastes a healthy cap.
-  - Late (> 400):  downstream ripple has already stressed nearby parts;
-                   intervention works but health is impaired.
-  - Too late (> 500): cap fails open before replacement completes.
+Long-horizon test. C1 electrolytic capacitor ESR drifts slowly
+over hundreds of ticks. No dramatic spike, just gradual degradation.
 
 Tests:
-  - long-horizon prediction
-  - intervention timing (not too early, not too late)
+  - Can the AI distinguish slow drift from noise?
+  - Does it predict accurately over long horizons?
+  - Does it intervene at the right point (not too early, not too late)?
+
+Premature intervention wastes spare components. Late intervention
+risks failure. The AI must calibrate against the curve.
+
+Drift profile:
+  ticks 0-50:    ESR stable at 0%
+  ticks 50-300:  linear drift to 25%
+  ticks 300-500: accelerating drift, reaches 75%
+  ticks 500+:    plateau then failure
+
+Optimal intervention: tick 250-350 (after drift confirmed, before
+acceleration).
 
 Interventions:
-  - "replace" + "C1" / "cap"  → C1 reset to nominal ESR
-  - "ignore"                    → cap fails
+  - "replace_C1"   → C1 swapped with spare, ESR back to 0
+  - "monitor"      → no action, keep observing
+  - "ignore"       → no action ever
 """
 
 from .base import Scenario, ScenarioState
@@ -30,106 +32,92 @@ from .base import Scenario, ScenarioState
 
 class SlowDegradationElectrolytic(Scenario):
     name = "slow_degradation_electrolytic"
-    description = "Long-horizon ESR drift; optimal replacement window 250-350."
+    description = (
+        "Long-horizon ESR drift on C1. Tests slow drift detection "
+        "and intervention timing."
+    )
 
-    def __init__(self, seed: int = 0, max_ticks: int = 700):
+    def __init__(self, seed: int = 0, max_ticks: int = 600):
         super().__init__(seed=seed, max_ticks=max_ticks)
-        self.ESR_nom = 0.050
-        self.linear_slope = 0.0006        # 50→300 phase: ESR rises by ~0.15
-        self.quad_coeff = 0.00002         # 300→500 phase
-        self.ESR_plateau = 1.2            # ohm
-        self.ESR_failed = 999.0
-
-        # Intervention windows
-        self.window_open_tick = 250
-        self.window_close_tick = 350
-        self.too_late_tick = 500
-
-        # State
         self.replaced = False
-        self.intervention_tick = None
-        self.intervention_premature = False
-        self.intervention_late = False
-        self.intervention_too_late = False
+        self.replacement_tick = None
 
     def receive_intervention(self, action: str, tick: int):
         a = action.lower()
-        if "replace" in a and ("c1" in a or "cap" in a or "electroly" in a):
+        if "replace" in a and not self.replaced:
             self.replaced = True
-            self.intervention_tick = tick
-            if tick < self.window_open_tick:
-                self.intervention_premature = True
-            elif tick > self.too_late_tick:
-                self.intervention_too_late = True
-            elif tick > self.window_close_tick:
-                self.intervention_late = True
+            self.replacement_tick = tick
 
-    def _phase_ESR(self) -> float:
-        t = self.tick
+    def _esr(self) -> float:
+        # Compute base drift
+        if self.replaced and self.replacement_tick is not None:
+            if self.tick < self.replacement_tick:
+                t = self.tick
+            else:
+                # After replacement, drift restarts from 0
+                t = self.tick - self.replacement_tick
+        else:
+            t = self.tick
+
         if t < 50:
-            return self.ESR_nom
-        if t < 300:
-            return self.ESR_nom + self.linear_slope * (t - 50)
-        if t < 500:
-            base = self.ESR_nom + self.linear_slope * (300 - 50)
-            return base + self.quad_coeff * (t - 300) ** 2
-        if t < 600:
-            return self.ESR_plateau
-        return self.ESR_failed
-
-    def _C1_ESR(self) -> float:
-        if self.replaced and self.intervention_tick is not None \
-           and self.tick >= self.intervention_tick \
-           and not self.intervention_too_late:
-            return self.ESR_nom
-        return self._phase_ESR()
-
-    def _phase_rate(self) -> float:
-        t = self.tick
-        if t < 50 or t >= 500:
             return 0.0
         if t < 300:
-            return self.linear_slope
-        return 2 * self.quad_coeff * (t - 300)
+            return (t - 50) * (25.0 / 250.0)
+        if t < 500:
+            # Accelerating: 25 → 75
+            frac = (t - 300) / 200.0
+            return 25.0 + 50.0 * (frac ** 1.5)
+        # Plateau then failure
+        return min(75.0 + 0.5 * (t - 500), 100.0)
 
     def step(self) -> ScenarioState:
-        ESR = self._C1_ESR()
+        esr = self._esr()
+        # Drift rate computed numerically
+        rate = 0.0
+        if esr > 0:
+            # Approximate local rate
+            test_t = self.tick
+            if 50 <= test_t < 300:
+                rate = 25.0 / 250.0
+            elif 300 <= test_t < 500:
+                # Derivative of accelerating curve
+                frac = (test_t - 300) / 200.0
+                rate = (50.0 * 1.5 * (frac ** 0.5)) / 200.0
+            elif test_t >= 500:
+                rate = 0.5
 
-        if ESR >= 500.0:
-            c1_state, sys = "failed", "failed"
-        elif ESR >= 0.5:
-            c1_state, sys = "degraded", "degraded"
-        elif ESR >= 0.15:
-            c1_state, sys = "degraded", "degraded"
-        else:
-            c1_state, sys = "nominal", "stable"
-
-        rate = 0.0 if self.replaced and not self.intervention_too_late else self._phase_rate()
+        C1_state = (
+            "failed" if esr >= 90
+            else "degraded" if esr >= 30
+            else "nominal"
+        )
+        system = (
+            "failed" if C1_state == "failed"
+            else "degraded" if C1_state == "degraded"
+            else "stable"
+        )
 
         sensors = {
-            "esr_C1": {
+            "C1_ESR": {
                 "component_id": "C1",
-                "sensor_type": "electrical",
-                "value": round(ESR, 5),
-                "rate": round(rate, 6),
-                "units": "ohm",
-                "threshold": 0.5,
-                "nominal": self.ESR_nom,
+                "sensor_type": "esr",
+                "value": round(esr, 3),
+                "rate": round(rate, 4),
+                "units": "pct_drift",
+                "threshold": 90.0,
+                "nominal": 0.0,
             },
         }
         components = {
             "C1": {
-                "component_type": "electrolytic_cap_220uF",
-                "state": c1_state,
-                "degradation_mode": "esr_drift" if ESR > self.ESR_nom * 1.2 else "",
-            },
+                "component_type": "electrolytic_cap_220uF_25V",
+                "state": C1_state,
+                "degradation_mode": "ESR_aging" if esr > 5 else "",
+            }
         }
         actual_outcome = {
-            "C1_ESR_ohm": round(ESR, 5),
-            "system_state": sys,
-            "intervention_premature": 1.0 if self.intervention_premature else 0.0,
-            "intervention_late": 1.0 if self.intervention_late else 0.0,
-            "intervention_too_late": 1.0 if self.intervention_too_late else 0.0,
+            "C1_esr_pct": round(esr, 3),
+            "system_state": system,
         }
         result = ScenarioState(
             tick=self.tick,

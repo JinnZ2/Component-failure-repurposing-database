@@ -1,26 +1,28 @@
 """
 scenario_engine.scenarios.cascade_event
 
-Three-stage cascade rooted in Q1.
+Single component failure propagates through shared substrate.
 
-  Q1 (BJT) goes thermal runaway from tick 0.
-  At tick ~38, Q1 reaches T_limit and FAILS OPEN.
-  Q1's failure leaves its heatsink hot → couples to Q2.
-  Q1's failure spikes the power rail → C1 ESR jumps and keeps drifting.
+Initial fault: Q1 thermal runaway begins at tick 5.
+At tick 25 (if unaddressed), Q1 fails open. Shared heatsink
+heats nearby Q2 by conduction. Q2 reaches threshold at tick 50.
+Shared power rail spikes when Q1 fails open, stressing capacitor C1.
+C1 ESR drift accelerates.
 
-If the AI does not intervene on Q1 BEFORE the fail tick, downstream
-mitigation (shield C1, dampen rail) cannot undo the damage to Q2 or C1.
+This is the test of intervention TIMING. Early intervention
+on Q1 prevents the cascade entirely. Late intervention only
+arrests propagation partially.
 
 Tests:
-  - cascade prediction (Q2 + C1 are downstream)
-  - intervention timing (must act before Q1's fail tick)
-  - root-cause vs symptom (downstream interventions are too late)
+  - Can the AI detect the upstream cause?
+  - Can it predict downstream propagation?
+  - Does it intervene early enough?
 
 Interventions:
-  - "reroute" + "Q1"   → Q1 sheds load before fail, no cascade
-  - "isolate" + "Q1"   → same
-  - "ignore"            → cascade unfolds
-  - others (e.g. "shield C1") → recorded but do not stop the cascade
+  - "reroute_load_Q1_to_Q3"   → Q1 cools, cascade arrested
+  - "isolate_Q1"              → Q1 disconnected, Q2 still warms slightly
+  - "increase_cooling"        → buys time, may not be enough
+  - "ignore"                  → cascade runs to completion
 """
 
 from .base import Scenario, ScenarioState
@@ -28,147 +30,171 @@ from .base import Scenario, ScenarioState
 
 class CascadeEvent(Scenario):
     name = "cascade_event"
-    description = "Q1 runaway → heatsink → Q2; rail spike → C1 ESR drift."
+    description = (
+        "Q1 thermal runaway propagates to Q2 via heatsink and to C1 "
+        "via power rail spike. Tests cascade detection + early intervention."
+    )
 
-    def __init__(self, seed: int = 0, max_ticks: int = 100):
+    def __init__(self, seed: int = 0, max_ticks: int = 200):
         super().__init__(seed=seed, max_ticks=max_ticks)
-        # Q1 — runs away fast
-        self.Q1_T0 = 60.0
-        self.Q1_rate = 1.71            # → crosses 125 at tick ≈ 38
-        self.Q1_T_limit = 125.0
-        self.Q1_cool_rate = 1.5        # after reroute, cooling per tick
+        # Q1 thermal state
+        self.Q1_T0 = 70.0
+        self.Q1_drift = 2.3  # fast runaway
+        self.Q1_fail_temp = 145.0
 
-        # Q2 — cool until Q1 fails, then heated by heatsink coupling
-        self.Q2_T0 = 35.0
-        self.Q2_coupling_rate = 1.2
+        # Q2 thermal coupling (heatsink)
+        self.Q2_T0 = 65.0
+        self.Q2_coupling_rate = 0.0  # set when Q1 fails
 
-        # C1 — nominal until Q1 fails, then jumps + drifts
-        self.C1_ESR_nom = 0.050
-        self.C1_ESR_post_spike = 0.120
-        self.C1_ESR_drift = 0.0015
+        # C1 capacitor
+        self.C1_ESR_pct = 0.0  # drift from nominal
 
-        # State
-        self.Q1_rerouted = False
+        # Intervention state
+        self.intervention_action = None
         self.intervention_tick = None
-        self.Q1_fail_tick = None       # set by step() when Q1 latches failed
+        self.Q1_failed = False
+        self.Q1_isolated = False
+        self.Q1_rerouted = False
+        self.cooling_boost = False
 
     def receive_intervention(self, action: str, tick: int):
         a = action.lower()
-        # Only Q1 reroute/isolate stops the cascade. Other actions are
-        # recorded but not effective — testing root-cause reasoning.
-        if ("reroute" in a or "isolate" in a) and "q1" in a:
+        self.intervention_tick = tick
+        if "reroute" in a:
+            self.intervention_action = "reroute"
             self.Q1_rerouted = True
-            self.intervention_tick = tick
+        elif "isolate" in a:
+            self.intervention_action = "isolate"
+            self.Q1_isolated = True
+        elif "cooling" in a:
+            self.intervention_action = "cooling"
+            self.cooling_boost = True
+        else:
+            self.intervention_action = "ignore"
 
     def _Q1_temp(self) -> float:
-        if self.Q1_rerouted:
-            T_at = self.Q1_T0 + self.Q1_rate * self.intervention_tick
+        if self.tick < 5:
+            return self.Q1_T0
+        ticks_drifting = self.tick - 5
+        if self.Q1_rerouted and self.intervention_tick is not None and self.tick >= self.intervention_tick:
+            ticks_since_int = self.tick - self.intervention_tick
+            T_at_int = self.Q1_T0 + self.Q1_drift * max(self.intervention_tick - 5, 0)
+            T = max(T_at_int - 1.2 * ticks_since_int, 30.0)
+            return T
+        if self.Q1_isolated and self.intervention_tick is not None and self.tick >= self.intervention_tick:
             ticks_since = self.tick - self.intervention_tick
-            return max(T_at - self.Q1_cool_rate * ticks_since, 25.0)
-        # Free runaway
-        T = self.Q1_T0 + self.Q1_rate * self.tick
-        if T >= self.Q1_T_limit:
-            if self.Q1_fail_tick is None:
-                self.Q1_fail_tick = self.tick
-            return self.Q1_T_limit  # latched
-        return T
-
-    def _Q1_failed(self) -> bool:
-        return self.Q1_fail_tick is not None and not self.Q1_rerouted
+            T_at_int = self.Q1_T0 + self.Q1_drift * max(self.intervention_tick - 5, 0)
+            T = max(T_at_int - 1.5 * ticks_since, 30.0)
+            return T
+        T = self.Q1_T0 + self.Q1_drift * ticks_drifting
+        if self.cooling_boost and self.intervention_tick is not None and self.tick >= self.intervention_tick:
+            T -= 0.5 * (self.tick - self.intervention_tick)
+        return max(T, 30.0)
 
     def _Q2_temp(self) -> float:
-        if not self._Q1_failed():
-            return self.Q2_T0
-        dt = self.tick - self.Q1_fail_tick
-        return self.Q2_T0 + self.Q2_coupling_rate * max(0, dt)
+        Q1_T = self._Q1_temp()
+        # Q1 failure event
+        if Q1_T >= self.Q1_fail_temp and not self.Q1_failed:
+            self.Q1_failed = True
+            self.Q2_coupling_rate = 0.9
+            # Power rail spike → C1 ESR drift accelerates
+            self.C1_ESR_pct += 20.0
+
+        T = self.Q2_T0
+        if self.Q2_coupling_rate > 0 and Q1_T > 100:
+            # Heatsink conduction
+            ticks_coupling = self.tick - (
+                self.intervention_tick if (self.Q1_isolated and self.intervention_tick) else 0
+            )
+            T += self.Q2_coupling_rate * max(ticks_coupling, 0)
+        # If isolated after Q1 fails, Q2 still warm but slowly cools
+        if self.Q1_isolated and self.Q1_failed and self.intervention_tick is not None:
+            cooling_ticks = self.tick - self.intervention_tick
+            T -= 0.3 * cooling_ticks
+        return max(T, self.Q2_T0)
 
     def _C1_ESR(self) -> float:
-        if not self._Q1_failed():
-            return self.C1_ESR_nom
-        dt = self.tick - self.Q1_fail_tick
-        return self.C1_ESR_post_spike + self.C1_ESR_drift * max(0, dt)
+        # Slow drift always; rapid jump on Q1 failure
+        base_drift = 0.05 * self.tick  # baseline drift
+        return min(self.C1_ESR_pct + base_drift, 100.0)
 
     def step(self) -> ScenarioState:
-        T_q1 = self._Q1_temp()
-        T_q2 = self._Q2_temp()
-        ESR = self._C1_ESR()
+        Q1_T = self._Q1_temp()
+        Q2_T = self._Q2_temp()
+        C1_esr = self._C1_ESR()
 
-        q1_state = (
-            "failed" if self._Q1_failed()
-            else "degraded" if T_q1 >= 100
+        # States
+        Q1_state = (
+            "failed" if Q1_T >= self.Q1_fail_temp
+            else "degraded" if Q1_T >= 100.0
             else "nominal"
         )
-        q2_state = (
-            "failed" if T_q2 >= 125
-            else "degraded" if T_q2 >= 80
+        Q2_state = (
+            "failed" if Q2_T >= 125.0
+            else "degraded" if Q2_T >= 100.0
             else "nominal"
         )
-        c1_state = (
-            "failed" if ESR >= 0.30
-            else "degraded" if ESR >= 0.10
+        C1_state = (
+            "failed" if C1_esr >= 80
+            else "degraded" if C1_esr >= 30
             else "nominal"
         )
 
-        sys = "stable"
-        for s in (q1_state, q2_state, c1_state):
+        worst = "stable"
+        for s in (Q1_state, Q2_state, C1_state):
             if s == "failed":
-                sys = "failed"
+                worst = "failed"
                 break
-            if s == "degraded" and sys != "failed":
-                sys = "degraded"
+            elif s == "degraded" and worst != "failed":
+                worst = "degraded"
+
+        Q1_rate = (
+            -1.2 if (self.Q1_rerouted and self.intervention_tick and self.tick >= self.intervention_tick)
+            else -1.5 if (self.Q1_isolated and self.intervention_tick and self.tick >= self.intervention_tick)
+            else self.Q1_drift if self.tick >= 5
+            else 0.0
+        )
 
         sensors = {
             "thermal_Q1": {
                 "component_id": "Q1",
                 "sensor_type": "thermal",
-                "value": round(T_q1, 2),
-                "rate": round(-self.Q1_cool_rate if self.Q1_rerouted else self.Q1_rate, 3),
+                "value": round(Q1_T, 2),
+                "rate": round(Q1_rate, 3),
                 "units": "C",
-                "threshold": self.Q1_T_limit,
-                "nominal": self.Q1_T0,
+                "threshold": self.Q1_fail_temp,
+                "nominal": 70.0,
             },
             "thermal_Q2": {
                 "component_id": "Q2",
                 "sensor_type": "thermal",
-                "value": round(T_q2, 2),
-                "rate": round(self.Q2_coupling_rate if self._Q1_failed() else 0.0, 3),
+                "value": round(Q2_T, 2),
+                "rate": round(self.Q2_coupling_rate, 3),
                 "units": "C",
                 "threshold": 125.0,
-                "nominal": self.Q2_T0,
+                "nominal": 65.0,
             },
-            "esr_C1": {
+            "C1_ESR": {
                 "component_id": "C1",
-                "sensor_type": "electrical",
-                "value": round(ESR, 4),
-                "rate": round(self.C1_ESR_drift if self._Q1_failed() else 0.0, 4),
-                "units": "ohm",
-                "threshold": 0.30,
-                "nominal": self.C1_ESR_nom,
+                "sensor_type": "esr",
+                "value": round(C1_esr, 2),
+                "rate": 0.05,
+                "units": "pct_drift",
+                "threshold": 80.0,
+                "nominal": 0.0,
             },
         }
         components = {
-            "Q1": {
-                "component_type": "BJT_NPN_2N3055",
-                "state": q1_state,
-                "degradation_mode": "thermal_runaway" if T_q1 > 80 else "",
-            },
-            "Q2": {
-                "component_type": "BJT_NPN_2N3055",
-                "state": q2_state,
-                "degradation_mode": "heatsink_coupling" if T_q2 > 50 else "",
-            },
-            "C1": {
-                "component_type": "electrolytic_cap",
-                "state": c1_state,
-                "degradation_mode": "esr_drift_post_spike" if ESR > 0.07 else "",
-            },
+            "Q1": {"component_type": "BJT_NPN", "state": Q1_state, "degradation_mode": "thermal_runaway" if Q1_T > 100 else ""},
+            "Q2": {"component_type": "BJT_NPN", "state": Q2_state, "degradation_mode": "heatsink_coupling" if Q2_T > 100 else ""},
+            "C1": {"component_type": "electrolytic_cap", "state": C1_state, "degradation_mode": "ESR_drift" if C1_esr > 10 else ""},
         }
         actual_outcome = {
-            "Q1_temp_c": round(T_q1, 2),
-            "Q2_temp_c": round(T_q2, 2),
-            "C1_ESR_ohm": round(ESR, 4),
-            "Q1_failed": 1.0 if self._Q1_failed() else 0.0,
-            "system_state": sys,
+            "Q1_temp_c": round(Q1_T, 2),
+            "Q2_temp_c": round(Q2_T, 2),
+            "C1_esr_pct": round(C1_esr, 2),
+            "Q1_failed": self.Q1_failed,
+            "system_state": worst,
         }
         result = ScenarioState(
             tick=self.tick,
