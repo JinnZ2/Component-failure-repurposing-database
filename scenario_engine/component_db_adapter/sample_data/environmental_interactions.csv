@@ -1,20 +1,35 @@
 Component,Condition,Observed Effect,Repurpose Impact,Notes
-Diode,High Temperature (+150°C),Leakage current ↑,Better for environmental sensing,Can act as crude temp sensor
-Diode,High Humidity (>70% RH),Corrosion & leakage ↑,Humidity detection possible,Open failures most sensitive
-Diode,Medium Radiation,Breakdown voltage shifts,Voltage reference or radiation sensor,Useful for detection arrays
-
-Resistor,High Temperature (+150°C),Value drift unpredictable,Reliability ↓,Can be used as temp stress indicator
-Resistor,Medium Humidity (30–70% RH),Resistance drift 2–5x faster,Humidity sensing,Works best with carbon film
-Resistor,Mechanical Vibration,Micro-cracks form,Still usable as spacer,No major electrical role
-
-Capacitor (Ceramic),High Temperature,Non-linear capacitance,Repurposed as thermal sensor,X7R/Z5U types most sensitive
-Capacitor (Ceramic),High Humidity,Leakage ↑,Humidity sensor potential,Moisture absorption into dielectric
-Capacitor (Ceramic),Radiation Exposure,Dielectric permittivity change,Environmental monitor,Partially reversible
-
-Transistor (BJT),High Temperature,hFE decreases,Temp sensing possible,Gain degradation accelerates
-Transistor (BJT),Radiation Leakage ↑,Noise generation ↑,Entropy source,Radiation dosimeter usage
-Transistor (BJT),High Humidity,Surface leakage paths,Unstable operation,Can be monitored for sensing
-
-Inductor (Ferrite Core),High Temperature,Core saturation earlier,Reduced inductance,Still usable as heating element
-Inductor (Ferrite Core),High Humidity,Corrosion ↑,Resistance drift,Environmental stress marker
-Inductor (Ferrite Core),Vibration,Core cracking,Mechanical noise element,May add piezo-like properties
+BJT_NPN,high_temperature_+85C,beta drops 15-25%,thermal sensor harder to calibrate,sensitivity favors low-bias designs
+BJT_NPN,vibration,intermittent contact at die,unreliable as switch,mounting must dampen
+BJT_NPN_2N2222,high_temperature_+85C,beta drops 15-25%,same as BJT_NPN,sensitivity favors low-bias designs
+BJT_NPN_2N2222,radiation,leakage current rises,better as dosimeter,exploit Ileak vs dose
+electrolytic_cap,high_temperature_+85C,ESR drift accelerated 2-4x,faster aging path,operate well below 85C
+electrolytic_cap,high_humidity_>70RH,capacitance loss,bandwidth narrows,dielectric absorbs moisture
+electrolytic_cap,thermal_cycling,ESR rises permanently,recoverable performance limited,each cycle adds small fraction
+electrolytic_cap_220uF_25V,high_temperature_+85C,ESR_aging accelerated 2-4x,faster intervention needed,Arrhenius behavior
+electrolytic_cap_220uF_25V,thermal_cycling,ESR rises permanently,monitor cumulative cycles,cycle count is a key risk metric
+ceramic_cap,mechanical_stress,microcracks form,intermittent short risk,X7R/Y5V most sensitive
+ceramic_cap,thermal_cycling,solder joint stress,joint failure adjacent,thermal mass mismatch
+silicon_diode,high_temperature_+85C,leakage current 2x per 10C,better as thermal sensor,classic Ileak vs T curve
+silicon_diode,high_humidity_>70RH,surface conduction,worse as switch,better as moisture sensor
+zener_diode,temperature_swing,Vz drifts with TC,known temperature coefficient,calibration via Vz(T) is reliable
+power_MOSFET,high_temperature_+85C,Rds_on +30%,derate current accordingly,use as heater becomes more effective
+power_MOSFET,ESD_event,gate oxide damage,fail short common,handle with care after ESD
+connector,high_humidity_>70RH,corrosion accelerated,contact resistance rises,plating quality is decisive
+connector,contamination,oxidation layer forms,intermittent connection,cleaning may restore briefly
+relay,vibration,contact bounce,false triggering,filter or replace
+relay,high_temperature_+85C,coil insulation degrades,eventual short,monitor coil R drift
+PCB_assembly,thermal_cycling,solder joint cracking,mechanical failure leads electrical,SAC305 fails earlier than SnPb
+PCB_assembly,vibration,fatigue accumulates,predictable curve via cycles,solder_joint_fatigue_pct trackable
+SAC305_solder,thermal_cycling,fatigue cracks at intermetallics,joint failure,delta-T amplitude dominant
+SAC305_solder,vibration,fatigue accumulates,joint resistance climbs,use as telemetry input
+solder_joints,vibration,fatigue accumulates,resistance drift,monitor early warning
+solder_joints,thermal_cycling,joint cracking,electrical opens,critical for high-power paths
+signal_trace,EM_interference_burst,noise injection on line,calibration false-positives,distinguish via burst pattern
+signal_trace,temperature_drift,trace R climbs slightly,signal offset rises,compensate at the receiver
+logic_CMOS,undervoltage_event,unreliable operation,must shed load or switch rail,shed first then verify
+logic_CMOS,radiation,SEU rate rises,latch up risk,scrubbing required
+analog_opamp,undervoltage_event,headroom collapse,output saturates,reduce gain or switch rail
+analog_opamp,high_temperature_+85C,offset voltage drifts,need recalibration,worse below input common-mode
+sensor_I2C,undervoltage_event,bus errors,data corruption,switch backup rail
+sensor_I2C,EM_interference,bus retries climb,intermittent reads,bus filter helps

@@ -60,7 +60,12 @@ class CsvLoaderTests(unittest.TestCase):
             path = os.path.join(d, "f.csv")
             _write(path, "Component,Failure Mode\nQ1,thermal_runaway\n")
             rows = load_csv(path)
-            self.assertEqual(rows, [{"component": "Q1", "failure_mode": "thermal_runaway"}])
+            self.assertEqual(len(rows), 1)
+            self.assertEqual(rows[0]["component"], "Q1")
+            self.assertEqual(rows[0]["failure_mode"], "thermal_runaway")
+            # Provenance attached automatically
+            self.assertEqual(rows[0]["_matrix"], "f")
+            self.assertEqual(rows[0]["_row_index"], 1)
 
     def test_load_csv_attaches_effectiveness_score(self):
         with tempfile.TemporaryDirectory() as d:
@@ -81,7 +86,8 @@ class CsvLoaderTests(unittest.TestCase):
             path = os.path.join(d, "f.csv")
             _write(path, "Component,Notes\n  Q1  ,  ok  \n")
             rows = load_csv(path)
-            self.assertEqual(rows[0], {"component": "Q1", "notes": "ok"})
+            self.assertEqual(rows[0]["component"], "Q1")
+            self.assertEqual(rows[0]["notes"], "ok")
 
     def test_load_all_matrices_known_schemas(self):
         with tempfile.TemporaryDirectory() as d:
@@ -311,12 +317,123 @@ class ComponentDBAdapterTests(unittest.TestCase):
         self.assertEqual(fake.calls, [("query_component_db", "Q1:therm")])
 
 
+class ProvenanceTests(unittest.TestCase):
+    """Loaded rows and DB results carry source_matrix_row locators."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        _fixture_dir(self.tmp.name)
+        self.db = ComponentDB(self.tmp.name)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_load_all_matrices_attaches_matrix_name(self):
+        all_m = load_all_matrices(self.tmp.name)
+        for name, rows in all_m.items():
+            for r in rows:
+                self.assertEqual(r["_matrix"], name)
+
+    def test_row_index_is_1_based_in_data_order(self):
+        all_m = load_all_matrices(self.tmp.name)
+        fm = all_m["failure_mode_matrix"]
+        self.assertEqual([r["_row_index"] for r in fm], [1, 2, 3, 4])
+
+    def test_repurpose_options_carry_source_matrix_row(self):
+        opts = self.db.repurpose_options("BJT_NPN", "thermal_runaway")
+        for o in opts:
+            src = o["source_matrix_row"]
+            self.assertEqual(src["matrix"], "failure_mode_matrix")
+            self.assertIn("row_index", src)
+            self.assertEqual(src["component"], "BJT_NPN")
+            self.assertEqual(src["failure_mode"], "thermal_runaway")
+
+    def test_environmental_factors_carry_source_matrix_row(self):
+        envs = self.db.environmental_factors("Capacitor")
+        for e in envs:
+            self.assertEqual(e["source_matrix_row"]["matrix"], "environmental_interactions")
+
+    def test_synergies_carry_source_matrix_row(self):
+        syn = self.db.synergies()
+        for s in syn:
+            self.assertEqual(s["source_matrix_row"]["matrix"], "component_synergies")
+
+
+class ClaimTableAuditTests(unittest.TestCase):
+    """ClaimTable.audit_traceability counts grounded vs ungrounded decisions."""
+
+    def _make_table(self, tmp: str):
+        from scenario_engine.claims import ClaimTable
+        return ClaimTable(os.path.join(tmp, "CLAIM_TABLE.substrate.json"))
+
+    def _grounded_claim(self, cid: str, matrix: str = "failure_mode_matrix"):
+        return {
+            "claim_id": cid,
+            "tick": 1,
+            "decision": "reroute_to_spare_BJT",
+            "prediction": {"system_state_at_tick_50": "stable", "tolerance": 5.0},
+            "falsifiable": True,
+            "source_matrix_row": {
+                "matrix": matrix,
+                "row_index": 1,
+                "component": "BJT_NPN",
+                "failure_mode": "thermal_runaway",
+            },
+        }
+
+    def _ungrounded_claim(self, cid: str):
+        return {
+            "claim_id": cid,
+            "tick": 1,
+            "decision": "reroute_load_to_Q2",
+            "prediction": {"system_state_at_tick_50": "stable", "tolerance": 5.0},
+            "falsifiable": True,
+        }
+
+    def test_empty_table(self):
+        with tempfile.TemporaryDirectory() as d:
+            t = self._make_table(d)
+            audit = t.audit_traceability()
+            self.assertEqual(audit["total_claims"], 0)
+            self.assertEqual(audit["decisions"], 0)
+            self.assertIsNone(audit["coverage"])
+
+    def test_full_coverage(self):
+        with tempfile.TemporaryDirectory() as d:
+            t = self._make_table(d)
+            t.write_claim(self._grounded_claim("c1"))
+            t.write_claim(self._grounded_claim("c2", matrix="repurpose_effectiveness"))
+            audit = t.audit_traceability()
+            self.assertEqual(audit["decisions"], 2)
+            self.assertEqual(audit["grounded"], 2)
+            self.assertEqual(audit["ungrounded"], 0)
+            self.assertEqual(audit["coverage"], 1.0)
+            self.assertEqual(audit["by_matrix"], {
+                "failure_mode_matrix": 1,
+                "repurpose_effectiveness": 1,
+            })
+            self.assertEqual(audit["ungrounded_claim_ids"], [])
+
+    def test_mixed_coverage(self):
+        with tempfile.TemporaryDirectory() as d:
+            t = self._make_table(d)
+            t.write_claim(self._grounded_claim("g1"))
+            t.write_claim(self._ungrounded_claim("u1"))
+            t.write_claim(self._ungrounded_claim("u2"))
+            audit = t.audit_traceability()
+            self.assertEqual(audit["decisions"], 3)
+            self.assertEqual(audit["grounded"], 1)
+            self.assertEqual(audit["ungrounded"], 2)
+            self.assertAlmostEqual(audit["coverage"], 1 / 3, places=5)
+            self.assertEqual(sorted(audit["ungrounded_claim_ids"]), ["u1", "u2"])
+
+
 class SessionWireInTests(unittest.TestCase):
     """Session passes the wrapped op_iface to the decider when db_adapter is set."""
 
     def test_decider_receives_db_augmented_op(self):
         from scenario_engine.runner import Session
-        observed = {"saw_db": False, "best_repurpose": None}
+        observed = {"saw_db": False, "best_repurpose": None, "src_matrix": None}
 
         def decider(state, body, op):
             # The wrapped op exposes the same surface plus DB augmentation.
@@ -330,6 +447,8 @@ class SessionWireInTests(unittest.TestCase):
                 best = result["db"].get("best")
                 if best:
                     observed["best_repurpose"] = best.get("repurpose_option")
+                    src = best.get("source_matrix_row") or {}
+                    observed["src_matrix"] = src.get("matrix")
             return None
 
         with tempfile.TemporaryDirectory() as d:
@@ -345,9 +464,50 @@ class SessionWireInTests(unittest.TestCase):
             ).run()
 
         self.assertTrue(observed["saw_db"])
-        # Best option for (BJT_NPN, thermal_runaway) in the fixture
-        # is "Temperature Sensor" (High effectiveness).
         self.assertEqual(observed["best_repurpose"], "Temperature Sensor")
+        # Provenance flows through the adapter
+        self.assertEqual(observed["src_matrix"], "failure_mode_matrix")
+
+    def test_claim_carries_source_matrix_row_end_to_end(self):
+        """A decider that copies source_matrix_row from a DB best result
+        ends up with a CLAIM_TABLE entry traceable via audit_traceability."""
+        from scenario_engine.runner import Session
+
+        def decider(state, body, op):
+            result = op.query_component_db(
+                "BJT_NPN:thermal_runaway",
+                component_type="BJT_NPN",
+                failure_mode="thermal_runaway",
+            )
+            best = result["db"]["best"]
+            return {
+                "tick": state["tick"],
+                "decision": best["repurpose_option"],
+                "prediction": {
+                    f"system_state_at_tick_{state['tick'] + 30}": "stable",
+                    "tolerance": 5.0,
+                },
+                "falsifiable": True,
+                "source_matrix_row": best["source_matrix_row"],
+            }
+
+        with tempfile.TemporaryDirectory() as d:
+            _fixture_dir(d)
+            adapter = ComponentDBAdapter(matrices_dir=d)
+            session = Session(
+                scenario_name="thermal_drift_localized",
+                ai_decide=decider,
+                output_dir=os.path.join(d, "session"),
+                seed=0,
+                max_ticks=5,
+                db_adapter=adapter,
+            )
+            session.run()
+            audit = session.claim_table.audit_traceability()
+            self.assertGreaterEqual(audit["grounded"], 1)
+            self.assertEqual(audit["ungrounded"], 0)
+            self.assertEqual(audit["coverage"], 1.0)
+            self.assertIn("failure_mode_matrix", audit["by_matrix"])
 
     def test_session_without_db_adapter_unchanged(self):
         from scenario_engine.runner import Session

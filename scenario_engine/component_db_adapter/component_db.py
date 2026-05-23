@@ -22,6 +22,22 @@ from typing import Dict, List, Optional, Any
 from .csv_loader import load_all_matrices, EFFECTIVENESS_SCORE
 
 
+def _locator(row: Dict[str, Any], identity_keys: List[str]) -> Dict[str, Any]:
+    """
+    Build a stable source_matrix_row locator from a loaded row.
+    Includes matrix + row_index for positional traceability and a
+    subset of identity_keys for semantic readability.
+    """
+    out: Dict[str, Any] = {
+        "matrix": row.get("_matrix"),
+        "row_index": row.get("_row_index"),
+    }
+    for k in identity_keys:
+        if k in row:
+            out[k] = row[k]
+    return out
+
+
 class ComponentDB:
     def __init__(self, matrices_dir: str):
         self.matrices_dir = matrices_dir
@@ -58,6 +74,10 @@ class ComponentDB:
                 "effectiveness_score": r.get("effectiveness_score", 0.0),
                 "notes": r.get("notes"),
                 "_source": "failure_mode_matrix",
+                "source_matrix_row": _locator(
+                    r,
+                    ["component", "failure_mode", "repurpose_option"],
+                ),
             })
         out.sort(key=lambda x: x["effectiveness_score"], reverse=True)
         return out
@@ -96,6 +116,10 @@ class ComponentDB:
                 "effectiveness_score": r.get("effectiveness_score", 0.0),
                 "notes": r.get("notes"),
                 "_source": "repurpose_effectiveness",
+                "source_matrix_row": _locator(
+                    r,
+                    ["component", "failure_mode", "repurpose_application"],
+                ),
             })
         out.sort(key=lambda x: x["effectiveness_score"], reverse=True)
         return out
@@ -127,6 +151,10 @@ class ComponentDB:
                 "repurpose_impact": r.get("repurpose_impact"),
                 "notes": r.get("notes"),
                 "_source": "environmental_interactions",
+                "source_matrix_row": _locator(
+                    r,
+                    ["component", "condition"],
+                ),
             })
         return out
 
@@ -156,6 +184,10 @@ class ComponentDB:
                 "repurpose_application": r.get("repurpose_application"),
                 "notes": r.get("notes"),
                 "_source": "component_synergies",
+                "source_matrix_row": _locator(
+                    r,
+                    ["component_a", "component_b", "repurpose_application"],
+                ),
             })
         return out
 

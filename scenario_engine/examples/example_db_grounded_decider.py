@@ -147,6 +147,8 @@ class DBGroundedDecider:
                 },
                 "falsifiable": True,
                 "db_grounded": True,
+                # Audit trail: link this decision back to the exact CSV row.
+                "source_matrix_row": best.get("source_matrix_row"),
                 "db_evidence": {
                     "component": component_type,
                     "failure_mode": failure_mode,
@@ -217,8 +219,14 @@ def run_demo():
         print(f"\n  claim_id: {c['claim_id']}")
         print(f"  decision: {c['decision']}")
         print(f"  status:   {c['status']}")
+        if c.get("source_matrix_row"):
+            print(f"  source_matrix_row: {json.dumps(c['source_matrix_row'])}")
         if "db_evidence" in c:
             print(f"  db_evidence: {json.dumps(c['db_evidence'], indent=4)}")
+
+    # Traceability audit: every decision should trace back to a CSV row.
+    print("\nTraceability audit:")
+    print(json.dumps(session.claim_table.audit_traceability(), indent=2))
 
 
 if __name__ == "__main__":

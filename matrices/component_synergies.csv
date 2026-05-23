@@ -1,12 +1,21 @@
 Component A,Component B,Synergy Effect,Repurpose Application,Notes
-Diode (Shorted),Resistor (Value Drift),Temperature coefficient + resistance drift,Distributed thermal sensing,Combine for more accurate heat maps
-Diode (Open),Capacitor (Ceramic Drift),Parasitic capacitance + dielectric variation,Timing circuit element,Useful for crude RC oscillators
-Resistor (Open),Inductor (Ferrite Core),Mechanical stability + magnetic field core,Hybrid spacer/EMI choke,Maintains board spacing while filtering
-Capacitor (Shorted),Resistor (Shorted),Thermal + resistive load,Emergency heating element,Low efficiency but usable in survival scenarios
-Transistor (Degraded Gain),Diode (Partial Degradation),Noise leakage + junction instability,Random number generator,Entropy source improved by mixing
-Inductor (Cracked Core),Capacitor (Value Drift),Modified inductance + capacitance shift,Adaptive LC filter,Useful in RF tuning under degraded conditions
-Multiple Failed Resistors,Multiple Failed Diodes,Distributed resistance + capacitance,Impedance network,Can create crude signal shaping circuits
-Resistor (Open),Capacitor (Open),Physical spacing + parasitic capacitance,Mechanical alignment + HF bypass,Maintains PCB integrity
-Resistor (Open),Inductor (Open/Loop),Antenna geometry from leads/coil,Emergency RF radiator,Use λ/4 or small loop
-MOSFET (Shorted),LC Tank (Degraded),Low-ohm shunt for OOK keying,Low-power beacon,Gate/base driven by MCU or RC
-Diode (Partial Degradation),MCU Timer,Noise-derived ID/backoff,Collision avoidance,Entropy from leakage/junction noise
+BJT_NPN,electrolytic_cap,Vbe drift + ESR jitter,distributed_thermal_array,pair leakage signal with ESR drift for heat map
+BJT_NPN_2N2222,silicon_diode,Vbe + leakage current,redundant_temperature_array,two independent thermal sensors
+silicon_diode,electrolytic_cap,leakage + ESR jitter,noise_channel_source,entropy for random backoff
+zener_diode,BJT_NPN,reference + sensor,temperature_compensated_reference,Vref tracks junction temp
+zener_diode,electrolytic_cap_220uF_25V,Vref drift + ESR drift,calibration_loop_signal,age-tracking voltage anchor
+power_MOSFET,electrolytic_cap,Rds_on heater + ESR filter,thermal_fallback_unit,heater regulated by smoothed gate drive
+power_MOSFET,zener_diode,gate clamp + thermal output,protected_heater,zener clamps gate during heater duty
+connector,relay,corroded contact + dead coil,magnetic_coupling_repeater,coil as inductor across corroded gap
+relay,signal_trace,coil + trace,magnetic_loop_emergency_TX,low-data-rate magnetic_fallback channel
+PCB_assembly,SAC305_solder,vibration energy + joint resistance,mechanical_vibration_sensor,joint R modulates with vibration
+PCB_assembly,solder_joints,structural + electrical fatigue,mechanical_fallback_unit,detect strain via resistance change
+SAC305_solder,solder_joints,joint fatigue x2,early_warning_telemetry,redundant fatigue signal
+signal_trace,ceramic_cap,degraded trace + bypass cap,filtered_backup_channel,cap smooths noisy rerouted signal
+signal_trace,zener_diode,trace drift + Vref,trace_clamping_reference,zener clamps overshoot on degraded line
+logic_CMOS,analog_opamp,undervoltage x2,low_power_degraded_mode,both share brownout budget; drop together
+analog_opamp,sensor_I2C,headroom + bus,reduced_precision_sensor_chain,opamp buffers degraded sensor output
+sensor_I2C,electrolytic_cap,bus errors + ESR,bus_pullup_with_filter,parallel cap stabilizes I2C SCL/SDA
+electrolytic_cap,ceramic_cap,ESR drift + bypass,bandwidth_compensation_pair,ceramic in parallel restores HF response
+BJT_NPN,signal_trace,Vbe + trace drift,distributed_calibration_target,trace drift used to calibrate Vbe sensor
+electrolytic_cap_220uF_25V,power_MOSFET,ESR + Rds_on,thermal_state_estimator,joint thermal signature across rail
