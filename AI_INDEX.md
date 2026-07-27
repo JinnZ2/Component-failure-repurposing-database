@@ -122,6 +122,11 @@ python experiments/sims/geometric_failure_diagnosis.py
 │       ├── mechanical_fallback/ # Vibration motor TX / accelerometer RX
 │       └── thermal_fallback/    # Resistor heater TX / thermistor RX
 │
+├── vendor/                    # Third-party code, copied verbatim — do not edit
+│   └── cyclic/                # Cyclic Programming engine (JinnZ2/cyclic-programming)
+│       ├── cyclic_interpreter.py  # CyclicalInterpreter: field energy, transfer, decay
+│       └── UPSTREAM.json          # Pinned commit + per-file SHA-256
+│
 └── Core documentation
     ├── Core_engine.md         # Monitoring engine architecture (~900 lines)
     ├── binary_sensor.md       # Detection plugin framework (~880 lines)

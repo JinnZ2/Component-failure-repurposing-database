@@ -39,6 +39,8 @@ Component Failure Repurposing Database — a machine-readable knowledge base doc
 │           ├── rf_fallback/
 │           ├── thermal_fallback/
 │           └── arduino_ook_beacon.ino
+├── vendor/                  # Third-party code, copied verbatim — never edited here
+│   └── cyclic/              # Cyclic Programming interpreter, pinned via UPSTREAM.json
 ├── Core_engine.md           # Monitoring/analysis engine architecture
 ├── Future.md                # Expansion roadmap
 ├── Component.md             # YAML component specification guide
@@ -94,6 +96,19 @@ Each component file follows this hierarchy:
 ### File Naming
 
 - Use `lower_snake_case.md` for all files (e.g., `silicon_diodes.md`, `wire_wound.md`)
+
+### Vendored Code
+
+Everything under `vendor/` is an upstream copy and is never edited in place —
+patching it silently would be lost on the next pull. Behaviour changes belong in
+a wrapper outside `vendor/`. Each vendored directory carries an `UPSTREAM.json`
+recording the source repository, pinned commit, and per-file SHA-256; refresh it
+whenever the copy is updated.
+
+`vendor/cyclic/` holds the Cyclic Programming interpreter
+(https://github.com/JinnZ2/cyclic-programming) — `CyclicalInterpreter`, used as
+a physics engine for energy-conserving transfers between fields. Consumers put
+the directory on `sys.path` and import `cyclic_interpreter` flat.
 
 ### Units and Formatting
 

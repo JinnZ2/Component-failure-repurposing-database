@@ -201,3 +201,11 @@ This index provides **direct raw links** to every major file in the repository, 
 - [geometric_transport_sieve.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/geometric_transport_sieve.py)
 - [quantum_chemistry_geo.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/quantum_chemistry_geo.py)
 - [molecule_geometric_symmetry.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/experiments/sims/molecule_geometric_symmetry.py)
+
+---
+
+## Vendored — Cyclic Programming Interpreter (vendor/cyclic/)
+Upstream copy of [JinnZ2/cyclic-programming](https://github.com/JinnZ2/cyclic-programming), pinned in `UPSTREAM.json`. Never edited in place.
+- [README.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/vendor/cyclic/README.md)
+- [UPSTREAM.json](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/vendor/cyclic/UPSTREAM.json)
+- [cyclic_interpreter.py](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/vendor/cyclic/cyclic_interpreter.py)
