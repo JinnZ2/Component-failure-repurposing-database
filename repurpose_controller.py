@@ -5,16 +5,8 @@
 # knowledge-base reserve to heal a node's regen.  The reserve can itself
 # be eroded by systemic draw, modelling the maintenance burden on the DB.
 
-import sys
-from pathlib import Path
-
-# harm.py and simulator.py come from the vendored Cyclic Programming engine.
-_CYCLIC = Path(__file__).resolve().parent / "vendor" / "cyclic"
-if str(_CYCLIC) not in sys.path:
-    sys.path.insert(0, str(_CYCLIC))
-
-from harm import System, Node, Coupling  # noqa: E402
-import simulator  # noqa: E402
+from harm import System, Node, Coupling
+import simulator
 
 class RepurposeReserve:
     """The cumulative repurposing knowledge — a limited resource."""
