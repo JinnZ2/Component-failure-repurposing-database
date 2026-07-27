@@ -1,7 +1,7 @@
 # AI Navigation Index
 
 **For:** AI agents, LLMs, and automated systems discovering this repository.
-**Updated:** 2026-04-09
+**Updated:** 2026-07-24
 
 ---
 
@@ -182,3 +182,12 @@ See `.fieldlink.json` for machine-readable integration config.
 3. **Add a sensor**: Subclass `PhysicalSensor` from `src/sensors/physical_sensor.py`, register in `src/integrated_monitor.py`
 4. **Add a fallback channel**: Create TX/RX classes with MockGPIO guard, add to `matrices/redundancy_channels.csv`
 5. **Connect to another repo**: Add entry to `.fieldlink.json` under `sources`
+
+
+## Cyclic Repurpose Bridge
+
+- **Adapter**: `cyclic_repurpose_adapter.py` is the ONLY file that touches the Cyclic Programming interpreter.
+- **Purpose**: The Cyclic interpreter serves as a physics engine for repurposing actions, enforcing energy conservation and entropy increase. This prevents impossible “free energy” repurpose claims.
+- **Fallback**: If the Cyclic interpreter is not installed, a simple resource tracker that still conserves energy is used. All repurpose controllers import from the adapter, never directly from the interpreter.
+- **Installation**: The Cyclic interpreter lives in `vendor/cyclic/` (git submodule or copy). See `vendor/README.md` for details.
+- **Repos remain separate**: No code from the failure DB is merged into the Cyclic repo, and vice versa. The adapter is the only interface.
