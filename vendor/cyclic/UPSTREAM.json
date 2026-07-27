@@ -1,0 +1,53 @@
+{
+  "upstream": {
+    "name": "cyclic-programming",
+    "repo": "https://github.com/JinnZ2/cyclic-programming",
+    "commit": "7d9054a40b09080f965bf63eba30353a703f643e",
+    "commit_subject": "Add cyclic repurpose engine functionality",
+    "retrieved": "2026-07-27",
+    "license": "MIT",
+    "modified": false
+  },
+  "files": [
+    {
+      "path": "cyclic_interpreter.py",
+      "sha256": "c78c8742c57ad285ae169a7a1da0e0e9197eefe2300da2d7116fe3829fecad2e",
+      "role": "CyclicalInterpreter — field/energy physics engine (create_field, decay, regenerate, directed transfer, entanglement, symbiosis)"
+    },
+    {
+      "path": "harm.py",
+      "sha256": "802f8dadfd74b43e804647d4e604af82092099d0a5cd7b38dce653f5221bd2d3",
+      "role": "Node / Coupling / System — static draw-vs-regen imbalance reader"
+    },
+    {
+      "path": "simulator.py",
+      "sha256": "c3937cd30a3438b2a4ffc1ecee58eee45f5037ab459368e1d37625030c518350",
+      "role": "step() / run() — steps the harm reader forward in time"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "2e405a74ff9e0c912a2b1310b3d4efdea66e42d6a57fc35a576cc4983b5dbc0f",
+      "role": "MIT license of the upstream project"
+    }
+  ],
+  "omitted": [
+    {
+      "path": "Cyclic_interpreter.py",
+      "reason": "Earlier, smaller variant of cyclic_interpreter.py. Vendoring both would create a filename collision on case-insensitive filesystems (macOS, Windows)."
+    },
+    {
+      "path": "cyclic_repurpose_adapter.py",
+      "reason": "Consumer-side glue, not part of the engine. Its API assumptions (execute(\"create ...\"), field.energy as a float) do not match this interpreter revision."
+    },
+    {
+      "path": "cyclic_repurpose_controller.py",
+      "reason": "Consumer-side glue with the same API mismatch; this repository has its own repurpose_controller.py."
+    },
+    {
+      "path": "epic_demo.py, language_*.py, tests/, docs, pyproject.toml",
+      "reason": "Demos, language-ecosystem experiments, packaging and documentation not needed to run the engine. tests/ additionally requires pytest, which is not a dependency of this repository."
+    }
+  ],
+  "dependencies": "Python >= 3.9, standard library only",
+  "sync": "git clone --depth 1 https://github.com/JinnZ2/cyclic-programming && cp cyclic_interpreter.py harm.py simulator.py LICENSE <this directory>/ && update commit and sha256 values above"
+}

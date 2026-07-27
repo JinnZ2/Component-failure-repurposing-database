@@ -39,6 +39,9 @@ Component Failure Repurposing Database — a machine-readable knowledge base doc
 │           ├── rf_fallback/
 │           ├── thermal_fallback/
 │           └── arduino_ook_beacon.ino
+├── vendor/                  # Third-party code, copied verbatim — never edited here
+│   └── cyclic/              # Cyclic Programming engine, pinned via UPSTREAM.json
+├── repurpose_controller.py  # Repurposing actions on the vendored dynamical model
 ├── Core_engine.md           # Monitoring/analysis engine architecture
 ├── Future.md                # Expansion roadmap
 ├── Component.md             # YAML component specification guide
@@ -94,6 +97,21 @@ Each component file follows this hierarchy:
 ### File Naming
 
 - Use `lower_snake_case.md` for all files (e.g., `silicon_diodes.md`, `wire_wound.md`)
+
+### Vendored Code
+
+Everything under `vendor/` is an upstream copy and is never edited in place —
+patching it silently would be lost on the next pull. Behaviour changes belong in
+a wrapper outside `vendor/`. Each vendored directory carries an `UPSTREAM.json`
+recording the source repository, pinned commit, and per-file SHA-256; refresh it
+whenever the copy is updated.
+
+`vendor/cyclic/` holds the Cyclic Programming engine
+(https://github.com/JinnZ2/cyclic-programming) — `CyclicalInterpreter` for
+energy-conserving transfers between fields, plus `harm.py` and `simulator.py`
+for reading draw-versus-regen imbalance across coupled components. Consumers put
+the directory on `sys.path` and import the modules flat; see
+`repurpose_controller.py`.
 
 ### Units and Formatting
 
