@@ -45,7 +45,58 @@ AXES = {
 }
 
 UNTYPED = "?"          # human has not judged yet
-UNTYPABLE = "FAIL"     # human judged: no axis value fits  -> THIS IS THE DATA
+UNTYPABLE = "FAIL"     # legacy umbrella: no axis value fits. prefer a GAP_* below.
+
+# ── PLACEHOLDERS ─────────────────────────────────────────────────────
+# "no value fits" is four different findings wearing one label, and they
+# imply four different repairs. An annotator who can only say FAIL cannot
+# tell you which one they hit, so E1 cannot tell a missing VALUE from a
+# missing AXIS. Each placeholder carries free text in row["notes"][axis].
+GAP_VALUE = "GAP:VALUE"      # axis is right, its value list is short
+GAP_AXIS = "GAP:AXIS"        # no axis captures the property at all
+GAP_DEF = "GAP:DEF"          # axis is ambiguous; two readings disagree here
+GAP_UNKNOWN = "GAP:UNKNOWN"  # a real quantity, not yet determinable
+
+GAPS = {
+    GAP_VALUE:   "missing value on an existing axis",
+    GAP_AXIS:    "missing axis",
+    GAP_DEF:     "ambiguous axis definition",
+    GAP_UNKNOWN: "undetermined — needs measurement or domain knowledge",
+}
+
+# Anything here is NOT an axis value. E2 must never score these.
+SENTINELS = frozenset({UNTYPED, UNTYPABLE}) | frozenset(GAPS)
+
+
+def is_judged(axis, v):
+    """True only for a value that is legal ON THIS AXIS.
+
+    Checking `v not in SENTINELS` is not enough: a typo like FLOORD is not a
+    sentinel, so it would pass as a judged value and E2 would score it as a
+    real level. Warning about it is not enough either — a warning scrolls off
+    and the verdict below it still looks authoritative. Illegal values are
+    excluded from scoring, not just reported.
+    """
+    return v in AXES.get(axis, ())
+
+
+def validate_rows(rows):
+    """Hand-annotated JSON will contain typos. A typo is worse than a gap:
+    it becomes a spurious axis value and E2 scores it as real signal."""
+    bad = []
+    for i, r in enumerate(rows):
+        for a, v in r.get("axes", {}).items():
+            if a not in AXES:
+                bad.append((i, r.get("name", "?"), a, v, "unknown axis"))
+            elif v not in AXES[a] and v not in SENTINELS:
+                bad.append((i, r.get("name", "?"), a, v, "not a legal value"))
+    if bad:
+        print(f"\n! {len(bad)} illegal annotations — fix before believing any result")
+        for i, name, a, v, why in bad[:20]:
+            print(f"    row {i} {name:<22} {a}={v!r}  ({why})")
+        if len(bad) > 20:
+            print(f"    ... and {len(bad) - 20} more")
+    return bad
 
 
 # ─────────────────────────────────────────────────────────────────────
@@ -67,6 +118,7 @@ class BindingSite:
     is_loop_var: bool
     literal_kinds: list     # observed RHS literal types
     axes: dict = field(default_factory=dict)
+    notes: dict = field(default_factory=dict)   # axis -> annotator text
 
     @property
     def lifetime(self):
@@ -102,7 +154,7 @@ class BindingExtractor(ast.NodeVisitor):
                 scope_kind=self.scope_kind, first_write=lineno,
                 last_read=-1, n_writes=0, n_reads=0, augmented=False,
                 is_param=False, is_loop_var=False, literal_kinds=[],
-                axes={a: UNTYPED for a in AXES},
+                axes={a: UNTYPED for a in AXES}, notes={},
             )
         return self.sites[k]
 
@@ -258,25 +310,58 @@ def load(path):
 # ─────────────────────────────────────────────────────────────────────
 
 def experiment_coverage(rows):
+    validate_rows(rows)
     total = len(rows)
     per_axis = {}
     for a in AXES:
         vals = Counter(r["axes"][a] for r in rows)
         per_axis[a] = {
-            "typed": total - vals[UNTYPED] - vals[UNTYPABLE],
+            "typed": sum(n for v, n in vals.items() if is_judged(a, v)),
             "unjudged": vals[UNTYPED],
-            "FAIL": vals[UNTYPABLE],
+            "gap": sum(n for v, n in vals.items()
+                       if v in GAPS or v == UNTYPABLE),
+            "illegal": sum(n for v, n in vals.items()
+                           if not is_judged(a, v) and v not in SENTINELS),
         }
     print(f"\nE1 COVERAGE   n={total} bindings\n")
-    print(f"  {'axis':<14}{'typed':>8}{'unjudged':>10}{'FAIL':>7}")
+    print(f"  {'axis':<14}{'typed':>8}{'unjudged':>10}{'gap':>6}{'illegal':>9}")
     for a, d in per_axis.items():
-        print(f"  {a:<14}{d['typed']:>8}{d['unjudged']:>10}{d['FAIL']:>7}")
-    fails = [r for r in rows if UNTYPABLE in r["axes"].values()]
-    if fails:
-        print(f"\n  {len(fails)} bindings no axis value fits — MISSING AXIS CANDIDATES:")
-        for r in fails[:25]:
-            bad = [a for a, v in r["axes"].items() if v == UNTYPABLE]
-            print(f"    {r['name']:<24} {r['scope']:<22} axes={bad}")
+        print(f"  {a:<14}{d['typed']:>8}{d['unjudged']:>10}{d['gap']:>6}"
+              f"{d['illegal']:>9}")
+
+    # the payload: what KIND of gap, and what the annotator said about it
+    by_kind = defaultdict(list)
+    for r in rows:
+        for a, v in r["axes"].items():
+            if v in GAPS or v == UNTYPABLE:
+                by_kind[v].append((r, a))
+    if not by_kind:
+        print("\n  no gaps recorded.")
+        return per_axis
+
+    print()
+    for kind in (GAP_VALUE, GAP_AXIS, GAP_DEF, GAP_UNKNOWN, UNTYPABLE):
+        hits = by_kind.get(kind)
+        if not hits:
+            continue
+        label = GAPS.get(kind, "unclassified — re-annotate as a GAP:* kind")
+        print(f"  {kind}  ({len(hits)}) — {label}")
+        if kind == GAP_VALUE:
+            print("    -> each axis below is a candidate NEW VALUE:")
+        elif kind == GAP_AXIS:
+            print("    -> these bindings are candidate NEW AXES:")
+        per = defaultdict(list)
+        for r, a in hits:
+            per[a].append(r)
+        for a, rs in sorted(per.items(), key=lambda kv: -len(kv[1])):
+            print(f"    {a:<14} {len(rs):>4} bindings")
+            for r in rs[:5]:
+                note = r.get("notes", {}).get(a, "")
+                tail = f"  — {note}" if note else "  (no note)"
+                print(f"      {r['name']:<22} {r['scope']:<20}{tail}")
+            if len(rs) > 5:
+                print(f"      ... and {len(rs) - 5} more")
+        print()
     return per_axis
 
 
@@ -318,6 +403,7 @@ def _U(a, b):
 
 def experiment_orthogonality(rows, trials=2000, seed=0):
     rng = random.Random(seed)
+    validate_rows(rows)
 
     print(f"\nE2 ORTHOGONALITY   trials={trials}\n")
     print(f"  {'A':<14}{'B':<14}{'U(A|B)':>8}{'U(B|A)':>8}{'p':>8}  verdict")
@@ -325,8 +411,7 @@ def experiment_orthogonality(rows, trials=2000, seed=0):
     for x, y in combinations(AXES, 2):
         # align: only rows where BOTH axes are judged
         pairs = [(r["axes"][x], r["axes"][y]) for r in rows
-                 if r["axes"][x] not in (UNTYPED, UNTYPABLE)
-                 and r["axes"][y] not in (UNTYPED, UNTYPABLE)]
+                 if is_judged(x, r["axes"][x]) and is_judged(y, r["axes"][y])]
         if len(pairs) < 10:
             print(f"  {x:<14}{y:<14}{'—':>8}{'—':>8}{'—':>8}  "
                   f"skipped: only {len(pairs)} judged pairs (need 10)")
@@ -474,12 +559,31 @@ USAGE = """\
 usage:
   taxonomy_lab.py extract <out.json> <file.py> [file.py ...]
       walk source, recover binding topology, attach heuristic guesses.
-      then EDIT out.json by hand: set each axis, or "FAIL" if none fits.
+      then EDIT out.json by hand.
 
-  taxonomy_lab.py e1 <worksheet.json>          coverage / missing axes
+  taxonomy_lab.py e1 <worksheet.json>          coverage / gap classification
   taxonomy_lab.py e2 <worksheet.json>          axis orthogonality
   taxonomy_lab.py e3 <prog.py> <name,name,..>  residue permutation
+  taxonomy_lab.py axes                         print the axes and placeholders
   taxonomy_lab.py selftest                     run on this file
+
+annotating a worksheet:
+  set each axis to one of its values, or to a placeholder when it does not
+  fit. put your reasoning in notes[<axis>] — a placeholder without a note
+  is not evidence of anything.
+
+  "?"           not judged yet
+  GAP:VALUE     axis is right, its value list is too short
+  GAP:AXIS      no axis captures the property at all
+  GAP:DEF       axis is ambiguous; two readings disagree on this binding
+  GAP:UNKNOWN   a real quantity, not yet determinable
+
+  "FAIL" is the legacy umbrella. It still parses, but it cannot tell a
+  missing value from a missing axis, so E1 can only report it unclassified.
+
+  {"name": "entropy", "axes": {"transfer": "GAP:VALUE"},
+   "notes": {"transfer": "flux and production are separate terms; neither
+             DEBIT_CREDIT nor EQUILIBRATE covers dS = d_eS + d_iS"}}
 """
 
 
@@ -497,6 +601,16 @@ def main(argv):
         save(sites, out)
         print(f"{len(sites)} bindings -> {out}")
         print("EDIT IT. heuristic guesses are proposals, not data.")
+        return 0
+
+    if cmd == "axes":
+        for a, vs in AXES.items():
+            print(f"  {a:<14}{' | '.join(vs)}")
+        print()
+        print(f"  {UNTYPED:<14}not judged yet")
+        for k, why in GAPS.items():
+            print(f"  {k:<14}{why}")
+        print(f"  {UNTYPABLE:<14}legacy umbrella — prefer a GAP:* kind")
         return 0
 
     if cmd == "e1":

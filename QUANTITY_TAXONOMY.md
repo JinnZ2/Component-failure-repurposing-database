@@ -67,8 +67,38 @@ unjudged: "?"
 untypable: "FAIL"
 ```
 
-An annotator sets every axis to one of its values, or to `FAIL` when no value
-fits. `FAIL` is the payload of experiment E1, not an error state.
+### Placeholders
+
+An annotator sets every axis to one of its values, or to a placeholder. The
+placeholders are the payload of E1, not error states.
+
+"No value fits" is four findings wearing one label, and they imply four
+different repairs. An annotator who can only say `FAIL` cannot tell you which
+one they hit, so E1 cannot distinguish a missing *value* from a missing *axis*.
+
+| Placeholder | Means | Repair it implies |
+|-------------|-------|-------------------|
+| `?` | Not judged yet | Annotate it |
+| `GAP:VALUE` | Axis is right, its value list is too short | Add a value to that axis |
+| `GAP:AXIS` | No axis captures the property at all | Add an eighth axis |
+| `GAP:DEF` | Axis is ambiguous; two readings disagree here | Tighten the definition |
+| `GAP:UNKNOWN` | A real quantity, not yet determinable | Measure it |
+| `FAIL` | Legacy umbrella | Re-annotate as a `GAP:*` kind |
+
+Every placeholder carries free text in `notes[<axis>]`. **A placeholder without
+a note is not evidence of anything** — it records that someone was stuck, not
+what they were stuck on.
+
+```json
+{"name": "entropy",
+ "axes":  {"transfer": "GAP:VALUE"},
+ "notes": {"transfer": "dS = d_eS + d_iS; flux and production are separate
+           terms and neither DEBIT_CREDIT nor EQUILIBRATE covers both"}}
+```
+
+Placeholders are excluded from E2 scoring, as is any value not legal on its
+axis — a typo is not a sentinel, and left unchecked it would enter the
+contingency table as a real level.
 
 ### extensivity
 
@@ -146,7 +176,7 @@ asserts every binding has a transfer semantics. See [Predictions](#predictions).
 
 | Value | Definition | Example |
 |-------|------------|---------|
-| `ERASE` | Discarding it dissipates — Landauer, `kT ln 2` per bit | A flag overwritten each tick |
+| `ERASE` | Discarding it dissipates — Landauer, `kT ln 2` per bit as a quasi-static *bound*, not a price. See Open Questions | A flag overwritten each tick |
 | `COPY` | Duplication is the dominant cost | A propagated sensor reading |
 | `TRANSFORM` | Conversion between representations dominates | An ADC count converted to °C |
 
@@ -266,10 +296,36 @@ Stated in advance, so confirmation is not retrofitted:
 
 ## Open Questions
 
-- **Entropy does not type cleanly.** It is `MONOTONE` and `EXTENSIVE`, but its
-  transfer mode fits none of the four: heat flow moves entropy *and* produces
-  it, so it is neither `DEBIT_CREDIT` (not sum-preserving) nor `EQUILIBRATE`
-  (that is temperature, not entropy). This is a live E1 `FAIL` candidate.
+- **`transfer` assumes one mode per quantity. Entropy falsifies that.**
+  📚 Literature Supported — Evidence Tier 2. Classical non-equilibrium
+  thermodynamics splits the entropy balance into two simultaneous terms
+  (de Groot & Mazur): `dS = d_eS + d_iS`, where `d_eS` is entropy *exchanged*
+  across the boundary — signed, and sum-preserving, so `DEBIT_CREDIT` — and
+  `d_iS ≥ 0` is entropy *produced* internally, which is a source term with no
+  counterparty at all. Entropy is not missing a value. It needs `DEBIT_CREDIT`
+  **and** a production term at the same time.
+
+  This generalises past entropy: any quantity whose balance equation carries a
+  source or sink has the same shape — mass under chemical reaction, charge
+  under pair production, and every `PRODUCIBLE` quantity in this repository.
+  So the repair is structural, not a fifth value: either `transfer` becomes a
+  set rather than a scalar, or it splits into an `exchange` axis and a
+  `production` axis. Annotate as `GAP:VALUE` on `transfer` until this is
+  settled, and note which term is missing.
+
+- **`cost` conflates a class with a magnitude.** 📚 Literature Supported —
+  Evidence Tier 2. `ERASE` is written as though Landauer's `kT ln 2` were a
+  fixed price. It is a bound attained only quasi-statically. In finite time
+  the achievable cost rises with the inverse of the time budget: for slowly
+  driven systems weakly coupled to a bath, `Q ≥ kT(ln 2 + π²/4Γτ)`; beyond
+  weak coupling Rolandi & Perarnau-Llobet give
+  `Q ≥ kT ln 2 + a·τ_Pl/τ + O(1/Γ²τ²)` with `a ≈ 2.579` and `τ_Pl = ℏ/kT`.
+  A categorical axis cannot express "costs more if you do it faster". Either
+  `cost` names only the dominant operation and the magnitude belongs to a
+  separate quantity, or the axis is under-specified. For a repurposing
+  database this is not academic: a degraded part re-tasked as a sensor is
+  usually being read *faster* than its replacement cycle, which is exactly
+  the regime where the finite-time penalty bites.
 - **`FLOORED` describes intent, not behavior.** `EnergyState.total_energy` is
   floored in principle but goes negative in practice when a decay rate exceeds
   1.0. Does the axis describe the quantity or the implementation? They diverge,
@@ -280,6 +336,28 @@ Stated in advance, so confirmation is not retrofitted:
   structure.
 - **One value per axis.** Nothing yet handles a binding whose type changes
   across its lifetime — a slot that holds a raw ADC count, then a temperature.
+
+---
+
+## References
+
+Evidence Tier 2 (Literature) for the two Open Questions above.
+
+| Source | Bears on |
+|--------|----------|
+| S. R. de Groot & P. Mazur, *Non-Equilibrium Thermodynamics*, North-Holland 1962 (Dover reprint 1984) | The `dS = d_eS + d_iS` split: entropy flux `J_s` versus entropy production `σ ≥ 0` |
+| A. Rolandi & M. Perarnau-Llobet, "Finite-time Landauer principle beyond weak coupling", *Quantum* **7**, 1161 (2023). [arXiv:2211.02065](https://arxiv.org/abs/2211.02065) | Finite-time correction to the erasure bound at strong coupling |
+| R. Landauer, "Irreversibility and heat generation in the computing process", *IBM J. Res. Dev.* **5**(3), 183–191 (1961) | Origin of the `kT ln 2` bound |
+
+⚠️ Provenance caveat: this environment's egress allowlist blocks direct
+retrieval from arxiv.org, quantum-journal.org and pmc.ncbi.nlm.nih.gov, so the
+above was assembled from search results rather than from the papers
+themselves. Title, venue, volume and year for the Rolandi & Perarnau-Llobet
+paper were cross-confirmed across two independent searches; the Landauer and
+de Groot & Mazur entries are standard references given from established
+knowledge and were **not** machine-verified here. Confirm before citing
+onward, and do not promote any of this to a higher evidence tier on the
+strength of this file alone.
 
 ---
 
@@ -305,6 +383,13 @@ python3 experiments/sims/taxonomy_lab.py e2 worksheet.json
 
 E2 needs ≥ 10 jointly-judged bindings per axis pair and at least two distinct
 values in each column before it will score anything.
+
+E2's machinery is known good, which the zero-result runs above cannot show. On
+a 40-row synthetic worksheet carrying a planted dependency — `dimension` set as
+a strict function of `extensivity` — it recovers `U(A|B) = U(B|A) = 1.000` at
+p = 0.0005 and returns `REDUNDANT — collapse these`, while the other 20 pairs
+come back independent. So the empty result on real bindings is data starvation,
+not a broken instrument.
 
 E3 is runnable now, and is the only experiment that needs no annotation beyond
 naming the residue bindings. It has two known blind spots, in opposite
