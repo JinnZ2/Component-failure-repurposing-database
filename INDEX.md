@@ -17,6 +17,7 @@ This index provides **direct raw links** to every major file in the repository, 
 - [diode.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/diode.md)
 - [resistor.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/resistor.md)
 - [ABNF.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/ABNF.md)
+- [QUANTITY_TAXONOMY.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/QUANTITY_TAXONOMY.md)
 - [AI_INDEX.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/AI_INDEX.md)
 - [ROADMAP.md](https://raw.githubusercontent.com/JinnZ2/Component-failure-repurposing-database/main/ROADMAP.md)
 

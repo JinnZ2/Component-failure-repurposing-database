@@ -133,6 +133,7 @@ python experiments/sims/geometric_failure_diagnosis.py
     ├── Component.md           # YAML specification guide
     ├── Future.md              # Expansion roadmap with YAML templates
     ├── ABNF.md                # Compact command grammar spec
+    ├── QUANTITY_TAXONOMY.md   # 7-axis binding taxonomy + falsification conditions
     └── PROJECTS.md            # Related ecosystem repositories
 ```
 
