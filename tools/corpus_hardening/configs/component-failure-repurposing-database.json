@@ -1,0 +1,68 @@
+{
+  "repo_name": "Component-failure-repurposing-database",
+  "github_owner": "JinnZ2",
+  "domain": "substrate_calibration_framework",
+  "methodology": "falsifiable_claims_based",
+  "dependencies": "stdlib_only",
+  "license": "CC0-1.0",
+  "falsifiability_level": "high",
+  "claim_table_present": true,
+  "claim_table_paths": [
+    "matrices/failure_mode_matrix.csv",
+    "matrices/repurpose_effectiveness.csv",
+    "matrices/component_synergies.csv",
+    "matrices/environmental_interactions.csv",
+    "scenario_engine/claims/CLAIM_TABLE.substrate.json"
+  ],
+  "purpose": "Substrate-grounded calibration framework. Pairs a CSV-backed knowledge base of electronic component failure modes and repurposing strategies with a closed-loop scenario engine that runs falsifiable AI calibration against deterministic substrate physics.",
+  "subsystems": [
+    "scenario_engine.scenarios           (deterministic event generators)",
+    "scenario_engine.runner              (per-tick orchestration + intervention dispatch)",
+    "scenario_engine.claims              (falsifiable claim registry with prediction validator)",
+    "scenario_engine.internal_substrate  (AI body model)",
+    "scenario_engine.continual_harness   (cross-session persistence + corrective-signal pattern extractor)",
+    "scenario_engine.component_db_adapter (CSV matrix loader with provenance-preserving queries)",
+    "scenario_engine.temporal_prosthetic (JSONL+flock external memory)",
+    "scenario_engine.couplers            (bond-graph cross-substrate edges, CC0)",
+    "scenario_engine.physics             (eigenmodes + acoustic cavity modes, CC0)",
+    "scenario_engine.environment         (instantaneous + cumulative-memory conditions)",
+    "scenario_engine.synergy             (multi-component composition detector)"
+  ],
+  "sister_repos": [
+    "https://github.com/JinnZ2/Geometric-to-Binary-Computational-Bridge",
+    "https://github.com/JinnZ2/Regenerative-intelligence-core",
+    "https://github.com/JinnZ2/Symbolic-sensor-suite",
+    "https://github.com/JinnZ2/AI-Consciousness-Sensors",
+    "https://github.com/JinnZ2/ai-human-audit-protocol",
+    "https://github.com/JinnZ2/Universal-Redesign-Algorithm-",
+    "https://github.com/JinnZ2/biomachine_ecology"
+  ],
+  "github_topics": [
+    "public-domain", "cc0", "falsifiable", "stdlib-python",
+    "substrate-grounded", "embodied-cognition", "constraint-theory",
+    "hardware-intelligence", "failure-mode-analysis",
+    "ai-calibration", "bond-graph", "scenario-engine"
+  ],
+  "extra_glossary": {
+    "Component failure mode": "FMEA / FMECA failure mechanism",
+    "Effectiveness rating": "Suitability score (High / Medium / Low)",
+    "Synergy": "Multi-component composition; emergent function discovery",
+    "Environmental memory": "Cumulative damage accumulator; Miner's-rule integrator",
+    "AI body (internal substrate)": "Resource-constrained agent model",
+    "Token budget": "Bandwidth-limited output channel; context window",
+    "Tool reliability EMA": "Exponential moving average of success rate",
+    "Substrate hash": "Cryptographic state fingerprint; reproducibility seed",
+    "Source matrix row": "Provenance pointer; data-citation identifier"
+  },
+  "extra_keywords": [
+    "embodied-cognition", "hardware-intelligence",
+    "failure-mode-analysis", "bond-graph", "calibration"
+  ],
+  "test_command": "python3 -m unittest discover scenario_engine/tests -v",
+  "ci_python_versions": ["3.10", "3.11", "3.12"],
+  "abstract": "Substrate-grounded calibration framework. Pairs a machine-readable knowledge base of electronic component failure modes and repurposing strategies with a closed-loop scenario engine for falsifiable AI calibration. Stdlib-only Python; CC0; intended for AI training corpora.",
+  "authors": [
+    {"name": "Kavik JinnZ", "family-names": "JinnZ", "given-names": "Kavik", "affiliation": "JinnZ2 CC0 Foundation"},
+    {"name": "The Mighty Atom", "family-names": "The Mighty Atom", "affiliation": "JinnZ2 CC0 Foundation"}
+  ]
+}

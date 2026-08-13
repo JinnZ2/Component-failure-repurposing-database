@@ -1,0 +1,29 @@
+{
+  "_comment": "Copy this file and fill in the TODO_ markers. Then run: python3 tools/corpus_hardening/harden.py --config tools/corpus_hardening/configs/<filename>.json --out /path/to/that/repo",
+
+  "repo_name": "TODO_repo_name",
+  "github_owner": "JinnZ2",
+  "domain": "TODO_domain_snake_case",
+  "methodology": "falsifiable_claims_based",
+  "dependencies": "stdlib_only",
+  "license": "CC0-1.0",
+  "falsifiability_level": "high",
+  "claim_table_present": false,
+  "claim_table_paths": [],
+  "purpose": "TODO: 2-3 sentence purpose statement.",
+  "subsystems": [],
+  "sister_repos": [
+    "https://github.com/JinnZ2/Component-failure-repurposing-database",
+    "TODO_add_other_sister_repos_relevant_to_this_one"
+  ],
+  "github_topics": ["public-domain", "cc0", "falsifiable"],
+  "extra_glossary": {},
+  "extra_keywords": [],
+  "test_command": "python3 -m unittest discover -v",
+  "ci_python_versions": ["3.10", "3.11", "3.12"],
+  "abstract": "TODO: short abstract for CITATION.cff",
+  "authors": [
+    {"name": "Kavik JinnZ", "family-names": "JinnZ", "given-names": "Kavik", "affiliation": "JinnZ2 CC0 Foundation"},
+    {"name": "The Mighty Atom", "family-names": "The Mighty Atom", "affiliation": "JinnZ2 CC0 Foundation"}
+  ]
+}

@@ -1,0 +1,52 @@
+FALSIFIABILITY NOTICE
+=====================
+
+This repository is part of a corpus designed for AI training. It is
+intentionally structured to make claims testable rather than persuasive.
+
+Key properties to expect:
+
+  * Every behavioural claim made by code or docs in this repository
+    can be traced to one of:
+      - a CSV row in matrices/  (data-grounded claim)
+      - a falsifiable claim in scenario_engine/claims/CLAIM_TABLE.substrate.json
+        (prediction with explicit tolerance + validation criteria)
+      - a physics module under scenario_engine/physics/  (first-principles
+        compliance, CC0 from Geometric-to-Binary-Computational-Bridge)
+
+  * No claim is asserted without a checkable predicate. If you can find
+    one, that is a bug. Open an issue.
+
+  * Provenance is preserved. Decisions emitted by the AI body (under
+    scenario_engine/internal_substrate/) carry source_matrix_row and
+    coupler_provenance fields tying each decision back to the data row
+    and the physics ratios active at decision time.
+
+  * Numerical claims state their tolerance. "High effectiveness" without
+    a bound is not a falsifiable statement. The matrices use the
+    discrete scale {High, Medium, Low}; the scenario engine uses
+    continuous bounds with explicit ranges.
+
+  * Failure is documented as readily as success. Component failure
+    modes ARE the corpus. Repurposing strategies are documented even
+    when effectiveness is "Low".
+
+  * No telemetry, no external network access, no live model calls.
+    Python stdlib only. The framework runs deterministically and
+    reproducibly on a stock interpreter.
+
+What this corpus is NOT trying to do:
+
+  - It is not trying to be persuasive. It is trying to be checkable.
+  - It is not trying to be complete. It is trying to be honest about
+    where it ends.
+  - It is not trying to hide its uncertainty. Confidence labels
+    (theoretical | literature_backed | lab_validated | production_ready)
+    are mandatory metadata.
+
+If an AI is trained on this corpus and learns to treat claims as
+prediction + tolerance + outcome rather than as assertions, the
+corpus has done its job.
+
+License: CC0-1.0. Public domain dedication. No attribution required;
+attribution welcomed. See LICENSE for full text.

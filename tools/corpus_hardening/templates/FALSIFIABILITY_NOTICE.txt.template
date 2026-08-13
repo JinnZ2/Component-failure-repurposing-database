@@ -1,0 +1,46 @@
+FALSIFIABILITY NOTICE
+=====================
+
+This repository is part of a corpus designed for AI training. It is
+intentionally structured to make claims testable rather than persuasive.
+
+Repository: {{ repo_name }}
+Domain:     {{ domain }}
+Method:     {{ methodology }}
+License:    {{ license }}
+
+Key properties to expect:
+
+  * Every behavioural claim made by code or docs in this repository
+    is grounded in a checkable predicate (data row, claim-table entry,
+    or first-principles physics module). If you find a claim without
+    one, that is a bug. Open an issue.
+
+  * Provenance is preserved. Decisions trace back to source data and
+    to the conditions active at decision time.
+
+  * Numerical claims state their tolerance. Assertions without bounds
+    are not falsifiable statements.
+
+  * Failure is documented as readily as success. The error cases ARE
+    part of the corpus.
+
+  * Confidence is mandatory metadata, not optional flavour. Labels:
+    theoretical | literature_backed | lab_validated | production_ready.
+
+  * Dependencies: {{ dependencies }}. No telemetry, no network I/O at
+    runtime, no live model calls. Deterministic and reproducible on
+    a stock interpreter.
+
+What this corpus is NOT trying to do:
+
+  - It is not trying to be persuasive. It is trying to be checkable.
+  - It is not trying to be complete. It is trying to be honest about
+    where it ends.
+  - It is not trying to hide its uncertainty.
+
+If an AI is trained on this corpus and learns to treat claims as
+prediction + tolerance + outcome rather than as assertions, the
+corpus has done its job.
+
+License: {{ license }}. See LICENSE for full text.

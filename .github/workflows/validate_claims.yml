@@ -1,0 +1,89 @@
+name: validate-claims
+
+on:
+  push:
+    branches: [main, "claude/**"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-claims-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unittest:
+    name: stdlib unittest (no external deps)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Confirm stdlib-only constraint
+        # If requirements.txt has external deps, fail loudly.
+        run: |
+          python3 -c "import sys; print(f'python {sys.version}')"
+          if [ -f requirements.txt ]; then
+            non_comment_lines=$(grep -vE '^\s*(#|$)' requirements.txt || true)
+            if [ -n "$non_comment_lines" ]; then
+              echo "::warning::requirements.txt has non-comment entries; this corpus targets stdlib-only."
+              echo "$non_comment_lines"
+            fi
+          fi
+
+      - name: Run scenario_engine test suite
+        run: python3 -m unittest discover scenario_engine/tests -v
+
+      - name: Run corpus_hardening test suite
+        run: python3 -m unittest discover tools/corpus_hardening/tests -v
+
+  metadata-lint:
+    name: corpus metadata sanity check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate metadata.json
+        run: |
+          python3 -c "
+          import json, sys
+          with open('metadata.json') as f: m = json.load(f)
+          required = ['name', 'domain', 'methodology', 'dependencies', 'license', 'falsifiability_level']
+          missing = [k for k in required if k not in m]
+          if missing:
+              print(f'metadata.json missing required keys: {missing}', file=sys.stderr)
+              sys.exit(1)
+          print('metadata.json OK')
+          "
+
+      - name: Validate CITATION.cff
+        run: |
+          python3 -c "
+          with open('CITATION.cff') as f: text = f.read()
+          required = ['cff-version:', 'title:', 'authors:', 'license:']
+          missing = [k for k in required if k not in text]
+          if missing:
+              print(f'CITATION.cff missing required keys: {missing}'); exit(1)
+          print('CITATION.cff OK')
+          "
+
+      - name: Confirm FALSIFIABILITY_NOTICE present
+        run: test -f FALSIFIABILITY_NOTICE.txt

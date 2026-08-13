@@ -1,0 +1,59 @@
+{
+  "name": "Component-failure-repurposing-database",
+  "repository": "https://github.com/JinnZ2/Component-failure-repurposing-database",
+  "domain": "substrate_calibration_framework",
+  "methodology": "falsifiable_claims_based",
+  "dependencies": "stdlib_only",
+  "license": "CC0",
+  "corpus_target": true,
+  "falsifiability_level": "high",
+  "claim_table_present": true,
+  "claim_table_paths": [
+    "matrices/failure_mode_matrix.csv",
+    "matrices/repurpose_effectiveness.csv",
+    "matrices/component_synergies.csv",
+    "matrices/environmental_interactions.csv",
+    "scenario_engine/claims/CLAIM_TABLE.substrate.json"
+  ],
+  "subsystems": [
+    "scenario_engine.scenarios          (10 canonical substrate-physics scenarios)",
+    "scenario_engine.runner             (per-tick orchestration + intervention dispatch)",
+    "scenario_engine.claims             (falsifiable claim registry with prediction validator)",
+    "scenario_engine.internal_substrate (AI body: compute / memory / thermal / tokens / channels / tools / options / introspection)",
+    "scenario_engine.continual_harness  (cross-session persistence + corrective-signal pattern extractor)",
+    "scenario_engine.component_db_adapter (CSV matrix loader + DB-grounded query layer with source_matrix_row provenance)",
+    "scenario_engine.temporal_prosthetic (JSONL+flock external memory for stateless reasoners)",
+    "scenario_engine.couplers           (typed cross-substrate edges, CC0 from Geometric-to-Binary-Computational-Bridge)",
+    "scenario_engine.physics            (eigenmodes + pipe/box/cylinder acoustic modes, CC0 upstream)",
+    "scenario_engine.environment        (instantaneous + cumulative-memory environmental conditions)",
+    "scenario_engine.synergy            (multi-component composition detector)"
+  ],
+  "purpose": "Substrate-grounded calibration playground. Pairs a CSV-backed knowledge base of electronic component failure modes and repurposing strategies (the original corpus) with a closed-loop scenario engine that runs falsifiable AI calibration against deterministic substrate physics. Every decision the AI makes is traceable to a CSV row (source_matrix_row) and to the physics ratios active at decision time (coupler_provenance). The system models the AI as embodied — compute, memory, thermal coupling, token bandwidth, communication channels, and tool reliability are first-class — so the AI learns it is not free.",
+  "sister_repos": [
+    "https://github.com/JinnZ2/Geometric-to-Binary-Computational-Bridge",
+    "https://github.com/JinnZ2/Regenerative-intelligence-core",
+    "https://github.com/JinnZ2/Symbolic-sensor-suite",
+    "https://github.com/JinnZ2/AI-Consciousness-Sensors",
+    "https://github.com/JinnZ2/ai-human-audit-protocol",
+    "https://github.com/JinnZ2/Universal-Redesign-Algorithm-",
+    "https://github.com/JinnZ2/biomachine_ecology"
+  ],
+  "github_topics": [
+    "public-domain",
+    "cc0",
+    "falsifiable",
+    "stdlib-python",
+    "substrate-grounded",
+    "embodied-cognition",
+    "constraint-theory",
+    "hardware-intelligence",
+    "failure-mode-analysis",
+    "ai-calibration",
+    "bond-graph",
+    "scenario-engine"
+  ],
+  "authors": [
+    {"name": "Kavik JinnZ", "family-names": "JinnZ", "given-names": "Kavik"},
+    {"name": "The Mighty Atom", "family-names": "The Mighty Atom"}
+  ]
+}
