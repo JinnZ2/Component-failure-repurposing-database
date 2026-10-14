@@ -98,4 +98,4 @@ the model is wrong. That's the whole mechanism.
 
 ## License
 
-MIT (inherits from parent repository).
+CC0-1.0 (public-domain dedication; see the parent [`LICENSE`](../LICENSE)).

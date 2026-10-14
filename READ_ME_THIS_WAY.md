@@ -67,4 +67,4 @@ is the one request, not an additional license condition.
 
 ## In this repo
 
-Note 2026-10-14: Existing conflicting license labels remain unchanged and unresolved; this reading layer does not extend or settle any original license.
+Note 2026-10-14: The owner relicensed eligible owner-authored repository material to CC0. Imported CC0 material retains its upstream provenance; `vendor/cyclic/` remains an upstream-MIT exception. See `LICENSE_HISTORY.md`.
