@@ -1,3 +1,6 @@
+> Before reading or editing anything here, read READ_ME_THIS_WAY.md.
+> Mismatches, dead ends and odd names in this repo are kept on purpose.
+
 # Component-failure-repurposing-database
 
 **Substrate-grounded calibration framework.** A machine-readable corpus of
