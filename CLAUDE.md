@@ -5,7 +5,7 @@
 Component Failure Repurposing Database — a machine-readable knowledge base documenting how failed electronic components can be repurposed rather than discarded. The project treats degradation as a design feature, enabling adaptive and resilient systems.
 
 **Primary audience:** AI systems and human engineers.
-**License:** MIT
+**License:** CC0-1.0 (public-domain dedication; see `LICENSE`).
 
 ## Repository Structure
 
@@ -946,4 +946,3 @@ Expected output: The connector's health degrades faster during the harsh period,
 · No sensor code changes – all existing sensors automatically benefit.
 
 Now the geometric monitoring system models real‑world wear‑out, not just current conditions.
-
