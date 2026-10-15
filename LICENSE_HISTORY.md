@@ -1,5 +1,48 @@
 # License history and scope
 
+## Note 2026-10-15 — WO-11 current-scope CC0 disposition
+
+The owner directed that eligible owner-authored material in
+**Component-failure-repurposing-database** is relicensed to CC0. This
+2026-10-15 disposition confirms the current scope; the exact standard CC0 1.0
+Universal legal text already remains in the root [`LICENSE`](./LICENSE) and is
+not duplicated here. The dedication covers only copyright and related rights
+the owner controls; it does not purport to grant rights in third-party or
+otherwise unresolved material.
+
+The previous root license was MIT. Its complete legal text is preserved
+verbatim in the 2026-10-14 record below, rather than silently erased or
+duplicated. Copies obtained earlier under MIT remain available under MIT for
+those holders. No CC BY-SA statement was located in the tracked tree or
+reachable history reviewed on 2026-10-15; consistent with the owner direction,
+any copies obtained earlier under CC BY-SA remain under CC BY-SA for those
+holders.
+
+### Corrected mixed current-license label (preserved verbatim)
+
+The following stale current label in `CLAUDE.md` was corrected to point at the
+existing CC0 root license. Its exact superseded text is retained here:
+
+```text
+└── LICENSE                  # MIT
+```
+
+### Third-party and provenance re-check
+
+The 2026-10-15 tracked-file, header, nested-license, vendor, provenance, and
+reachable-commit review found no new third-party licensing exception. The
+exact paths, licenses, sources, and preservation actions remain recorded in
+the 2026-10-14 table below: `vendor/cyclic/cyclic_interpreter.py` and
+`vendor/cyclic/LICENSE` are the pinned, unmodified upstream MIT package from
+`JinnZ2/cyclic-programming` commit
+`7d9054a40b09080f965bf63eba30353a703f643e`; `vendor/cyclic/UPSTREAM.json` and
+`vendor/cyclic/README.md` preserve its provenance; and the listed
+`scenario_engine/couplers/` and `scenario_engine/physics/` material retains
+its separately stated CC0 upstream provenance. These files and notices remain
+outside this owner-work relicensing action. Commit identities are provenance
+evidence only, so undisclosed copying remains unresolved rather than silently
+relicensed.
+
 ## Note 2026-10-14 — owner CC0 decision and scope
 
 The owner directed that **Component-failure-repurposing-database** be

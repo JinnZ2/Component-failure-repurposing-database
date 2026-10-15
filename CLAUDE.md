@@ -51,7 +51,7 @@ Component Failure Repurposing Database — a machine-readable knowledge base doc
 ├── resistor.md              # Resistor reference
 ├── CONTRIBUTING.md          # Contribution guidelines
 ├── .fieldlink.json          # Integration config for external resources
-└── LICENSE                  # MIT
+└── LICENSE                  # CC0-1.0
 ```
 
 ## Tech Stack
@@ -946,3 +946,18 @@ Expected output: The connector's health degrades faster during the harsh period,
 · No sensor code changes – all existing sensors automatically benefit.
 
 Now the geometric monitoring system models real‑world wear‑out, not just current conditions.
+
+<!-- clone-refspec-note v1.1 -->
+## Cloning and pushing
+Shallow clones are single-branch by default.
+Before pushing any branch other than the default
+branch, run:
+
+    git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+    git fetch --depth 1
+
+Or clone with: git clone --depth 1 --no-single-branch <url>
+Without this, the first push of a new branch
+fails the tracking-ref check even when the
+commit landed.
+<!-- /clone-refspec-note v1.1 -->
