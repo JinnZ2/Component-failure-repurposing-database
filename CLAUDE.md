@@ -51,7 +51,7 @@ Component Failure Repurposing Database — a machine-readable knowledge base doc
 ├── resistor.md              # Resistor reference
 ├── CONTRIBUTING.md          # Contribution guidelines
 ├── .fieldlink.json          # Integration config for external resources
-└── LICENSE                  # MIT
+└── LICENSE                  # CC0-1.0
 ```
 
 ## Tech Stack
