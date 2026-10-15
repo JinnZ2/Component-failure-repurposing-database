@@ -944,7 +944,9 @@ Expected output: The connector's health degrades faster during the harsh period,
 · Non‑reversible degradation – memory persists after environment recovers.
 · Realistic aging model – acceleration factor combines instantaneous stress and historical damage.
 · No sensor code changes – all existing sensors automatically benefit.
+
 Now the geometric monitoring system models real‑world wear‑out, not just current conditions.
+
 <!-- clone-refspec-note v1.1 -->
 ## Cloning and pushing
 Shallow clones are single-branch by default.
