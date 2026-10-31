@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "description": "Standing noise-precursor claims (PROPOSED, co-authored). Outcomes CONFIRMED / REFUTED / INCONCLUSIVE via scenario_engine/validators/noise_precursor.py. Separate from CLAIM_TABLE.substrate.json (per-tick runtime log).",
+  "claims": [
+    {
+      "claim_id": "noise_precursor_0001",
+      "claim_type": "noise_precursor",
+      "statement": "Residual noise rises by at least 100% at least 1024 ticks before mean drift exceeds tolerance (+/-0.5% of nominal).",
+      "parameters": {
+        "rise_pct": 100.0,
+        "lead_ticks": 1024,
+        "tolerance": null,
+        "tolerance_pct": 0.5,
+        "persist_windows": 3
+      },
+      "outcome_vocabulary": [
+        "CONFIRMED",
+        "REFUTED",
+        "INCONCLUSIVE"
+      ],
+      "source_matrix_row": {
+        "matrix": "failure_mode_matrix",
+        "row_index": 17,
+        "component": "Diode (LED)",
+        "failure_mode": "Reduced Light Output",
+        "pre_failure_noise_signature": "series-resistance 1/f noise rose up to 800x while series resistance rose 13-90% under accelerated aging; high or fast-rising noise in first test hours flagged unreliable parts [GAN_LED_2005; LED_EARLY_2011]",
+        "noise_signature_status": "OBSERVED"
+      },
+      "provenance": {
+        "co_authored": "Kavik + Claude, 2026-10-31",
+        "published_basis": [
+          "GAN_LED_2005 (matrix row status OBSERVED; citation VERIFY)",
+          "VANDAMME1994"
+        ],
+        "published_basis_tag": "DOCUMENTED: low-frequency noise changes ahead of DC parameters in LEDs",
+        "method": "noise titration, src/noise_titration.py (PROPOSED; after GIULIANI_VICI2024)",
+        "parameters_origin": "ILLUSTRATIVE choice; X, N, tolerance not taken from any source",
+        "tested_against": "synthetic data only (src/noise_titration.py synthetic); no bench or field run",
+        "source_keys": "src/noise_titration.py NOISE_SOURCES"
+      },
+      "falsifiable": true,
+      "status": "pending",
+      "validator": {}
+    }
+  ]
+}
