@@ -1,238 +1,238 @@
-Component,Failure Mode,Repurpose Option,Effectiveness,Notes
-Diode (Silicon),Short Circuit,Low-value Resistor,Medium,0.05–2Ω range usable
-Diode (Silicon),Short Circuit,Current Path/Jumper,High,1–3A capacity; 50–100mV drop
-Diode (Silicon),Short Circuit,Temperature Sensor,Medium,2–3mV/°C sensitivity
-Diode (Silicon),Open Circuit,Mechanical Spacer,High,Preserves original board layout
-Diode (Silicon),Open Circuit,Antenna Element,Medium,Quarter-wave monopole from leads
-Diode (Silicon),Parametric Degradation,Environmental Sensor,High,Multi-parameter: temp/humidity/radiation
-Diode (Silicon),Parametric Degradation,Random Number Generator,High,1–100 kbits/sec entropy source
-Diode (Zener),Voltage Shift,Non-Critical Voltage Reference,Medium,±100–500mV accuracy; threshold detection
-Diode (Zener),Voltage Shift,Temperature Sensor,High,5–15mV/°C sensitivity; ±1–2°C accuracy
-Diode (Zener),Increased Dynamic Resistance,Noise Generator,Medium,Controlled noise DC to several MHz
-Diode (Zener),Increased Dynamic Resistance,Current Limiting Element,High,Soft current limiter; LED/sensor protection
-Diode (Zener),Short Circuit,Low-Value Precision Resistor,Medium,0.1–3Ω; current sensing
-Diode (Zener),Open Circuit,Precision Mechanical Spacer,High,Voltage-rated spacing; HV isolation
-Diode (Schottky),Short Circuit,Low-Value Shunt Resistor,Medium,Current sense element
-Diode (Schottky),Open Circuit,PCB Spacer,High,Maintains board geometry
-Diode (Schottky),Leakage Increase,Humidity/Temperature Proxy,Medium,Leakage rises with heat and moisture
-Diode (LED),Reduced Light Output,Low-Level Indicator,High,Standby indicators; power savings
-Diode (LED),Reduced Light Output,Temperature Sensor,High,3–8mV/°C; ±1–2°C accuracy
-Diode (LED),Reduced Light Output,Photodiode (Reverse Bias),Medium,Light sensor with spectral selectivity
-Diode (LED),Complete Light Failure,Standard Diode Function,Medium,Rectification; protection; 20mA–1A
-Diode (LED),Complete Light Failure,Photodiode,High,Pure photodetection without self-illumination
-Diode (LED),Intermittent Operation,Thermal Stress Indicator,High,Temperature-dependent operation
-Diode (Photodiode),Dark Current Increase,Noise Source / RNG,Medium,Entropy from dark current fluctuations
-Diode (Photodiode),Dark Current Increase,Radiation Detector,Medium,Crude dosimeter
-Diode (Photodiode),Sensitivity Loss,Binary Light/Dark Detector,Medium,Simple threshold detection
-Diode (Photodiode),Open Circuit,Antenna Stub,Low,Lead geometry determines band
-Resistor (Carbon Film),Open Circuit,PCB Spacer,High,Preserves board spacing and stability
-Resistor (Carbon Film),Open Circuit,RF Parasitic Capacitor,Low,0.2–2pF between leads
-Resistor (Carbon Film),Value Drift,Humidity/Temperature Proxy,Medium,ppm/°C increase; drift maps to environment
-Resistor (Carbon Film),Short/Low-Ohm Scar,Jumper Wire,Medium,Lead gauge limits current to 1–3A
-Resistor (Metal Film),Open Circuit,Mechanical Spacer,High,Very low parasitic C for RF decoupling
-Resistor (Metal Film),Value Drift,Temperature Probe,Medium,More stable than carbon film; calibratable
-Resistor (Metal Film),Short Circuit,Low-Ohm Current Sensor,Medium,mV per amp measurement
-Resistor (Wire-Wound),Open Winding,Inductor Form / EMI Choke,Medium,Partial turns usable for LC tank
-Resistor (Wire-Wound),Open Winding,Thermal Mass Spacer,High,Good heat spreading capability
-Resistor (Wire-Wound),Hot-Spot Damage,Low-Value Heater,Medium,Partial turn short creates heating element
-Resistor (Wire-Wound),Hot-Spot Damage,Current Shunt,Medium,Low-value resistance path
-Resistor (Potentiometer),Dead Spots/Wiper Noise,Multi-Position Switch,Medium,Use only good segments of track
-Resistor (Potentiometer),Open Track,Fixed Voltage Divider,Medium,Intact end segment still functions
-Resistor (Thermistor),Value Drift,Relative Trend Sensor,Medium,Tracks temperature trends despite drift
-Resistor (Thermistor),Open Circuit,Spacer with Minimal RF Capacitance,High,Minimal parasitic effects
-Capacitor (Ceramic),Open Circuit,PCB Spacer / Parasitic Cap,Low,0.1–2pF remains between leads
-Capacitor (Ceramic),Value Drift,Humidity Sensor,Medium,Capacitance vs RH drift exploitable
-Capacitor (Ceramic),Short Circuit,Fused Link,Low,Sacrificial protection element only
-Capacitor (Electrolytic),Dry-Out / Capacitance Loss,Insulating Spacer,Low,Low-value residual capacitance for timing
-Capacitor (Electrolytic),Short Circuit,Fused Link / Thermal Mass,Low,Heat spreading in emergency
-Capacitor (Electrolytic),Increased ESR,Crude Heating Element,Medium,ESR as resistive load for low-power heat
-Capacitor (Film),Dielectric Breakdown,Fused Protection Element,Low,Parasitic capacitance still usable
-Capacitor (Film),Capacitance Drift,Crude Timing Element,Medium,Environmental drift sensor
-Capacitor (Film),Open Leads,Mechanical Spacer,High,Board stability element
-Capacitor (Tantalum),Short Circuit,Fused Link,Low,Non-critical path protection only
-Capacitor (Tantalum),Capacitance Loss,Weak Timing Element,Low,Spacer with residual capacitance
-Capacitor (Tantalum),Increased Leakage,Environmental Sensor,Medium,Leakage correlates to temp/humidity
-Capacitor (Supercapacitor),Capacitance Fade,Heating Element (ESR),Medium,Large ESR provides resistive heating
-Capacitor (Supercapacitor),Capacitance Fade,Backup Timing Source,Low,Residual capacitance for timing
-Capacitor (Supercapacitor),Increased ESR,Resistive Load / Health Monitor,Medium,ESR as sensing element
-Capacitor (Supercapacitor),Mechanical Swelling,Pressure Indicator,Low,Mechanical stress sensing
-Transistor (BJT),Collector-Emitter Short,Low-Value Resistor,Medium,0.05–1Ω usable range
-Transistor (BJT),Collector-Emitter Short,PCB Jumper,Medium,Current path between pads
-Transistor (BJT),Collector-Emitter Short,Thermal Sensor,Medium,Junction drop vs temperature
-Transistor (BJT),Open Junction,Mechanical Spacer,High,Preserves PCB geometry
-Transistor (BJT),Open Junction,Antenna Stub,Low,Leads usable as RF element
-Transistor (BJT),Gain Degradation,Noise Source,High,Base leakage for entropy/RNG
-Transistor (MOSFET),Drain-Source Short,Low-Value Resistor / Shunt,Medium,0.01–0.1Ω; ampere-range current sensing
-Transistor (MOSFET),Drain-Source Short,Thermal Pad,Medium,Small heat spreader
-Transistor (MOSFET),Open Circuit,Mechanical Spacer,High,Preserves PCB structure
-Transistor (MOSFET),Open Circuit,Capacitive Element,Medium,Gate capacitance 10–1000pF for timing
-Transistor (MOSFET),Parameter Drift,Voltage Sensor,Medium,Threshold drift as environmental proxy
-Transistor (MOSFET),Parameter Drift,Noise Source / RNG,High,Entropy from leakage fluctuations
-Transistor (MOSFET),Parameter Drift,Radiation Monitor,Medium,Leakage scales with dose
-Transistor (Power),Short Circuit,Low-Ohm Resistor,Medium,Heat spreader or current path
-Transistor (Power),Open Circuit,Spacer / Antenna Stub,Medium,Mechanical or RF element
-Transistor (Power),Gain Degradation,Noise Source,Medium,Leakage-based entropy
-Transistor (RF),Gain Collapse,Noise Source,Medium,Broadband noise generator
-Transistor (RF),Open Junction,Antenna Stub,Low,Frequency-dependent element
-Transistor (RF),Partial Leakage,Crude RF Detector,Medium,Leakage as RF energy indicator
-Transistor (Switching),Open Junction,Spacer / Antenna Stub,Low,Lead length useful at HF/VHF
-Transistor (Switching),Shorted Junction,Low-Value Jumper,Medium,Current shunt in non-critical paths
-Transistor (Switching),Gain Loss / Parameter Drift,Noise Source / Drift Sensor,Medium,Environmental sensing via drift
-Inductor (Ferrite Core),Open Winding,EMI Absorber,Medium,Ferrite core still effective for suppression
-Inductor (Ferrite Core),Open Winding,Mechanical Spacer,High,Board spacing maintained
-Inductor (Ferrite Core),Core Saturation / Damage,Partial Transformer Core,Low,Reduced inductance still useful
-Inductor (Ferrite Core),Core Saturation / Damage,Thermal Sink,Low,Heat spreading capability
-Inductor (Ferrite Core),Resistance Increase,Heating Element,Low,Low-power thermal applications
-Inductor (Air Core),Open Winding,Antenna Coil Form,Medium,Coil geometry usable for RF
-Inductor (Air Core),Open Winding,PCB Spacer,High,Maintains board layout
-Inductor (Air Core),Mechanical Deformation,Crude Strain Sensor,Low,Altered inductance tracks deformation
-Inductor (Choke),Open Winding,EMI Absorber,Medium,Ferrite body still absorbs EMI
-Inductor (Choke),Saturation / Core Damage,Crude Thermal Sink,Low,Partial inductor for low-current filtering
-Inductor (Choke),Resistance Drift,Heating Element / Stress Indicator,Low,Resistance change tracks degradation
-Inductor (Transformer),Open Winding,Single-Winding Inductor,Medium,Remaining windings still functional
-Inductor (Transformer),Shorted Turns,Crude Heating Element,Low,Resistive heating from shorted winding
-Inductor (Transformer),Core Damage,EMI Absorber Fragments,Low,Ferrite fragments for suppression
-IC (Microcontroller),Flash Wear-Out,Fixed-Function Controller,Medium,ROM firmware locked; no reprogramming
-IC (Microcontroller),Peripheral Failure,Signal Router via Remaining GPIOs,Medium,Fixed pull-ups; partial I/O
-IC (Microcontroller),CPU Lockup,Oscillator Source,Low,Internal clock as timing element
-IC (Processor),Partial Core Failure,Reduced-Core Computing,High,Task-specific engine with fewer cores
-IC (Processor),Cache Errors,Entropy Source,Medium,Bit flips as random data
-IC (Processor),I/O Bus Failure,Internal ALU Reuse,Low,Math co-processor if accessible
-IC (Memory Controller),Address Line Failure,Reduced Memory Space,Medium,Address remapping to working lines
-IC (Memory Controller),Timing Drift,Variable Delay Element,Low,Crude timing generator
-IC (Power Management),Shorted Regulator,Low-Value Resistor / Thermal Pad,Medium,Heat spreading element
-IC (Power Management),Open Control Loop,Fixed Voltage Drop Element,Low,Passive voltage offset
-IC (Power Management),Drifted Reference,Environmental Voltage Sensor,Medium,Temperature-dependent reference drift
-IC (Communication),Transmitter Burnout,Receiver-Only Mode,Medium,Half-duplex operation preserved
-IC (Communication),Transmitter Burnout,Noise Detector,Low,Burned input as broadband detector
-IC (Communication),Frequency Drift,Crude RF Oscillator,Medium,Drift exploitable for sensing
-IC (Communication),Protocol Logic Failure,Partial Repeater,Low,Signal relay with limited protocol
-Sensor (Temperature),Open Circuit,Mechanical Spacer,High,Parasitic capacitance element
-Sensor (Temperature),Value Drift,Relative Trend Sensor,Medium,Not absolute; tracks direction of change
-Sensor (Temperature),Increased Noise,Entropy Source,Medium,Random generation from junction noise
-Sensor (Pressure),Reduced Sensitivity,Binary Threshold Detector,Medium,On/off pressure detection
-Sensor (Pressure),Mechanical Damage,Vibration / Shock Indicator,Low,Impact detection only
-Sensor (Optical),Dark Current Increase,Random Noise Generator,Medium,Entropy from dark current
-Sensor (Optical),Dark Current Increase,Radiation Detector,Medium,Crude dosimeter function
-Sensor (Optical),Reduced Sensitivity,Binary Light/Dark Detector,Medium,Simple threshold detection
-Sensor (Magnetic),Offset Drift,Relative Change Detector,Medium,Motion or presence sensing
-Sensor (Magnetic),Loss of Sensitivity,Threshold Switch,Low,Large-field detection only
-Sensor (Chemical),Sensitivity Drift,Relative Indicator,Low,Long-term environmental monitoring
-Sensor (Chemical),Open Circuit,Spacer / Humidity Proxy,Low,Package absorbs moisture
-Storage (Flash Memory),Stuck Bits,ROM with Fixed Data,Medium,Firmware stubs; lookup tables
-Storage (Flash Memory),Endurance Limit,Append-Only Logging,Medium,Write-limited but still readable
-Storage (Flash Memory),Endurance Limit,Entropy Source,Medium,Read errors as random data
-Storage (EEPROM),Write Failure,Permanent Calibration Storage,Medium,Locked data still readable
-Storage (EEPROM),Data Retention Loss,Drift Tracker / Entropy Source,Low,Bit decay as random or trend data
-Storage (Hard Drive),Head Crash,Spindle Motor Generator,Medium,Mechanical energy conversion
-Storage (Hard Drive),Head Crash,Reflective Optical Element,Low,Platter as mirror/reflector
-Storage (Hard Drive),Bad Sectors,Partial Capacity Storage,Medium,Remap around bad sectors
-Storage (Hard Drive),Bad Sectors,Entropy Source,Low,Error distribution as random data
-Storage (Optical Media),Surface Scratches,Diffraction Element,Medium,Optical calibration grating
-Storage (Optical Media),Read Errors,Entropy Source / Calibration Tool,Low,Error patterns as random data
-Storage (SD Card),File System Corruption,Raw Block Storage,Medium,Append-only logging; bypass filesystem
-Storage (SD Card),Bad Blocks,Circular Buffer (Partial),Low,Reduced capacity still usable
-Storage (SD Card),Bad Blocks,Entropy Source,Low,Block error patterns as random data
-Connector (Pin Header),Contact Corrosion,Humidity Sensor,High,40–95% RH; ±5% with calibration
-Connector (Pin Header),Contact Corrosion,Contamination Detector,Medium,Dendritic growth detection via resistance
-Connector (Pin Header),Mechanical Wear,Vibration Sensor,Medium,Intermittent contact as vibration switch
-Connector (Pin Header),Mechanical Wear,Mechanical Spacer,High,Pin geometry preserves PCB spacing
-Connector (Pin Header),Solder Joint Failure,Thermal Cycling Indicator,Medium,Crack progression tracks thermal stress
-Connector (Edge),Contact Oxidation,Air Quality Sensor,Medium,Oxidation rate correlates with contaminants
-Connector (Edge),Contact Oxidation,Humidity Monitor,Medium,Tarnish rate varies with humidity
-Connector (Edge),Mechanical Misalignment,Reduced-Channel Interface,Medium,Use remaining good contacts
-Connector (Edge),Fretting Corrosion,Vibration Detector,Medium,Resistance spikes correlate with vibration
-Connector (Board-to-Wire),Crimp Degradation,Temperature Indicator,Medium,Localized heating at bad crimp
-Connector (Board-to-Wire),Crimp Degradation,Vibration-Activated Switch,Medium,Intermittent connection correlates with vibration
-Connector (Board-to-Wire),Housing Fatigue,Wire Guide,High,Physical form factor maintained
-Connector (Board-to-Wire),Pin Corrosion,Humidity Sensor,Medium,Corrosion resistance correlates with humidity
-Relay,Contact Welding,Permanent Jumper,High,Original current rating maintained
-Relay,Contact Welding,Electromagnetic Actuator,High,Coil preserved for magnetic field generation
-Relay,Contact Welding,Inductance Element,Medium,Coil as inductor; mH range
-Relay,Coil Failure (Open),Mechanical Switch,Medium,Manual actuation; 5–50g force
-Relay,Coil Failure (Open),Antenna Coil,Medium,Winding as RF element; 1–100 MHz
-Relay,Contact Erosion,Signal-Level Switch,Medium,Low-current signals still switch
-Relay,Spring Fatigue,Low-Force Switch,Medium,Reduced spring = more sensitive
-Relay,Spring Fatigue,Vibration Sensor,Low,Weakened spring causes detectable bounce
-Switch,Contact Bounce,Noise Source / Entropy,Medium,Bounce as random data for RNG
-Switch,Contact Bounce,Vibration-Activated Trigger,Medium,Degraded contact closes under vibration
-Switch,Mechanical Failure (Stuck Closed),Fixed Jumper,High,Permanent connection; rating preserved
-Switch,Mechanical Failure (Stuck Open),Spacer / Mount Point,High,Physical form factor maintained
-Switch,Contact Resistance Increase,Pressure-Variable Resistor,Low,Resistance varies with actuation force
-Switch,Contact Resistance Increase,Environmental Indicator,Medium,Oxide buildup tracks humidity/contamination
-Motor,Brush Wear,Generator,High,Spin shaft for proportional voltage output
-Motor,Brush Wear,Tachometer,High,Back-EMF proportional to RPM
-Motor,Brush Wear,Vibration Source,Medium,Unbalanced rotor creates vibration
-Motor,Winding Failure (Open),Inductor / Choke,Medium,Intact windings for filtering; mH range
-Motor,Winding Failure (Short),Heating Element,Medium,Resistive heating from shorted turns
-Motor,Bearing Failure,Low-Speed Generator,Medium,Reduced efficiency; still generates voltage
-Motor,Bearing Failure,Static Electromagnet,High,Energize windings without rotation
-Motor,Demagnetization,Weak Magnetic Source,Medium,Reed switch actuation at close range
-Solenoid,Coil Burnout (Open),Ferromagnetic Core,High,Iron core for EMI absorber / field concentrator
-Solenoid,Coil Burnout (Open),Mechanical Plunger,Medium,Manual actuation with spring return
-Solenoid,Plunger Stuck,Static Electromagnet,High,Coil generates field without motion
-Solenoid,Plunger Stuck,Inductor,Medium,Coil with iron core; mH–H range
-Solenoid,Weak Pull,Low-Force Actuator,Medium,Light-duty tasks; paper feed; flag actuation
-Solenoid,Weak Pull,Vibration Generator,Medium,Incomplete actuation under PWM
-Voltage Regulator,Increased Dropout,Temperature Sensor,High,2–10 mV/°C; ±3°C linearity
-Voltage Regulator,Increased Dropout,Current Limiter,Medium,Dropout limits current; ±20% accuracy
-Voltage Regulator,Output Voltage Drift,Non-Critical Voltage Source,Medium,Acceptable for tolerant loads
-Voltage Regulator,Output Voltage Drift,Environmental Voltage Sensor,Medium,Drift correlates with temperature
-Voltage Regulator,Short Circuit (I/O),Low-Value Resistor,Medium,0.05–1Ω; current sensing
-Voltage Regulator,Short Circuit (I/O),Thermal Pad / Heat Spreader,Medium,TO-220/D2PAK designed for thermal mgmt
-Voltage Regulator,Open Circuit,Mechanical Spacer,High,TO-220 heatsink mount; SOT-223 board spacing
-Power Diode,Short Circuit,High-Current Jumper,High,3–60A capacity; original rating maintained
-Power Diode,Short Circuit,Current Shunt Resistor,High,Very low R; millivolt drop at high current
-Power Diode,Short Circuit,Heat Spreader,Medium,TO-220/TO-247 thermal management
-Power Diode,Open Circuit,High-Power Spacer,High,Heatsink mounting; electrical isolation
-Power Diode,Open Circuit,Thermal Mass Element,Medium,Significant heat capacity in large packages
-Power Diode,Increased Forward Voltage,Temperature Sensor,High,Enhanced 5–15 mV/°C sensitivity
-Power Diode,Increased Forward Voltage,Voltage Drop Element,Medium,Fixed voltage offset; crude reference
-Power Transformer,Winding Open,Single-Winding Inductor,High,mH–H range; high-quality inductance
-Power Transformer,Winding Open,EMI Common-Mode Choke,Medium,Core properties preserved
-Power Transformer,Winding Open,Isolation Barrier,High,Galvanic isolation maintained mechanically
-Power Transformer,Shorted Turns,Heating Element,Medium,Resistive loss as heat source
-Power Transformer,Shorted Turns,Current Transformer,Medium,Shorted secondary as single-turn CT
-Power Transformer,Core Damage,EMI Absorber,Medium,Damaged core still absorbs RF
-Power Transformer,Core Damage,Mechanical Mass / Damper,High,Heavy core as vibration dampener
-Power Transformer,Insulation Breakdown,Low-Voltage Transformer,Medium,Reduced isolation adequate for <50V
-Power Transformer,Insulation Breakdown,Coupled Inductor,Medium,Magnetic coupling preserved
-Diode,Short Circuit,Low-value Resistor,Medium,0.1–5 Ω range usable
-Diode,Open Circuit,Capacitive Element,Low,1–5 pF parasitic only
-Resistor,Open Circuit,Mechanical Spacer,High,Preserves PCB spacing
-Resistor,Value Drift,Temperature Sensor,Medium,100–1000 ppm/°C sensitivity
-Resistor,Short Circuit,Jumper Wire,Medium,Lead gauge limits current
-BJT_NPN,thermal_runaway,reroute_to_spare_BJT,High,direct substitution if Q2/Q3 available
-BJT_NPN,thermal_runaway,reduce_load_50pct,Medium,buys time but does not arrest
-BJT_NPN,beta_loss,use_as_temperature_sensor,Medium,Vbe drift correlates with temp
-BJT_NPN,heatsink_coupling,isolate_failed_BJT,High,prevents propagation to neighbors
-BJT_NPN_2N2222,thermal_runaway,reroute_to_spare_BJT,High,same Q2/Q3 substitution path
-BJT_NPN_2N2222,thermal_runaway,reduce_load_50pct,Medium,buys time but does not arrest
-BJT_NPN_2N2222,beta_loss,use_as_temperature_sensor,Medium,Vbe drift correlates with temp
-electrolytic_cap,ESR_drift,replace_with_spare,High,prefer if drift > 30%
-electrolytic_cap,ESR_drift,parallel_extra_cap,Medium,reduces effective ESR
-electrolytic_cap,ESR_drift,use_as_noise_source,Low,salvage path only
-electrolytic_cap_220uF_25V,ESR_aging,replace_with_spare,High,standard intervention
-electrolytic_cap_220uF_25V,ESR_aging,parallel_with_ceramic,Medium,bandwidth compensation
-ceramic_cap,short_circuit,isolate_and_bypass,High,must isolate to prevent rail collapse
-silicon_diode,short_circuit,use_as_resistor,Medium,characterize forward voltage
-silicon_diode,open_circuit,use_as_thermal_sensor,Medium,leakage current ~ temp
-zener_diode,voltage_drift,recalibrate_as_temp_sensor,High,well-documented temp coefficient
-power_MOSFET,gate_short,use_as_heater_element,Medium,thermal_fallback channel
-power_MOSFET,Rds_on_increase,reroute_to_spare,High,if available
-connector,corrosion,magnetic_coupling,Medium,bypass channel
-connector,oxidation,acoustic_alarm,Low,degraded mode notification
-relay,contact_welding,rf_beacon,Medium,repurpose coil as antenna
-relay,coil_failure,magnetic_coupling,Medium,still usable as inductor
-PCB_assembly,vibration_fatigue,dampen_mechanical,High,address root cause
-solder_joints,fatigue,replace_PCB,High,terminal repair needed
-SAC305_solder,fatigue,replace_joint,High,reflow if accessible
-SAC305_solder,fatigue,monitor_resistance_drift,Medium,joint degradation telemetry
-signal_trace,real_drift,reroute_to_backup_trace,High,if redundancy exists
-signal_trace,real_drift,calibrate_offset,Medium,compensates short-term drift
-logic_CMOS,undervoltage,shed_load,High,reduce rail demand below threshold
-logic_CMOS,undervoltage,switch_backup_rail,High,if alternate supply available
-analog_opamp,undervoltage,switch_backup_rail,High,headroom restored on backup
-analog_opamp,undervoltage,reduce_gain,Medium,operate within shrunken envelope
-sensor_I2C,undervoltage,shed_load,High,non-critical sensors safe to drop
-sensor_I2C,undervoltage,switch_backup_rail,High,bus restored on backup
+Component,Failure Mode,Repurpose Option,Effectiveness,Notes,Pre-failure noise signature,Noise signature status
+Diode (Silicon),Short Circuit,Low-value Resistor,Medium,0.05–2Ω range usable,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+Diode (Silicon),Short Circuit,Current Path/Jumper,High,1–3A capacity; 50–100mV drop,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+Diode (Silicon),Short Circuit,Temperature Sensor,Medium,2–3mV/°C sensitivity,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+Diode (Silicon),Open Circuit,Mechanical Spacer,High,Preserves original board layout,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Diode (Silicon),Open Circuit,Antenna Element,Medium,Quarter-wave monopole from leads,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Diode (Silicon),Parametric Degradation,Environmental Sensor,High,Multi-parameter: temp/humidity/radiation,1/f noise rises before the DC parameter moves [VANDAMME1994 general claim; not measured for this component],PROPOSED
+Diode (Silicon),Parametric Degradation,Random Number Generator,High,1–100 kbits/sec entropy source,1/f noise rises before the DC parameter moves [VANDAMME1994 general claim; not measured for this component],PROPOSED
+Diode (Zener),Voltage Shift,Non-Critical Voltage Reference,Medium,±100–500mV accuracy; threshold detection,1/f noise rises before the DC parameter moves [VANDAMME1994 general claim; not measured for this component],PROPOSED
+Diode (Zener),Voltage Shift,Temperature Sensor,High,5–15mV/°C sensitivity; ±1–2°C accuracy,1/f noise rises before the DC parameter moves [VANDAMME1994 general claim; not measured for this component],PROPOSED
+Diode (Zener),Increased Dynamic Resistance,Noise Generator,Medium,Controlled noise DC to several MHz,not interpretable atm,OWED
+Diode (Zener),Increased Dynamic Resistance,Current Limiting Element,High,Soft current limiter; LED/sensor protection,not interpretable atm,OWED
+Diode (Zener),Short Circuit,Low-Value Precision Resistor,Medium,0.1–3Ω; current sensing,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+Diode (Zener),Open Circuit,Precision Mechanical Spacer,High,Voltage-rated spacing; HV isolation,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Diode (Schottky),Short Circuit,Low-Value Shunt Resistor,Medium,Current sense element,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+Diode (Schottky),Open Circuit,PCB Spacer,High,Maintains board geometry,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Diode (Schottky),Leakage Increase,Humidity/Temperature Proxy,Medium,Leakage rises with heat and moisture,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+Diode (LED),Reduced Light Output,Low-Level Indicator,High,Standby indicators; power savings,series-resistance 1/f noise rose up to 800x while series resistance rose 13-90% under accelerated aging; high or fast-rising noise in first test hours flagged unreliable parts [GAN_LED_2005; LED_EARLY_2011],OBSERVED
+Diode (LED),Reduced Light Output,Temperature Sensor,High,3–8mV/°C; ±1–2°C accuracy,series-resistance 1/f noise rose up to 800x while series resistance rose 13-90% under accelerated aging; high or fast-rising noise in first test hours flagged unreliable parts [GAN_LED_2005; LED_EARLY_2011],OBSERVED
+Diode (LED),Reduced Light Output,Photodiode (Reverse Bias),Medium,Light sensor with spectral selectivity,series-resistance 1/f noise rose up to 800x while series resistance rose 13-90% under accelerated aging; high or fast-rising noise in first test hours flagged unreliable parts [GAN_LED_2005; LED_EARLY_2011],OBSERVED
+Diode (LED),Complete Light Failure,Standard Diode Function,Medium,Rectification; protection; 20mA–1A,as Reduced Light Output: series-resistance 1/f noise rise ahead of resistance change [GAN_LED_2005; LED_EARLY_2011],DERIVED
+Diode (LED),Complete Light Failure,Photodiode,High,Pure photodetection without self-illumination,as Reduced Light Output: series-resistance 1/f noise rise ahead of resistance change [GAN_LED_2005; LED_EARLY_2011],DERIVED
+Diode (LED),Intermittent Operation,Thermal Stress Indicator,High,Temperature-dependent operation,"current switching events (burst-like) and optical blinks in unreliable parts; robust parts show plain 1/f [OLED_2013, OLED not LED]",DERIVED
+Diode (Photodiode),Dark Current Increase,Noise Source / RNG,Medium,Entropy from dark current fluctuations,1/f noise rises before the DC parameter moves [VANDAMME1994 general claim; not measured for this component],PROPOSED
+Diode (Photodiode),Dark Current Increase,Radiation Detector,Medium,Crude dosimeter,1/f noise rises before the DC parameter moves [VANDAMME1994 general claim; not measured for this component],PROPOSED
+Diode (Photodiode),Sensitivity Loss,Binary Light/Dark Detector,Medium,Simple threshold detection,not interpretable atm,OWED
+Diode (Photodiode),Open Circuit,Antenna Stub,Low,Lead geometry determines band,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Resistor (Carbon Film),Open Circuit,PCB Spacer,High,Preserves board spacing and stability,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Resistor (Carbon Film),Open Circuit,RF Parasitic Capacitor,Low,0.2–2pF between leads,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Resistor (Carbon Film),Value Drift,Humidity/Temperature Proxy,Medium,ppm/°C increase; drift maps to environment,current (1/f) noise rises before resistance drift; noise spectroscopy proposed as non-destructive reliability predictor [PAVELKA_THICKFILM thick-film data; VANDAMME1994],DERIVED
+Resistor (Carbon Film),Short/Low-Ohm Scar,Jumper Wire,Medium,Lead gauge limits current to 1–3A,not interpretable atm,OWED
+Resistor (Metal Film),Open Circuit,Mechanical Spacer,High,Very low parasitic C for RF decoupling,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Resistor (Metal Film),Value Drift,Temperature Probe,Medium,More stable than carbon film; calibratable,current (1/f) noise rises before resistance drift; noise spectroscopy proposed as non-destructive reliability predictor [PAVELKA_THICKFILM thick-film data; VANDAMME1994],DERIVED
+Resistor (Metal Film),Short Circuit,Low-Ohm Current Sensor,Medium,mV per amp measurement,not interpretable atm,OWED
+Resistor (Wire-Wound),Open Winding,Inductor Form / EMI Choke,Medium,Partial turns usable for LC tank,not interpretable atm,OWED
+Resistor (Wire-Wound),Open Winding,Thermal Mass Spacer,High,Good heat spreading capability,not interpretable atm,OWED
+Resistor (Wire-Wound),Hot-Spot Damage,Low-Value Heater,Medium,Partial turn short creates heating element,not interpretable atm,OWED
+Resistor (Wire-Wound),Hot-Spot Damage,Current Shunt,Medium,Low-value resistance path,not interpretable atm,OWED
+Resistor (Potentiometer),Dead Spots/Wiper Noise,Multi-Position Switch,Medium,Use only good segments of track,"wiper contact-resistance fluctuation rises; the failure mode is itself contact noise [CONTACT_FRETTING, sliding contact not tested]",DERIVED
+Resistor (Potentiometer),Open Track,Fixed Voltage Divider,Medium,Intact end segment still functions,not interpretable atm,OWED
+Resistor (Thermistor),Value Drift,Relative Trend Sensor,Medium,Tracks temperature trends despite drift,1/f noise rises before the DC parameter moves [VANDAMME1994 general claim; not measured for this component],PROPOSED
+Resistor (Thermistor),Open Circuit,Spacer with Minimal RF Capacitance,High,Minimal parasitic effects,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Capacitor (Ceramic),Open Circuit,PCB Spacer / Parasitic Cap,Low,0.1–2pF remains between leads,not interpretable atm,OWED
+Capacitor (Ceramic),Value Drift,Humidity Sensor,Medium,Capacitance vs RH drift exploitable,not interpretable atm,OWED
+Capacitor (Ceramic),Short Circuit,Fused Link,Low,Sacrificial protection element only,not interpretable atm,OWED
+Capacitor (Electrolytic),Dry-Out / Capacitance Loss,Insulating Spacer,Low,Low-value residual capacitance for timing,no low-frequency-noise source found; documented precursor is ESR rise / capacitance loss (RC time constant proposed); ripple across the part rises with ESR (V = I*ESR) [ECAP_ESR],DERIVED
+Capacitor (Electrolytic),Short Circuit,Fused Link / Thermal Mass,Low,Heat spreading in emergency,not interpretable atm,OWED
+Capacitor (Electrolytic),Increased ESR,Crude Heating Element,Medium,ESR as resistive load for low-power heat,no low-frequency-noise source found; documented precursor is ESR rise / capacitance loss (RC time constant proposed); ripple across the part rises with ESR (V = I*ESR) [ECAP_ESR],DERIVED
+Capacitor (Film),Dielectric Breakdown,Fused Protection Element,Low,Parasitic capacitance still usable,not interpretable atm,OWED
+Capacitor (Film),Capacitance Drift,Crude Timing Element,Medium,Environmental drift sensor,not interpretable atm,OWED
+Capacitor (Film),Open Leads,Mechanical Spacer,High,Board stability element,not interpretable atm,OWED
+Capacitor (Tantalum),Short Circuit,Fused Link,Low,Non-critical path protection only,"low-frequency current noise tracks leakage and spreads ~2 decades at equal leakage, so noise separates parts that leakage alone does not; noise reliability indicator proposed [SIKULA2002]",OBSERVED
+Capacitor (Tantalum),Capacitance Loss,Weak Timing Element,Low,Spacer with residual capacitance,not interpretable atm,OWED
+Capacitor (Tantalum),Increased Leakage,Environmental Sensor,Medium,Leakage correlates to temp/humidity,"low-frequency current noise tracks leakage and spreads ~2 decades at equal leakage, so noise separates parts that leakage alone does not; noise reliability indicator proposed [SIKULA2002]",OBSERVED
+Capacitor (Supercapacitor),Capacitance Fade,Heating Element (ESR),Medium,Large ESR provides resistive heating,not interpretable atm,OWED
+Capacitor (Supercapacitor),Capacitance Fade,Backup Timing Source,Low,Residual capacitance for timing,not interpretable atm,OWED
+Capacitor (Supercapacitor),Increased ESR,Resistive Load / Health Monitor,Medium,ESR as sensing element,not interpretable atm,OWED
+Capacitor (Supercapacitor),Mechanical Swelling,Pressure Indicator,Low,Mechanical stress sensing,not interpretable atm,OWED
+Transistor (BJT),Collector-Emitter Short,Low-Value Resistor,Medium,0.05–1Ω usable range,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+Transistor (BJT),Collector-Emitter Short,PCB Jumper,Medium,Current path between pads,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+Transistor (BJT),Collector-Emitter Short,Thermal Sensor,Medium,Junction drop vs temperature,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+Transistor (BJT),Open Junction,Mechanical Spacer,High,Preserves PCB geometry,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Transistor (BJT),Open Junction,Antenna Stub,Low,Leads usable as RF element,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Transistor (BJT),Gain Degradation,Noise Source,High,Base leakage for entropy/RNG,"1/f / RTS noise rise from stress-created traps, measured in MOSFETs [HC_1F_1999; HC_RTS_1997; VANDAMME1994]",DERIVED
+Transistor (MOSFET),Drain-Source Short,Low-Value Resistor / Shunt,Medium,0.01–0.1Ω; ampere-range current sensing,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+Transistor (MOSFET),Drain-Source Short,Thermal Pad,Medium,Small heat spreader,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+Transistor (MOSFET),Open Circuit,Mechanical Spacer,High,Preserves PCB structure,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Transistor (MOSFET),Open Circuit,Capacitive Element,Medium,Gate capacitance 10–1000pF for timing,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Transistor (MOSFET),Parameter Drift,Voltage Sensor,Medium,Threshold drift as environmental proxy,1/f noise and random telegraph signal (RTS) amplitude rise after hot-carrier stress as oxide traps are created [HC_1F_1999; HC_RTS_1997],OBSERVED
+Transistor (MOSFET),Parameter Drift,Noise Source / RNG,High,Entropy from leakage fluctuations,1/f noise and random telegraph signal (RTS) amplitude rise after hot-carrier stress as oxide traps are created [HC_1F_1999; HC_RTS_1997],OBSERVED
+Transistor (MOSFET),Parameter Drift,Radiation Monitor,Medium,Leakage scales with dose,1/f noise and random telegraph signal (RTS) amplitude rise after hot-carrier stress as oxide traps are created [HC_1F_1999; HC_RTS_1997],OBSERVED
+Transistor (Power),Short Circuit,Low-Ohm Resistor,Medium,Heat spreader or current path,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+Transistor (Power),Open Circuit,Spacer / Antenna Stub,Medium,Mechanical or RF element,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Transistor (Power),Gain Degradation,Noise Source,Medium,Leakage-based entropy,"1/f / RTS noise rise from stress-created traps, measured in MOSFETs [HC_1F_1999; HC_RTS_1997; VANDAMME1994]",DERIVED
+Transistor (RF),Gain Collapse,Noise Source,Medium,Broadband noise generator,"1/f / RTS noise rise from stress-created traps, measured in MOSFETs [HC_1F_1999; HC_RTS_1997; VANDAMME1994]",DERIVED
+Transistor (RF),Open Junction,Antenna Stub,Low,Frequency-dependent element,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Transistor (RF),Partial Leakage,Crude RF Detector,Medium,Leakage as RF energy indicator,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+Transistor (Switching),Open Junction,Spacer / Antenna Stub,Low,Lead length useful at HF/VHF,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Transistor (Switching),Shorted Junction,Low-Value Jumper,Medium,Current shunt in non-critical paths,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+Transistor (Switching),Gain Loss / Parameter Drift,Noise Source / Drift Sensor,Medium,Environmental sensing via drift,"1/f / RTS noise rise from stress-created traps, measured in MOSFETs [HC_1F_1999; HC_RTS_1997; VANDAMME1994]",DERIVED
+Inductor (Ferrite Core),Open Winding,EMI Absorber,Medium,Ferrite core still effective for suppression,not interpretable atm,OWED
+Inductor (Ferrite Core),Open Winding,Mechanical Spacer,High,Board spacing maintained,not interpretable atm,OWED
+Inductor (Ferrite Core),Core Saturation / Damage,Partial Transformer Core,Low,Reduced inductance still useful,not interpretable atm,OWED
+Inductor (Ferrite Core),Core Saturation / Damage,Thermal Sink,Low,Heat spreading capability,not interpretable atm,OWED
+Inductor (Ferrite Core),Resistance Increase,Heating Element,Low,Low-power thermal applications,not interpretable atm,OWED
+Inductor (Air Core),Open Winding,Antenna Coil Form,Medium,Coil geometry usable for RF,not interpretable atm,OWED
+Inductor (Air Core),Open Winding,PCB Spacer,High,Maintains board layout,not interpretable atm,OWED
+Inductor (Air Core),Mechanical Deformation,Crude Strain Sensor,Low,Altered inductance tracks deformation,not interpretable atm,OWED
+Inductor (Choke),Open Winding,EMI Absorber,Medium,Ferrite body still absorbs EMI,not interpretable atm,OWED
+Inductor (Choke),Saturation / Core Damage,Crude Thermal Sink,Low,Partial inductor for low-current filtering,not interpretable atm,OWED
+Inductor (Choke),Resistance Drift,Heating Element / Stress Indicator,Low,Resistance change tracks degradation,not interpretable atm,OWED
+Inductor (Transformer),Open Winding,Single-Winding Inductor,Medium,Remaining windings still functional,not interpretable atm,OWED
+Inductor (Transformer),Shorted Turns,Crude Heating Element,Low,Resistive heating from shorted winding,not interpretable atm,OWED
+Inductor (Transformer),Core Damage,EMI Absorber Fragments,Low,Ferrite fragments for suppression,not interpretable atm,OWED
+IC (Microcontroller),Flash Wear-Out,Fixed-Function Controller,Medium,ROM firmware locked; no reprogramming,not interpretable atm,OWED
+IC (Microcontroller),Peripheral Failure,Signal Router via Remaining GPIOs,Medium,Fixed pull-ups; partial I/O,not interpretable atm,OWED
+IC (Microcontroller),CPU Lockup,Oscillator Source,Low,Internal clock as timing element,not interpretable atm,OWED
+IC (Processor),Partial Core Failure,Reduced-Core Computing,High,Task-specific engine with fewer cores,not interpretable atm,OWED
+IC (Processor),Cache Errors,Entropy Source,Medium,Bit flips as random data,not interpretable atm,OWED
+IC (Processor),I/O Bus Failure,Internal ALU Reuse,Low,Math co-processor if accessible,1/f noise level correlated with electromigration failure time; spectrum moves 1/f -> 1/f^2 as voids form [EM_NOISE; VANDAMME1994],DERIVED
+IC (Memory Controller),Address Line Failure,Reduced Memory Space,Medium,Address remapping to working lines,1/f noise level correlated with electromigration failure time; spectrum moves 1/f -> 1/f^2 as voids form [EM_NOISE; VANDAMME1994],DERIVED
+IC (Memory Controller),Timing Drift,Variable Delay Element,Low,Crude timing generator,not interpretable atm,OWED
+IC (Power Management),Shorted Regulator,Low-Value Resistor / Thermal Pad,Medium,Heat spreading element,not interpretable atm,OWED
+IC (Power Management),Open Control Loop,Fixed Voltage Drop Element,Low,Passive voltage offset,not interpretable atm,OWED
+IC (Power Management),Drifted Reference,Environmental Voltage Sensor,Medium,Temperature-dependent reference drift,1/f noise rises before the DC parameter moves [VANDAMME1994 general claim; not measured for this component],PROPOSED
+IC (Communication),Transmitter Burnout,Receiver-Only Mode,Medium,Half-duplex operation preserved,not interpretable atm,OWED
+IC (Communication),Transmitter Burnout,Noise Detector,Low,Burned input as broadband detector,not interpretable atm,OWED
+IC (Communication),Frequency Drift,Crude RF Oscillator,Medium,Drift exploitable for sensing,not interpretable atm,OWED
+IC (Communication),Protocol Logic Failure,Partial Repeater,Low,Signal relay with limited protocol,not interpretable atm,OWED
+Sensor (Temperature),Open Circuit,Mechanical Spacer,High,Parasitic capacitance element,not interpretable atm,OWED
+Sensor (Temperature),Value Drift,Relative Trend Sensor,Medium,Not absolute; tracks direction of change,1/f noise rises before the DC parameter moves [VANDAMME1994 general claim; not measured for this component],PROPOSED
+Sensor (Temperature),Increased Noise,Entropy Source,Medium,Random generation from junction noise,the failure mode is itself a noise rise; a separate precursor is not interpretable atm,OWED
+Sensor (Pressure),Reduced Sensitivity,Binary Threshold Detector,Medium,On/off pressure detection,not interpretable atm,OWED
+Sensor (Pressure),Mechanical Damage,Vibration / Shock Indicator,Low,Impact detection only,not interpretable atm,OWED
+Sensor (Optical),Dark Current Increase,Random Noise Generator,Medium,Entropy from dark current,1/f noise rises before the DC parameter moves [VANDAMME1994 general claim; not measured for this component],PROPOSED
+Sensor (Optical),Dark Current Increase,Radiation Detector,Medium,Crude dosimeter function,1/f noise rises before the DC parameter moves [VANDAMME1994 general claim; not measured for this component],PROPOSED
+Sensor (Optical),Reduced Sensitivity,Binary Light/Dark Detector,Medium,Simple threshold detection,not interpretable atm,OWED
+Sensor (Magnetic),Offset Drift,Relative Change Detector,Medium,Motion or presence sensing,not interpretable atm,OWED
+Sensor (Magnetic),Loss of Sensitivity,Threshold Switch,Low,Large-field detection only,not interpretable atm,OWED
+Sensor (Chemical),Sensitivity Drift,Relative Indicator,Low,Long-term environmental monitoring,not interpretable atm,OWED
+Sensor (Chemical),Open Circuit,Spacer / Humidity Proxy,Low,Package absorbs moisture,not interpretable atm,OWED
+Storage (Flash Memory),Stuck Bits,ROM with Fixed Data,Medium,Firmware stubs; lookup tables,not interpretable atm,OWED
+Storage (Flash Memory),Endurance Limit,Append-Only Logging,Medium,Write-limited but still readable,raw bit error rate rises with program/erase wear; same source reports it as a weak predictor of uncorrectable errors [FLASH_SCHROEDER2016],DERIVED
+Storage (Flash Memory),Endurance Limit,Entropy Source,Medium,Read errors as random data,raw bit error rate rises with program/erase wear; same source reports it as a weak predictor of uncorrectable errors [FLASH_SCHROEDER2016],DERIVED
+Storage (EEPROM),Write Failure,Permanent Calibration Storage,Medium,Locked data still readable,not interpretable atm,OWED
+Storage (EEPROM),Data Retention Loss,Drift Tracker / Entropy Source,Low,Bit decay as random or trend data,not interpretable atm,OWED
+Storage (Hard Drive),Head Crash,Spindle Motor Generator,Medium,Mechanical energy conversion,"scan errors / reallocation counts rise before many failures, but a large share of failed drives showed none [HDD_PINHEIRO2007]",DERIVED
+Storage (Hard Drive),Head Crash,Reflective Optical Element,Low,Platter as mirror/reflector,"scan errors / reallocation counts rise before many failures, but a large share of failed drives showed none [HDD_PINHEIRO2007]",DERIVED
+Storage (Hard Drive),Bad Sectors,Partial Capacity Storage,Medium,Remap around bad sectors,"scan errors / reallocation counts rise before many failures, but a large share of failed drives showed none [HDD_PINHEIRO2007]",DERIVED
+Storage (Hard Drive),Bad Sectors,Entropy Source,Low,Error distribution as random data,"scan errors / reallocation counts rise before many failures, but a large share of failed drives showed none [HDD_PINHEIRO2007]",DERIVED
+Storage (Optical Media),Surface Scratches,Diffraction Element,Medium,Optical calibration grating,not interpretable atm,OWED
+Storage (Optical Media),Read Errors,Entropy Source / Calibration Tool,Low,Error patterns as random data,not interpretable atm,OWED
+Storage (SD Card),File System Corruption,Raw Block Storage,Medium,Append-only logging; bypass filesystem,not interpretable atm,OWED
+Storage (SD Card),Bad Blocks,Circular Buffer (Partial),Low,Reduced capacity still usable,not interpretable atm,OWED
+Storage (SD Card),Bad Blocks,Entropy Source,Low,Block error patterns as random data,not interpretable atm,OWED
+Connector (Pin Header),Contact Corrosion,Humidity Sensor,High,40–95% RH; ±5% with calibration,"contact-resistance fluctuation and intermittent spikes before a sustained rise [CONTACT_FRETTING, fretting data applied to this contact]",DERIVED
+Connector (Pin Header),Contact Corrosion,Contamination Detector,Medium,Dendritic growth detection via resistance,"contact-resistance fluctuation and intermittent spikes before a sustained rise [CONTACT_FRETTING, fretting data applied to this contact]",DERIVED
+Connector (Pin Header),Mechanical Wear,Vibration Sensor,Medium,Intermittent contact as vibration switch,"contact-resistance fluctuation and intermittent spikes before a sustained rise [CONTACT_FRETTING, fretting data applied to this contact]",DERIVED
+Connector (Pin Header),Mechanical Wear,Mechanical Spacer,High,Pin geometry preserves PCB spacing,"contact-resistance fluctuation and intermittent spikes before a sustained rise [CONTACT_FRETTING, fretting data applied to this contact]",DERIVED
+Connector (Pin Header),Solder Joint Failure,Thermal Cycling Indicator,Medium,Crack progression tracks thermal stress,"intermittent resistance spikes as a crack opens under load [CONTACT_FRETTING intermittency, not solder data]",PROPOSED
+Connector (Edge),Contact Oxidation,Air Quality Sensor,Medium,Oxidation rate correlates with contaminants,"contact-resistance fluctuation and intermittent spikes before a sustained rise [CONTACT_FRETTING, fretting data applied to this contact]",DERIVED
+Connector (Edge),Contact Oxidation,Humidity Monitor,Medium,Tarnish rate varies with humidity,"contact-resistance fluctuation and intermittent spikes before a sustained rise [CONTACT_FRETTING, fretting data applied to this contact]",DERIVED
+Connector (Edge),Mechanical Misalignment,Reduced-Channel Interface,Medium,Use remaining good contacts,not interpretable atm,OWED
+Connector (Edge),Fretting Corrosion,Vibration Detector,Medium,Resistance spikes correlate with vibration,slow contact-resistance rise with short-duration discontinuities (intermittences); self-healing back to low resistance can hide episodes; resistance spectroscopy gave a leading indicator before conventional failure [CONTACT_FRETTING],OBSERVED
+Connector (Board-to-Wire),Crimp Degradation,Temperature Indicator,Medium,Localized heating at bad crimp,"contact-resistance fluctuation and intermittent spikes before a sustained rise [CONTACT_FRETTING, fretting data applied to this contact]",DERIVED
+Connector (Board-to-Wire),Crimp Degradation,Vibration-Activated Switch,Medium,Intermittent connection correlates with vibration,"contact-resistance fluctuation and intermittent spikes before a sustained rise [CONTACT_FRETTING, fretting data applied to this contact]",DERIVED
+Connector (Board-to-Wire),Housing Fatigue,Wire Guide,High,Physical form factor maintained,not interpretable atm,OWED
+Connector (Board-to-Wire),Pin Corrosion,Humidity Sensor,Medium,Corrosion resistance correlates with humidity,"contact-resistance fluctuation and intermittent spikes before a sustained rise [CONTACT_FRETTING, fretting data applied to this contact]",DERIVED
+Relay,Contact Welding,Permanent Jumper,High,Original current rating maintained,not interpretable atm,OWED
+Relay,Contact Welding,Electromagnetic Actuator,High,Coil preserved for magnetic field generation,not interpretable atm,OWED
+Relay,Contact Welding,Inductance Element,Medium,Coil as inductor; mH range,not interpretable atm,OWED
+Relay,Coil Failure (Open),Mechanical Switch,Medium,Manual actuation; 5–50g force,not interpretable atm,OWED
+Relay,Coil Failure (Open),Antenna Coil,Medium,Winding as RF element; 1–100 MHz,not interpretable atm,OWED
+Relay,Contact Erosion,Signal-Level Switch,Medium,Low-current signals still switch,"contact-resistance fluctuation and intermittent spikes before a sustained rise [CONTACT_FRETTING, fretting data applied to this contact]",DERIVED
+Relay,Spring Fatigue,Low-Force Switch,Medium,Reduced spring = more sensitive,not interpretable atm,OWED
+Relay,Spring Fatigue,Vibration Sensor,Low,Weakened spring causes detectable bounce,not interpretable atm,OWED
+Switch,Contact Bounce,Noise Source / Entropy,Medium,Bounce as random data for RNG,not interpretable atm,OWED
+Switch,Contact Bounce,Vibration-Activated Trigger,Medium,Degraded contact closes under vibration,not interpretable atm,OWED
+Switch,Mechanical Failure (Stuck Closed),Fixed Jumper,High,Permanent connection; rating preserved,not interpretable atm,OWED
+Switch,Mechanical Failure (Stuck Open),Spacer / Mount Point,High,Physical form factor maintained,not interpretable atm,OWED
+Switch,Contact Resistance Increase,Pressure-Variable Resistor,Low,Resistance varies with actuation force,"contact-resistance fluctuation and intermittent spikes before a sustained rise [CONTACT_FRETTING, fretting data applied to this contact]",DERIVED
+Switch,Contact Resistance Increase,Environmental Indicator,Medium,Oxide buildup tracks humidity/contamination,"contact-resistance fluctuation and intermittent spikes before a sustained rise [CONTACT_FRETTING, fretting data applied to this contact]",DERIVED
+Motor,Brush Wear,Generator,High,Spin shaft for proportional voltage output,not interpretable atm,OWED
+Motor,Brush Wear,Tachometer,High,Back-EMF proportional to RPM,not interpretable atm,OWED
+Motor,Brush Wear,Vibration Source,Medium,Unbalanced rotor creates vibration,not interpretable atm,OWED
+Motor,Winding Failure (Open),Inductor / Choke,Medium,Intact windings for filtering; mH range,not interpretable atm,OWED
+Motor,Winding Failure (Short),Heating Element,Medium,Resistive heating from shorted turns,not interpretable atm,OWED
+Motor,Bearing Failure,Low-Speed Generator,Medium,Reduced efficiency; still generates voltage,vibration kurtosis rises when a race defect forms; RMS climbs near end of life; some run-to-failure records show no change before failure [BEARING_VIB],OBSERVED
+Motor,Bearing Failure,Static Electromagnet,High,Energize windings without rotation,vibration kurtosis rises when a race defect forms; RMS climbs near end of life; some run-to-failure records show no change before failure [BEARING_VIB],OBSERVED
+Motor,Demagnetization,Weak Magnetic Source,Medium,Reed switch actuation at close range,not interpretable atm,OWED
+Solenoid,Coil Burnout (Open),Ferromagnetic Core,High,Iron core for EMI absorber / field concentrator,not interpretable atm,OWED
+Solenoid,Coil Burnout (Open),Mechanical Plunger,Medium,Manual actuation with spring return,not interpretable atm,OWED
+Solenoid,Plunger Stuck,Static Electromagnet,High,Coil generates field without motion,not interpretable atm,OWED
+Solenoid,Plunger Stuck,Inductor,Medium,Coil with iron core; mH–H range,not interpretable atm,OWED
+Solenoid,Weak Pull,Low-Force Actuator,Medium,Light-duty tasks; paper feed; flag actuation,not interpretable atm,OWED
+Solenoid,Weak Pull,Vibration Generator,Medium,Incomplete actuation under PWM,not interpretable atm,OWED
+Voltage Regulator,Increased Dropout,Temperature Sensor,High,2–10 mV/°C; ±3°C linearity,not interpretable atm,OWED
+Voltage Regulator,Increased Dropout,Current Limiter,Medium,Dropout limits current; ±20% accuracy,not interpretable atm,OWED
+Voltage Regulator,Output Voltage Drift,Non-Critical Voltage Source,Medium,Acceptable for tolerant loads,1/f noise rises before the DC parameter moves [VANDAMME1994 general claim; not measured for this component],PROPOSED
+Voltage Regulator,Output Voltage Drift,Environmental Voltage Sensor,Medium,Drift correlates with temperature,1/f noise rises before the DC parameter moves [VANDAMME1994 general claim; not measured for this component],PROPOSED
+Voltage Regulator,Short Circuit (I/O),Low-Value Resistor,Medium,0.05–1Ω; current sensing,not interpretable atm,OWED
+Voltage Regulator,Short Circuit (I/O),Thermal Pad / Heat Spreader,Medium,TO-220/D2PAK designed for thermal mgmt,not interpretable atm,OWED
+Voltage Regulator,Open Circuit,Mechanical Spacer,High,TO-220 heatsink mount; SOT-223 board spacing,not interpretable atm,OWED
+Power Diode,Short Circuit,High-Current Jumper,High,3–60A capacity; original rating maintained,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+Power Diode,Short Circuit,Current Shunt Resistor,High,Very low R; millivolt drop at high current,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+Power Diode,Short Circuit,Heat Spreader,Medium,TO-220/TO-247 thermal management,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+Power Diode,Open Circuit,High-Power Spacer,High,Heatsink mounting; electrical isolation,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Power Diode,Open Circuit,Thermal Mass Element,Medium,Significant heat capacity in large packages,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Power Diode,Increased Forward Voltage,Temperature Sensor,High,Enhanced 5–15 mV/°C sensitivity,"series-resistance 1/f noise rise ahead of resistance change, measured in LEDs [GAN_LED_2005, diode-type device, not power diode data]",DERIVED
+Power Diode,Increased Forward Voltage,Voltage Drop Element,Medium,Fixed voltage offset; crude reference,"series-resistance 1/f noise rise ahead of resistance change, measured in LEDs [GAN_LED_2005, diode-type device, not power diode data]",DERIVED
+Power Transformer,Winding Open,Single-Winding Inductor,High,mH–H range; high-quality inductance,not interpretable atm,OWED
+Power Transformer,Winding Open,EMI Common-Mode Choke,Medium,Core properties preserved,not interpretable atm,OWED
+Power Transformer,Winding Open,Isolation Barrier,High,Galvanic isolation maintained mechanically,not interpretable atm,OWED
+Power Transformer,Shorted Turns,Heating Element,Medium,Resistive loss as heat source,not interpretable atm,OWED
+Power Transformer,Shorted Turns,Current Transformer,Medium,Shorted secondary as single-turn CT,not interpretable atm,OWED
+Power Transformer,Core Damage,EMI Absorber,Medium,Damaged core still absorbs RF,not interpretable atm,OWED
+Power Transformer,Core Damage,Mechanical Mass / Damper,High,Heavy core as vibration dampener,not interpretable atm,OWED
+Power Transformer,Insulation Breakdown,Low-Voltage Transformer,Medium,Reduced isolation adequate for <50V,partial-discharge pulses rise before insulation breakdown [PD_IEC60270],PROPOSED
+Power Transformer,Insulation Breakdown,Coupled Inductor,Medium,Magnetic coupling preserved,partial-discharge pulses rise before insulation breakdown [PD_IEC60270],PROPOSED
+Diode,Short Circuit,Low-value Resistor,Medium,0.1–5 Ω range usable,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+Diode,Open Circuit,Capacitive Element,Low,1–5 pF parasitic only,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Resistor,Open Circuit,Mechanical Spacer,High,Preserves PCB spacing,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+Resistor,Value Drift,Temperature Sensor,Medium,100–1000 ppm/°C sensitivity,current (1/f) noise rises before resistance drift; noise spectroscopy proposed as non-destructive reliability predictor [PAVELKA_THICKFILM thick-film data; VANDAMME1994],DERIVED
+Resistor,Short Circuit,Jumper Wire,Medium,Lead gauge limits current,not interpretable atm,OWED
+BJT_NPN,thermal_runaway,reroute_to_spare_BJT,High,direct substitution if Q2/Q3 available,not interpretable atm,OWED
+BJT_NPN,thermal_runaway,reduce_load_50pct,Medium,buys time but does not arrest,not interpretable atm,OWED
+BJT_NPN,beta_loss,use_as_temperature_sensor,Medium,Vbe drift correlates with temp,"1/f / RTS noise rise from stress-created traps, measured in MOSFETs [HC_1F_1999; HC_RTS_1997; VANDAMME1994]",DERIVED
+BJT_NPN,heatsink_coupling,isolate_failed_BJT,High,prevents propagation to neighbors,not interpretable atm,OWED
+BJT_NPN_2N2222,thermal_runaway,reroute_to_spare_BJT,High,same Q2/Q3 substitution path,not interpretable atm,OWED
+BJT_NPN_2N2222,thermal_runaway,reduce_load_50pct,Medium,buys time but does not arrest,not interpretable atm,OWED
+BJT_NPN_2N2222,beta_loss,use_as_temperature_sensor,Medium,Vbe drift correlates with temp,"1/f / RTS noise rise from stress-created traps, measured in MOSFETs [HC_1F_1999; HC_RTS_1997; VANDAMME1994]",DERIVED
+electrolytic_cap,ESR_drift,replace_with_spare,High,prefer if drift > 30%,no low-frequency-noise source found; documented precursor is ESR rise / capacitance loss (RC time constant proposed); ripple across the part rises with ESR (V = I*ESR) [ECAP_ESR],DERIVED
+electrolytic_cap,ESR_drift,parallel_extra_cap,Medium,reduces effective ESR,no low-frequency-noise source found; documented precursor is ESR rise / capacitance loss (RC time constant proposed); ripple across the part rises with ESR (V = I*ESR) [ECAP_ESR],DERIVED
+electrolytic_cap,ESR_drift,use_as_noise_source,Low,salvage path only,no low-frequency-noise source found; documented precursor is ESR rise / capacitance loss (RC time constant proposed); ripple across the part rises with ESR (V = I*ESR) [ECAP_ESR],DERIVED
+electrolytic_cap_220uF_25V,ESR_aging,replace_with_spare,High,standard intervention,no low-frequency-noise source found; documented precursor is ESR rise / capacitance loss (RC time constant proposed); ripple across the part rises with ESR (V = I*ESR) [ECAP_ESR],DERIVED
+electrolytic_cap_220uF_25V,ESR_aging,parallel_with_ceramic,Medium,bandwidth compensation,no low-frequency-noise source found; documented precursor is ESR rise / capacitance loss (RC time constant proposed); ripple across the part rises with ESR (V = I*ESR) [ECAP_ESR],DERIVED
+ceramic_cap,short_circuit,isolate_and_bypass,High,must isolate to prevent rail collapse,not interpretable atm,OWED
+silicon_diode,short_circuit,use_as_resistor,Medium,characterize forward voltage,1/f and burst (popcorn) noise in leakage current rise with junction defects [VANDAMME1994 general claim for diode-type devices; not measured for this mode],PROPOSED
+silicon_diode,open_circuit,use_as_thermal_sensor,Medium,leakage current ~ temp,"contact/bond 1/f noise rises as the contact degrades, before the open [VANDAMME1994 contacts and vias]",DERIVED
+zener_diode,voltage_drift,recalibrate_as_temp_sensor,High,well-documented temp coefficient,1/f noise rises before the DC parameter moves [VANDAMME1994 general claim; not measured for this component],PROPOSED
+power_MOSFET,gate_short,use_as_heater_element,Medium,thermal_fallback channel,trap-related 1/f / RTS noise in the gate region before oxide failure [HC_1F_1999 traps; breakdown precursor not measured in source],PROPOSED
+power_MOSFET,Rds_on_increase,reroute_to_spare,High,if available,"1/f / RTS noise rise from stress-created traps, measured in MOSFETs [HC_1F_1999; HC_RTS_1997; VANDAMME1994]",DERIVED
+connector,corrosion,magnetic_coupling,Medium,bypass channel,"contact-resistance fluctuation and intermittent spikes before a sustained rise [CONTACT_FRETTING, fretting data applied to this contact]",DERIVED
+connector,oxidation,acoustic_alarm,Low,degraded mode notification,"contact-resistance fluctuation and intermittent spikes before a sustained rise [CONTACT_FRETTING, fretting data applied to this contact]",DERIVED
+relay,contact_welding,rf_beacon,Medium,repurpose coil as antenna,not interpretable atm,OWED
+relay,coil_failure,magnetic_coupling,Medium,still usable as inductor,not interpretable atm,OWED
+PCB_assembly,vibration_fatigue,dampen_mechanical,High,address root cause,not interpretable atm,OWED
+solder_joints,fatigue,replace_PCB,High,terminal repair needed,"intermittent resistance spikes as a crack opens under load [CONTACT_FRETTING intermittency, not solder data]",PROPOSED
+SAC305_solder,fatigue,replace_joint,High,reflow if accessible,"intermittent resistance spikes as a crack opens under load [CONTACT_FRETTING intermittency, not solder data]",PROPOSED
+SAC305_solder,fatigue,monitor_resistance_drift,Medium,joint degradation telemetry,"intermittent resistance spikes as a crack opens under load [CONTACT_FRETTING intermittency, not solder data]",PROPOSED
+signal_trace,real_drift,reroute_to_backup_trace,High,if redundancy exists,not interpretable atm,OWED
+signal_trace,real_drift,calibrate_offset,Medium,compensates short-term drift,not interpretable atm,OWED
+logic_CMOS,undervoltage,shed_load,High,reduce rail demand below threshold,not interpretable atm,OWED
+logic_CMOS,undervoltage,switch_backup_rail,High,if alternate supply available,not interpretable atm,OWED
+analog_opamp,undervoltage,switch_backup_rail,High,headroom restored on backup,not interpretable atm,OWED
+analog_opamp,undervoltage,reduce_gain,Medium,operate within shrunken envelope,not interpretable atm,OWED
+sensor_I2C,undervoltage,shed_load,High,non-critical sensors safe to drop,not interpretable atm,OWED
+sensor_I2C,undervoltage,switch_backup_rail,High,bus restored on backup,not interpretable atm,OWED
