@@ -90,6 +90,7 @@ python experiments/sims/geometric_failure_diagnosis.py
 │   ├── rhombic_network.py                 # 32-node distributed consensus
 │   ├── integrated_monitor.py              # Sensor -> geometric system integration
 │   ├── bitchunk_sensor.py                 # Binary string -> token stream
+│   ├── noise_titration.py                 # Noise titration: 1/f residual vs mean, pre-failure flag (PROPOSED, stdlib)
 │   ├── reference.py                       # SOMS polyhedron vertex data
 │   └── sensors/                           # PhysicalSensor subclasses
 │       ├── physical_sensor.py             # ABC base class
@@ -121,6 +122,13 @@ python experiments/sims/geometric_failure_diagnosis.py
 │       ├── magnetic_fallback/   # Transformer coupling TX/RX
 │       ├── mechanical_fallback/ # Vibration motor TX / accelerometer RX
 │       └── thermal_fallback/    # Resistor heater TX / thermistor RX
+│
+├── scenario_engine/           # Note 2026-10-31: only the noise-precursor files are listed here
+│   ├── claims/noise_precursor.py              # Claim builder: residual noise rises >= X% >= N ticks before mean drift
+│   ├── claims/NOISE_PRECURSOR_CLAIMS.json     # noise_precursor_0001 on failure_mode_matrix row 17 (PROPOSED)
+│   ├── validators/noise_precursor.py          # CONFIRMED / REFUTED / INCONCLUSIVE from a titration report
+│   ├── tests/test_noise_titration.py          # Titration + matrix noise-column checks
+│   └── tests/test_noise_precursor_validator.py  # Claim + validator outcome branches
 │
 ├── vendor/                    # Third-party code, copied verbatim — do not edit
 │   └── cyclic/                # Cyclic Programming engine (JinnZ2/cyclic-programming)

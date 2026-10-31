@@ -30,6 +30,29 @@
 
 ---
 
+## Pre-failure noise signature
+<!-- co-authored (Kavik + Claude, 2026-10-31). CC0. -->
+What the noise does BEFORE each failure mode, while the mean reading may still look fine.
+
+|Failure Mode|Noise signature before failure|Status|Source key|
+|------------|------------------------------|------|----------|
+|Failure Mode A|e.g. 1/f rise, burst (popcorn) noise, drift variance, intermittent spikes| | |
+|Failure Mode B|not interpretable atm|OWED| |
+
+Status tags, local meaning:
+- `OBSERVED` — a cited source measured this signature in this component class
+- `DERIVED` — a cited source measured it in a related device, or for the same mechanism
+- `PROPOSED` — a general published claim applied to this mode; no class-specific data
+- `OWED` — no source found; the signature cell reads `not interpretable atm`
+
+Source keys resolve in `src/noise_titration.py` `NOISE_SOURCES` (each records what was
+checked; `VERIFY` where not checked word-for-word). Matrix copy: the
+`Pre-failure noise signature` and `Noise signature status` columns of
+`matrices/failure_mode_matrix.csv`. To read a series: `python3 src/noise_titration.py
+readings.txt --tolerance <band>` (PROPOSED method; synthetic demo is ILLUSTRATIVE).
+
+---
+
 ## Environmental Interaction Matrix
 
 |Condition|Electrical Change|Thermal Effect|Other Notes|
