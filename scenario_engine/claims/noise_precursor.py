@@ -1,6 +1,6 @@
 """Noise-precursor claim: residual noise rises before the mean drifts out of tolerance.
 
-STATUS: PROPOSED claim, co-authored (Kavik + Claude, 2026-10-31). CC0. stdlib only.
+STATUS: PROPOSED claim, co-authored (2026-10-31). CC0. stdlib only.
 
 Statement (parameters explicit, all required):
     "Residual noise rises by at least X% at least N ticks before mean drift

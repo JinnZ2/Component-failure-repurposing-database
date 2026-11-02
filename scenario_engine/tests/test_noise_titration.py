@@ -1,6 +1,6 @@
 """Tests for src/noise_titration.py and the failure_mode_matrix noise columns.
 
-Co-authored (Kavik + Claude, 2026-10-31). CC0. Synthetic data only (ILLUSTRATIVE).
+Co-authored (2026-10-31). CC0. Synthetic data only (ILLUSTRATIVE).
 """
 
 import csv

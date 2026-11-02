@@ -1,6 +1,6 @@
 """Offline tests for scripts/fetch_ims_bearings.py and scripts/real_data_titration.py.
 
-Co-authored (Kavik + Claude, 2026-10-31). CC0.
+Co-authored (2026-10-31). CC0.
 No network. Fixtures are MOCK: synthetic values in the same file shape as the IMS snapshots
 (tab-separated rows, one column per channel, timestamp file names). They are not IMS data;
 the data set's license is not verified, so no real slice is committed.

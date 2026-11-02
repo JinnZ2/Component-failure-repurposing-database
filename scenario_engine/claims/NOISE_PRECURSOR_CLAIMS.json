@@ -27,7 +27,7 @@
         "noise_signature_status": "OBSERVED"
       },
       "provenance": {
-        "co_authored": "Kavik + Claude, 2026-10-31",
+        "co_authored": "co-authored, 2026-10-31",
         "published_basis": [
           "GAN_LED_2005 (matrix row status OBSERVED; citation VERIFY)",
           "VANDAMME1994"

@@ -2,7 +2,7 @@
 """
 fetch_ims_bearings.py -- download and extract the IMS bearing run-to-failure data set.
 
-Co-authored (Kavik + Claude, 2026-10-31). CC0 for this script. The data set keeps its own
+Co-authored (2026-10-31). CC0 for this script. The data set keeps its own
 license (see data/README_ims_bearings.md; license status VERIFY until read from the NASA page).
 
 Imports: Python standard library only. Extraction of the inner archives needs the system

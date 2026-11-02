@@ -1,6 +1,6 @@
 # Real-data titration: NASA PCoE "Capacitor Electrical Stress" -- method not applicable atm
 
-Co-authored (Kavik + Claude), 2026-10-31. CC0 (this write-up; the dataset keeps its own license).
+Co-authored, 2026-10-31. CC0 (this write-up; the dataset keeps its own license).
 Work order: first real-data run of `src/noise_titration.py`, Target B (secondary).
 
 ## Result

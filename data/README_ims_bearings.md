@@ -1,6 +1,6 @@
 # IMS bearing run-to-failure data -- source record
 
-Co-authored (Kavik + Claude), 2026-10-31. CC0 for this note. The data keeps its own license.
+Co-authored, 2026-10-31. CC0 for this note. The data keeps its own license.
 Raw data is NOT in this repository: `scripts/fetch_ims_bearings.py` downloads and extracts it
 into `data/external/ims_bearings/` (git-ignored).
 

@@ -31,7 +31,7 @@
 ---
 
 ## Pre-failure noise signature
-<!-- co-authored (Kavik + Claude, 2026-10-31). CC0. -->
+<!-- co-authored (2026-10-31). CC0. -->
 What the noise does BEFORE each failure mode, while the mean reading may still look fine.
 
 |Failure Mode|Noise signature before failure|Status|Source key|

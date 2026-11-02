@@ -1,6 +1,6 @@
 """Tests for the noise-precursor claim and validator.
 
-Co-authored (Kavik + Claude, 2026-10-31). CC0. Synthetic / hand-built reports only.
+Co-authored (2026-10-31). CC0. Synthetic / hand-built reports only.
 """
 
 import os

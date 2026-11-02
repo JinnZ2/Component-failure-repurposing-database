@@ -1,6 +1,6 @@
 """Validator for noise-precursor claims (scenario_engine/claims/noise_precursor.py).
 
-STATUS: PROPOSED, co-authored (Kavik + Claude, 2026-10-31). CC0. stdlib only.
+STATUS: PROPOSED, co-authored (2026-10-31). CC0. stdlib only.
 
 Input: a claim dict and a titration report from src/noise_titration.py analyze().
 The validator does NOT trust the report's own flag: it recomputes the rise tick and

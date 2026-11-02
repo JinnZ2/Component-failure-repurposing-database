@@ -2,7 +2,7 @@
 """
 real_data_titration.py -- first real-data run of src/noise_titration.py: IMS bearings.
 
-Co-authored (Kavik + Claude, 2026-10-31). CC0 for this script; the IMS data keeps its own
+Co-authored (2026-10-31). CC0 for this script; the IMS data keeps its own
 license (data/README_ims_bearings.md). Stdlib only (data extraction: scripts/fetch_ims_bearings.py).
 
 Question: does the titration residual rise while the vibration level is still inside its
@@ -290,7 +290,7 @@ def build_rows(feats_by_set):
 def write_report(rows, path=RESULTS):
     status = "EXPLORATORY" if CHANGES else "PRE-REGISTERED"
     L = ["# Real-data titration: IMS bearing run-to-failure data", "",
-         "Co-authored (Kavik + Claude), 2026-10-31. CC0 (this write-up; the data keeps its own license).",
+         "Co-authored, 2026-10-31. CC0 (this write-up; the data keeps its own license).",
          "REAL DATA (not synthetic). Status: **%s** (prereg sha256 `%s`)." % (status, prereg_sha256()), "",
          "| unit | failed? | flag fired? | lead (snapshots / hours) | RMS lead | kurtosis lead | outcome |",
          "|---|---|---|---|---|---|---|"]

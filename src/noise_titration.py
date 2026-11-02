@@ -2,7 +2,7 @@
 """
 noise_titration.py -- noise as a DIAGNOSTIC before failure: "mean holds, noise moves first".
 
-STATUS: PROPOSED method, co-authored (Kavik + Claude, 2026-10-31). CC0. stdlib only.
+STATUS: PROPOSED method, co-authored (2026-10-31). CC0. stdlib only.
 
 TWO LAYERS, KEPT APART
   Published (DOCUMENTED, see NOISE_SOURCES):
