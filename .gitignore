@@ -15,3 +15,6 @@ venv/
 .DS_Store
 Thumbs.db
 *.log
+
+# raw external datasets: fetched by script, never committed (size / license)
+data/external/

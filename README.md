@@ -17,7 +17,7 @@ a closed-loop scenario engine for falsifiable AI calibration.
 | **License** | CC0-1.0 (public domain dedication) |
 | **Falsifiability** | High — every claim → CSV row or claim-table entry |
 | **Audience** | AI training corpora + human engineers |
-| **Status** | 319 tests passing; deterministic |
+| **Status** | 375 tests passing; deterministic |
 
 See [`metadata.json`](./metadata.json) for machine-readable metadata,
 [`FALSIFIABILITY_NOTICE.txt`](./FALSIFIABILITY_NOTICE.txt) for the
@@ -50,7 +50,7 @@ ratios active at decision time.
 ## Quickstart
 
 ```bash
-# Run the test suite (stdlib unittest, ~1s, 319 tests)
+# Run the test suite (stdlib unittest, ~1s, 375 tests)
 python3 -m unittest discover scenario_engine/tests -v
 
 # Run a canonical scenario end-to-end
@@ -75,7 +75,9 @@ scenario_engine/         # Stdlib-only Python calibration framework
   ├── scenarios/         # Deterministic event generators
   ├── runner/            # Per-tick orchestration, intervention dispatch
   ├── claims/            # Falsifiable claim registry + writer
+  │                     #   noise_precursor.py + NOISE_PRECURSOR_CLAIMS.json: residual noise rises before mean drift (PROPOSED)
   ├── validators/        # Predicted-vs-actual outcome checkers
+  │                     #   noise_precursor.py: CONFIRMED / REFUTED / INCONCLUSIVE for noise-precursor claims
   ├── internal_substrate/# AI body (compute/mem/thermal/tokens/channels/tools)
   ├── continual_harness/ # Cross-session persistence + pattern extractor
   ├── component_db_adapter/  # CSV loader with provenance-preserving queries
@@ -85,7 +87,9 @@ scenario_engine/         # Stdlib-only Python calibration framework
   ├── environment/       # Instantaneous + cumulative-memory conditions
   ├── synergy/           # Multi-component composition detector
   ├── examples/          # End-to-end demonstrations
-  └── tests/             # 319 stdlib unittest cases
+  └── tests/             # 375 stdlib unittest cases
+                       #   + test_noise_titration.py, test_noise_precursor_validator.py
+src/noise_titration.py  # Noise titration of one component's readings: "mean holds, noise moves first" (PROPOSED, stdlib)
 tools/corpus_hardening/  # Reusable artifact generator (for sister repos)
 ```
 

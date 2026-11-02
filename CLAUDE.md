@@ -136,6 +136,8 @@ the directory on `sys.path` and import `cyclic_interpreter` flat.
 #### Core Matrices
 
 - `failure_mode_matrix.csv`: `Component,Failure Mode,Repurpose Option,Effectiveness,Notes`
+  - `Pre-failure noise signature`: what the noise does before this failure mode (cited source key, or `not interpretable atm`)
+  - `Noise signature status`: `OBSERVED` | `DERIVED` | `PROPOSED` | `OWED` (meanings in `components/_template.md`)
 - `repurpose_effectiveness.csv`: `Component,Failure Mode,Repurpose Application,Effectiveness,Notes`
 - `environmental_interactions.csv`: `Component,Condition,Observed Effect,Repurpose Impact,Notes`
 - `component_synergies.csv`: `Component A,Component B,Synergy Effect,Repurpose Application,Notes`
